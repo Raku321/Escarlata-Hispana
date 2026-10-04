@@ -1,4 +1,5 @@
 const { app, BrowserWindow, ipcMain, safeStorage, Tray, Menu, powerSaveBlocker, shell, session, Notification } = require('electron');
+const { autoUpdater } = require('electron-updater');
 const path = require('path');
 const fs = require('fs');
 const https = require('https');
@@ -273,13 +274,33 @@ app.userAgentFallback = app.userAgentFallback
 // versao do app pro badge do topo (sendSync: disponivel no load, mesmo com o preload em sandbox)
 ipcMain.on('app:version', (e) => { e.returnValue = app.getVersion(); });
 
-// ===== Actualizaciones =====
-// Cliente sin autenticación GitHub: nunca solicita token ni credenciales.
-let updateState={state:'manual',version:app.getVersion(),availableVersion:null,percent:0,message:'Actualizaciones automáticas desactivadas.'};
+// ===== Actualizaciones automáticas =====
+// El repositorio es público: los usuarios no necesitan token de GitHub.
+let updateState={state:'idle',version:app.getVersion(),availableVersion:null,percent:0,message:'Estás actualizado.'};
+const sendUpdateState=()=>{ try { BrowserWindow.getAllWindows().forEach(w=>{ if(!w.isDestroyed()) w.webContents.send('update:status',updateState); }); } catch {} };
+const setUpdateState=(patch)=>{ updateState={...updateState,...patch,version:app.getVersion()}; sendUpdateState(); return updateState; };
+autoUpdater.autoDownload=true;
+autoUpdater.autoInstallOnAppQuit=true;
+autoUpdater.allowPrerelease=false;
+autoUpdater.on('checking-for-update',()=>setUpdateState({state:'checking',message:'Buscando actualizaciones…'}));
+autoUpdater.on('update-available',(info)=>setUpdateState({state:'downloading',availableVersion:info.version,percent:0,message:'Nueva versión v'+info.version+' disponible. Descargando…'}));
+autoUpdater.on('update-not-available',()=>setUpdateState({state:'idle',availableVersion:null,percent:0,message:'Estás actualizado.'}));
+autoUpdater.on('download-progress',(p)=>setUpdateState({state:'downloading',percent:Math.round(p.percent||0),message:'Descargando actualización… '+Math.round(p.percent||0)+'%'}));
+autoUpdater.on('update-downloaded',(info)=>setUpdateState({state:'ready',availableVersion:info.version,percent:100,message:'Versión v'+info.version+' lista. Reinicia para instalar.'}));
+autoUpdater.on('error',()=>setUpdateState({state:'error',message:'No se pudo comprobar la actualización. Puedes intentarlo nuevamente.'}));
+async function checkUpdates(){
+  if(!app.isPackaged) return setUpdateState({state:'idle',message:'Actualizador disponible en la versión instalada.'});
+  try { await autoUpdater.checkForUpdates(); } catch {}
+  return updateState;
+}
 ipcMain.handle('update:status',()=>updateState);
-ipcMain.handle('update:check',()=>updateState);
-ipcMain.handle('update:download',()=>false);
-ipcMain.handle('update:install',()=>false);
+ipcMain.handle('update:check',()=>checkUpdates());
+ipcMain.handle('update:download',async()=>{ try { await autoUpdater.downloadUpdate(); return true; } catch { return false; } });
+ipcMain.handle('update:install',()=>{ if(updateState.state!=='ready') return false; setImmediate(()=>autoUpdater.quitAndInstall(false,true)); return true; });
+if (lockOk) app.whenReady().then(() => {
+  setTimeout(() => { checkUpdates(); }, 6000);
+  setInterval(() => { checkUpdates(); }, 6 * 60 * 60 * 1000);
+});
 
 // ===== Abrir com o Windows (desligado por padrao) =====
 // Feito com um atalho na pasta Inicializar do usuario, e nao escrevendo na chave Run do registro
