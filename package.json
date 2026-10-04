@@ -1,6 +1,6 @@
 {
   "name": "escarlata-hispana",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Cliente personalizado para Poke Idle World - Comunidad Escarlata Hispana",
   "main": "main.js",
   "author": "Escarlata Hispana",
@@ -62,11 +62,21 @@
       "!**/*.cmd",
       "!**/*.ps1",
       "!HERRAMIENTA PRIVADA*/**"
+    ],
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "Raku321",
+        "repo": "Escarlata-Hispana",
+        "releaseType": "release"
+      }
     ]
   },
   "allowScripts": {
     "electron": true,
     "electron-winstaller": true
   },
-  "dependencies": {}
+  "dependencies": {
+    "electron-updater": "^6.6.2"
+  }
 }
