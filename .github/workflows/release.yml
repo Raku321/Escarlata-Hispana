@@ -20,12 +20,11 @@ jobs:
       - name: Instalar dependencias
         run: npm ci
       - name: Compilar instalador
-        run: npm run dist
+        run: npx electron-builder --win nsis --publish never
       - name: Publicar Release
         uses: softprops/action-gh-release@v2
         with:
           files: |
             dist/Instalador-Escarlata-Hispana-1.0.2.exe
             dist/*.blockmap
-            dist/latest.yml
           generate_release_notes: true
