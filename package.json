@@ -1,0 +1,72 @@
+{
+  "name": "escarlata-hispana",
+  "version": "1.0.2",
+  "description": "Cliente personalizado para Poke Idle World - Comunidad Escarlata Hispana",
+  "main": "main.js",
+  "author": "Escarlata Hispana",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --win nsis",
+    "dist:dir": "electron-builder --win --dir"
+  },
+  "keywords": [
+    "electron",
+    "multi-account",
+    "poke-idle-world",
+    "idle-game"
+  ],
+  "devDependencies": {
+    "electron": "^43.7.7",
+    "electron-builder": "^26.0.12"
+  },
+  "productName": "Escarlata Hispana",
+  "build": {
+    "appId": "com.escarlatahispana.app",
+    "productName": "Escarlata Hispana",
+    "artifactName": "Instalador-Escarlata-Hispana-${version}.${ext}",
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "icon": "assets/escarlata-hispana.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "installerLanguages": [
+        "es_ES"
+      ],
+      "language": "3082",
+      "displayLanguageSelector": false,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Escarlata Hispana",
+      "uninstallDisplayName": "Escarlata Hispana"
+    },
+    "asar": true,
+    "compression": "maximum",
+    "files": [
+      "main.js",
+      "preload.js",
+      "index.html",
+      "assets/**/*",
+      "presets/**/*",
+      "src/**/*",
+      "tray.png",
+      "package.json",
+      "!**/*.map",
+      "!**/*.md",
+      "!**/test{,s}/**",
+      "!**/__tests__/**",
+      "!**/*.bat",
+      "!**/*.cmd",
+      "!**/*.ps1",
+      "!HERRAMIENTA PRIVADA*/**"
+    ]
+  },
+  "allowScripts": {
+    "electron": true,
+    "electron-winstaller": true
+  },
+  "dependencies": {}
+}

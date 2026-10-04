@@ -1,5 +1,5 @@
 # Escarlata Hispana
 
-Repositorio oficial de Escarlata Hispana.
+Version actual del codigo fuente: **v1.0.2**
 
-Las versiones publicadas en GitHub Releases son utilizadas por el sistema de actualizaciones de la aplicación.
+Para usuarios finales, descarga el instalador desde **Releases**.
