@@ -1,0 +1,1 @@
+Eliminados Estado y rendimiento, Centro de estado de cuentas y Alertas de mercado, incluyendo su código asociado. Se conservan Hunt Advisor, Mercado Global y Diagnóstico.

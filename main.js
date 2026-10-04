@@ -275,7 +275,7 @@ ipcMain.on('app:version', (e) => { e.returnValue = app.getVersion(); });
 
 // ===== Actualizaciones SIN TOKEN =====
 // Consulta el último Release PÚBLICO de GitHub mediante HTTPS anónimo.
-// No usa electron-updater, Authorization, GH_TOKEN ni GITHUB_TOKEN.
+// Actualizador público propio, sin credenciales.
 const UPDATE_API='https://api.github.com/repos/Raku321/Escarlata-Hispana/releases/latest';
 let updateState={state:'idle',version:app.getVersion(),availableVersion:null,percent:0,message:'Estás actualizado.'};
 let updateAsset=null, updateFile=null;

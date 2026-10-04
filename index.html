@@ -573,6 +573,147 @@ webview{background:#050405}
 #ehSimpleBtn:hover{background:#203629;border-color:#438452}
 #ehSimpleBtn.on{background:#238636!important;border-color:#3fb950!important;color:#fff!important}
 
+
+#ehGMSafety{font-weight:900;font-size:12px;padding:5px 9px;border-radius:999px;background:#3a2024;color:#ffd7dc}
+#ehGMSafety.safe{background:#173923;color:#bfffd0}
+#ehGMFavOnly.on{background:#6b5310!important;border-color:#d9ae32!important;color:#fff4b0!important}
+.ehgm-star{border:0!important;background:transparent!important;font-size:20px!important;padding:0 5px!important;min-width:auto!important;color:#e7b93e!important}
+#ehGMTeleport.busy{opacity:.7;pointer-events:none}
+
+#ehGMStats{padding:7px 14px;border-bottom:1px solid #263140;color:#cbd5e1;font-size:12px;display:none}
+.ehgm-deal{border-color:#8a6a13!important;box-shadow:inset 3px 0 #d5a51e}
+.ehgm-deal small:after{content:" 🔥 50% bajo precio típico confiable";color:#ffd45c;font-weight:900}
+#ehGMHistory{overflow:auto;flex:1;padding:10px 14px}
+.ehgm-hrow{display:grid;grid-template-columns:150px 1fr 130px 110px;gap:8px;padding:7px;border-bottom:1px solid #202938;font-size:12px}
+#ehGMProfile{max-width:175px}
+
+#ehGMHead{min-height:58px;padding:0 18px!important;display:flex;align-items:center;gap:12px;background:linear-gradient(180deg,#17101a,#100d14);border-bottom:1px solid #7d2030}
+#ehGMHead>b{font-size:20px;letter-spacing:.2px;margin-right:auto}
+#ehGMHead select{height:34px;min-width:180px}
+#ehGMControls{display:grid!important;grid-template-columns:150px minmax(180px,1fr) repeat(4,125px);gap:9px!important;padding:14px 16px!important;background:#0d121b;border-bottom:1px solid #273141}
+#ehGMControls input,#ehGMControls select,#ehGMControls button{height:38px!important;border-radius:8px!important;font-size:13px!important}
+#ehGMFavOnly{grid-column:auto}
+#ehGMStats{font-size:13px!important;padding:9px 17px!important;background:#0c1118}
+#ehGMList{padding:8px 14px 14px!important;overflow:auto!important;flex:1}
+.ehgm-row{display:grid!important;grid-template-columns:38px minmax(310px,1fr) 165px 120px;align-items:center;gap:12px;min-height:70px;padding:9px 12px!important;margin:5px 0;border:1px solid #202c3b!important;border-radius:10px;background:#0d131d}
+.ehgm-row:hover{background:#121b28;border-color:#43536a!important}
+.ehgm-row>div b{display:block;font-size:16px!important;margin-bottom:5px}
+.ehgm-row small{font-size:13px!important;color:#aeb9c8!important}
+.ehgm-row>strong{font-size:16px!important;text-align:right;color:#ffd35c}
+.ehgm-row>button:last-child{height:38px!important;background:#238636!important;border:1px solid #3fb950!important;color:white!important;font-weight:900!important;border-radius:8px!important}
+.ehgm-row>button:last-child:hover{background:#2ea043!important}
+.ehgm-star{font-size:23px!important}
+#ehGMStatus{min-height:32px;padding:7px 16px!important;background:#0b1017;border-top:1px solid #263140;color:#aeb9c8}
+#ehGMHistory{padding:14px 18px!important}
+.ehgm-hrow{grid-template-columns:180px minmax(260px,1fr) 180px 140px!important;font-size:13px!important}
+@media(max-width:900px){
+ #ehGeneralMarket{width:96vw;height:92vh}
+ #ehGMControls{grid-template-columns:repeat(3,minmax(0,1fr))}
+ .ehgm-row{grid-template-columns:34px minmax(180px,1fr) 130px 100px}
+}
+
+/* Mercado Global — acabado visual */
+#ehGeneralMarket{background:#0a0f17!important;border:1px solid #8d2638!important}
+#ehGMHead{background:#111722!important;border-bottom:1px solid #2d3746!important}
+#ehGMHead>b{font-size:18px!important}
+#ehGMSafety{margin-left:auto}
+#ehGMControls{grid-template-columns:150px minmax(250px,1.7fr) 125px 125px 125px 125px!important;background:#0d131d!important;padding:13px 15px!important}
+#ehGMControls input,#ehGMControls select,#ehGMControls button{background:#151d2a!important;border:1px solid #354154!important;color:#f2f5f8!important}
+#ehGMControls button:hover{border-color:#7d8da5!important;background:#1b2635!important}
+#ehGMRefresh,#ehGMTeleport{background:#8e2338!important;border-color:#b23850!important}
+#ehGMRefresh:hover,#ehGMTeleport:hover{background:#a52a43!important}
+#ehGMList{padding:10px 14px 14px!important}
+.ehgm-row{
+ display:grid!important;
+ grid-template-columns:42px minmax(0,1fr) 160px 112px!important;
+ grid-template-rows:1fr!important;
+ min-height:0!important;height:auto!important;
+ padding:12px 14px!important;margin:7px 0!important;
+ border:1px solid #263345!important;border-radius:10px!important;
+ background:#0e151f!important;
+}
+.ehgm-row:hover{background:#121c29!important;border-color:#46566d!important}
+.ehgm-row .ehgm-star{grid-column:1!important;grid-row:1!important;align-self:center!important;justify-self:center!important}
+.ehgm-row>div{grid-column:2!important;grid-row:1!important;min-width:0!important}
+.ehgm-row>div b{font-size:16px!important;color:#f4f6fa!important;margin:0 0 4px!important}
+.ehgm-row>div small{display:block!important;font-size:12.5px!important;line-height:1.35!important;color:#9eacbd!important}
+.ehgm-row>strong{grid-column:3!important;grid-row:1!important;align-self:center!important;text-align:right!important;font-size:16px!important;color:#ffd05a!important;white-space:nowrap!important}
+.ehgm-row>button:last-child{
+ grid-column:4!important;grid-row:1!important;
+ width:100%!important;height:38px!important;min-width:0!important;
+ margin:0!important;padding:0 12px!important;
+ align-self:center!important;
+ background:#238636!important;border:1px solid #3fa95a!important;
+ border-radius:7px!important;color:#fff!important;font-weight:800!important;
+}
+.ehgm-row>button:last-child:hover{background:#2ea043!important}
+.ehgm-star{background:transparent!important;border:0!important;color:#f3c43c!important}
+.ehgm-deal{border-color:#7b621d!important;background:#15180f!important}
+#ehGMStatus{font-size:12px!important;color:#8795a8!important}
+@media(max-width:900px){
+ #ehGMControls{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+ .ehgm-row{grid-template-columns:34px minmax(0,1fr) 125px 95px!important}
+}
+
+.ehgm-row{grid-template-columns:38px 52px minmax(0,1fr) 160px 112px!important}
+.ehgm-row .ehgm-star{grid-column:1!important}
+.ehgm-img{grid-column:2!important;grid-row:1!important;width:44px!important;height:44px!important;object-fit:contain!important;justify-self:center!important;align-self:center!important;image-rendering:auto}
+.ehgm-img-fallback{grid-column:2!important;grid-row:1!important;width:44px;height:44px;display:flex;align-items:center;justify-content:center;font-size:25px;color:#65758b}
+.ehgm-row>div:not(.ehgm-img-fallback){grid-column:3!important}
+.ehgm-row>strong{grid-column:4!important}
+.ehgm-row>button:last-child{grid-column:5!important}
+@media(max-width:900px){.ehgm-row{grid-template-columns:30px 44px minmax(0,1fr) 120px 90px!important}.ehgm-img,.ehgm-img-fallback{width:38px!important;height:38px!important}}
+
+/* v1.0.5 integral */
+.ehgm-good{border-color:#276749!important;background:#0d1916!important}
+.ehgm-great{border-color:#b58b16!important;background:#17180d!important;box-shadow:inset 3px 0 #d6a91b}
+.ehgm-good>div b:after{content:"  ✓ Buen precio";color:#53c982;font-size:11px}
+.ehgm-great>div b:after{content:"  🔥 Gran oferta";color:#ffd24d;font-size:11px}
+#ehAccountHealth{display:grid;gap:6px;margin:8px 10px}
+.eh-health{font-size:11px;padding:7px 8px;border:1px solid #293649;border-radius:7px;background:#0d141e;color:#aebbc9}
+.eh-health b{color:#f0f4f8}.eh-health .ok{color:#53c982}.eh-health .warn{color:#ffcf5a}.eh-health .bad{color:#ff6b75}
+#ehDiagPane,#ehPerfPane{display:none;padding:10px;color:#d9e1ea;font-size:12px}
+#ehDiagPane.on,#ehPerfPane.on{display:block}
+.eh-toolbox{border:1px solid #2a3749;border-radius:9px;background:#0d141e;padding:10px;margin:8px 0}
+.eh-toolbox button{margin:4px 4px 0 0}
+
+#ehStatusCenter{margin:8px 9px 10px;border:1px solid #334155;border-radius:9px;background:#0b121b;overflow:hidden}
+#ehStatusToggle{width:100%;display:flex!important;justify-content:space-between;align-items:center;padding:9px 10px!important;margin:0!important;border:0!important;border-bottom:1px solid #263345!important;border-radius:0!important;background:#131d2a!important;color:#eef4fa!important;font-weight:800!important;text-align:left}
+#ehStatusToggle:hover{background:#192638!important}
+#ehStatusSummary{font-size:10px;color:#8fa1b5;font-weight:700}
+#ehAccountHealth{display:grid!important;gap:5px!important;margin:0!important;padding:7px!important;max-height:230px;overflow:auto}
+#ehAccountHealth.collapsed{display:none!important}
+#ehAccountHealth .eh-health{margin:0!important;padding:7px 8px!important}
+
+.eh-tools-tabs{display:flex;gap:7px;flex-wrap:wrap}
+.eh-tools-tabs button{opacity:.72}.eh-tools-tabs button.active{opacity:1;background:#8e2338!important}
+.eh-feature-panel{display:none;padding:18px;overflow:auto;flex:1;background:#0c1320}
+.eh-feature-panel.show{display:block}
+.eh-feature-panel h3{margin:0 0 6px;color:#fff;font-size:18px}.eh-feature-panel p{color:#98a7b9}
+.eh-feature-panel input,.eh-feature-panel select{background:#111a27;border:1px solid #354258;color:#fff;border-radius:7px;padding:9px;margin:5px}
+.eh-feature-panel button{background:#8e2338;border:1px solid #b23850;color:#fff;border-radius:7px;padding:9px 12px;margin:5px;font-weight:800}
+#ehAlertInfo{display:block;color:#9eacbd;margin:8px}
+#ehDiagPane{display:block!important;white-space:pre-wrap;max-height:430px;overflow:auto;background:#080d14;border:1px solid #283548;border-radius:8px;padding:10px}
+
+.eh-tool-main-panel{display:none!important;min-height:0;flex:1;overflow:auto}
+.eh-tool-main-panel.show{display:block!important}
+#ehAdvisorPanel.show{display:flex!important;flex-direction:column}
+#ehFeaturePanels{display:contents}
+
+#ehAlertSuggestions{display:none;position:absolute;left:5px;top:44px;width:310px;max-height:260px;overflow:auto;z-index:100;background:#0b121c;border:1px solid #40506a;border-radius:8px;box-shadow:0 12px 28px #000;padding:4px}
+#ehAlertSuggestions.show{display:block}
+.eh-alert-sug{display:flex;align-items:center;gap:9px;width:100%;padding:8px!important;margin:0!important;background:transparent!important;border:0!important;border-bottom:1px solid #1e2b3d!important;border-radius:0!important;text-align:left}
+.eh-alert-sug:hover{background:#172235!important}.eh-alert-sug img{width:28px;height:28px;object-fit:contain;image-rendering:auto}.eh-alert-sug span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#ehMonitorMirror .eh-health{margin:5px 0!important}
+
+.eh-alert-searchrow,.eh-alert-save-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:8px 0}
+#ehAlertName{width:min(420px,70vw)!important}
+.eh-alert-results{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:6px;max-height:260px;overflow:auto;padding:8px;border:1px solid #29374a;border-radius:8px;background:#09101a;color:#9cabbc}
+.eh-alert-result{display:flex!important;align-items:center;gap:8px;text-align:left!important;background:#121d2b!important;border:1px solid #314159!important;color:#eef4fa!important;padding:9px!important;margin:0!important}
+.eh-alert-result:hover{border-color:#b23850!important;background:#192638!important}
+.eh-alert-selected{padding:10px;margin:8px 0;border:1px solid #33445a;border-radius:8px;background:#0c1723;color:#b9c7d6}
+.eh-alert-selected.ok{border-color:#2f8f55;color:#eaffef;background:#0d1d16}
+#ehAlertSave:disabled{opacity:.45;cursor:not-allowed}
 </style>
 
   <style id="escarlata-active-checks">
@@ -628,8 +769,46 @@ webview{background:#050405}
 @media (max-width: 900px) { #menu { grid-template-columns: repeat(2,minmax(160px,1fr)); } }
 @media (max-width: 600px) { #menu { grid-template-columns: 1fr; top: 96px !important; padding: 14px !important; } }
 </style>
+
+<style id="ehGeneralMarketStyle">
+#ehGeneralMarket{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:min(1120px,94vw);height:min(760px,90vh);z-index:999999;background:#090d14;display:none;flex-direction:column;color:#eef2f7;border:2px solid #8e2438;border-radius:14px;box-shadow:0 24px 90px #000;overflow:hidden}
+#ehGeneralMarket.show{display:flex}
+#ehGMHead{display:flex;align-items:center;gap:8px;padding:10px 14px;background:#10151f;border-bottom:1px solid #7d2030}
+#ehGMHead b{font-size:18px;flex:1} #ehGMHead button,#ehGMControls button,#ehGMControls select,#ehGMControls input{background:#171e2a;color:#fff;border:1px solid #4b5568;border-radius:7px;padding:8px}
+#ehGMControls{display:flex;gap:8px;flex-wrap:wrap;padding:10px 14px;border-bottom:1px solid #252e3b}
+#ehGMControls .accent{background:#7d2030;border-color:#b83a50;font-weight:800}
+#ehGMList{flex:1;overflow:auto;padding:0 14px}.ehgm-row{display:grid;grid-template-columns:1fr 170px 100px;gap:10px;align-items:center;padding:10px;border-bottom:1px solid #222c3a}
+.ehgm-row small{display:block;color:#9da9ba;margin-top:3px}.ehgm-row strong{color:#f2c55c}.ehgm-row button{background:#238636;color:#fff;border:1px solid #3fb950;border-radius:7px;padding:8px;font-weight:800}.ehgm-row button:disabled{opacity:.35}
+#ehGMStatus{padding:8px 14px;border-top:1px solid #252e3b;color:#b8c0ce;font-size:12px}
+</style>
 </head>
 <body>
+<div id="ehGeneralMarket">
+  <div id="ehGMHead"><b>🌐 Mercado Global — Escarlata Hispana</b><span id="ehGMSafety">Comprobando…</span><select id="ehGMTrainer" title="Entrenador"></select><button id="ehGMClose">✕</button></div>
+  <div id="ehGMControls">
+    <select id="ehGMCat"><option value="Pokemon">Pokémon</option><option value="Items">Ítems</option><option value="Stones">Stones</option><option value="Poke Balls">Poké Balls</option><option value="Diamonds">Diamantes</option><option value="All">Todo</option></select>
+    <input id="ehGMQ" placeholder="🔎 Buscar Pokémon o ítem…">
+    <input id="ehGMIVMin" type="number" min="0" max="192" placeholder="IV mín.">
+    <input id="ehGMIVMax" type="number" min="0" max="192" placeholder="IV máx.">
+    <input id="ehGMQMin" type="number" min="0" step="0.01" placeholder="Calidad mín.">
+    <input id="ehGMQMax" type="number" min="0" step="0.01" placeholder="Calidad máx.">
+    <input id="ehGMLvMin" type="number" min="1" placeholder="Nivel mín.">
+    <input id="ehGMLvMax" type="number" min="1" placeholder="Nivel máx.">
+    <select id="ehGMCurrency"><option value="ALL">💰 Todas las monedas</option><option value="DIAMONDS">💎 Solo DD</option><option value="GOLD">💲 Solo Dollars</option></select>
+    <select id="ehGMSort"><option value="level-desc">Nivel ↓</option><option value="level-asc">Nivel ↑</option><option value="iv-desc">IV ↓</option><option value="iv-asc">IV ↑</option><option value="quality-desc">Calidad ↓</option><option value="quality-asc">Calidad ↑</option><option value="price-asc">Precio ↑</option><option value="price-desc">Precio ↓</option></select>
+    <button id="ehGMFavOnly" title="Mostrar solo favoritos">☆ Solo favoritos</button>
+    <button id="ehGMRefresh" class="accent">↻ Actualizar</button>
+    <select id="ehGMProfile"><option value="">Perfil de búsqueda…</option></select>
+    <button id="ehGMSaveProfile">💾 Guardar perfil</button>
+    <button id="ehGMClear">🧹 Limpiar</button>
+    <button id="ehGMHistoryBtn">🕘 Historial</button>
+    <button id="ehGMTeleport" class="accent">🧭 Ir al mercado</button>
+  </div>
+  <div id="ehGMStats"></div><div id="ehGMList"></div>
+  <div id="ehGMHistory" style="display:none"></div>
+  <div id="ehGMStatus">Selecciona una cuenta activa.</div>
+</div>
+
   <div id="topbar">
     <span class="logo">
       <img src="assets/escarlata-hispana.png" alt="Escarlata Hispana" style="width:34px;height:34px;object-fit:cover;border-radius:50%;vertical-align:middle;margin-right:7px;">
@@ -1130,7 +1309,7 @@ S.supBase=cur;if(S.picBase==null){S.picBase=now;}else{if(now>S.picBase){const do
           // so na tela de login, pra nao rodar a toa dentro do jogo
           if ((wv.getURL() || '').startsWith(LOGIN_URL)) wv.executeJavaScript(scrollLoginScript).catch(() => {});
           wv.executeJavaScript(`(()=>{if(!localStorage.getItem('poke_lang')) localStorage.setItem('poke_lang','es')})()`).catch(() => {}); // español solo como valor inicial; después respeta la elección del jugador
-          injectJustPokedex(wv); // función nativa integrada, independiente en cada cuenta
+          injectJustPokedex(wv); injectEhMarket(wv); // funciones integradas por cuenta
           injectScripts(wv); // userscripts opcionales del usuario
         } catch {}
       });
@@ -1175,7 +1354,7 @@ S.supBase=cur;if(S.picBase==null){S.picBase=now;}else{if(now>S.picBase){const do
         if (String(e.url || '').startsWith('https://poke.idleworld.online/play')) armaVolta(); // o login vai pro /play com router.push, sem dom-ready
       });
       // saiu do /login por rota interna da SPA (sem novo dom-ready): agora sim os userscripts entram
-      wv.addEventListener('did-navigate-in-page', (e) => { try { if (e.isMainFrame && !usNoLoginUrl(e.url)) { injectJustPokedex(wv); if (wv.__pgSemScripts) injectScripts(wv); } } catch {} });
+      wv.addEventListener('did-navigate-in-page', (e) => { try { if (e.isMainFrame && !usNoLoginUrl(e.url)) { injectJustPokedex(wv); injectEhMarket(wv); if (wv.__pgSemScripts) injectScripts(wv); } } catch {} });
 
       panel.querySelector('.reload').onclick = () => { if (!off[i]) { try { wv.reloadIgnoringCache(); } catch { wv.reload(); } } };
       panel.querySelector('.expand').onclick = () => toggleExpand(i);
@@ -3465,7 +3644,7 @@ lw:!!(window.__loginWatch||window.document?.querySelector('input[autocomplete=on
         // o catalogo de criaturas e independente dos marcadores: com /api/game/map-markers fora do ar (502)
         // o app perdia sprites, stats e golpes junto. As hunts seguem sendo tentadas de novo a cada 60s.
         if (r.byId && Object.keys(r.byId).length) { creaturesById = r.byId; formDex = r.dex || {}; basesByName = r.bs || {}; movesByName = r.mv || {}; }
-        if (r.h && r.h.length) { const seen = {}; huntsCache = r.h.filter(x => !seen[x.name + x.level] && (seen[x.name + x.level] = 1)); }
+        if (r.h && r.h.length) { const seen = {}; huntsCache = r.h.filter(x => !seen[x.name + x.level] && (seen[x.name + x.level] = 1)); try { window.__EH_HUNT_LEVELS__ = Object.fromEntries(huntsCache.map(x => [String(x.name||'').trim().toLowerCase(), Number(x.level)||1])); } catch {} }
         dittoCache.clear(); tlCache = null; // dado novo com a mesma chave (huntsCacheT marca o INICIO da busca): varredura feita com a lista velha no meio tempo nao vale mais
       }).catch(() => {});
       break;
@@ -4446,6 +4625,19 @@ lw:!!(window.__loginWatch||window.document?.querySelector('input[autocomplete=on
     } catch (e) { }
   }
 
+
+  // ===== Mercado Global Escarlata =====
+  let ehMarketCode = null;
+  async function injectEhMarket(wv) {
+    if (usNoLogin(wv)) return;
+    try {
+      if (ehMarketCode == null) ehMarketCode = (await window.pokeAPI.readPreset('mercado.js')) || '';
+      if (!ehMarketCode) return;
+      const ya = await wv.executeJavaScript("(()=>!!window.__EH_MARKET__)()");
+      if (!ya) await wv.executeJavaScript('(async function(){' + ehMarketCode + '\n})().then(function(){})');
+    } catch {}
+  }
+
   async function injectScripts(wv) {
     if (usNoLogin(wv)) { wv.__pgSemScripts = true; return; }
     wv.__pgSemScripts = false;
@@ -4470,7 +4662,7 @@ lw:!!(window.__loginWatch||window.document?.querySelector('input[autocomplete=on
   justPokedexBtn.onclick = async () => {
     for (let i = 0; i < webviews.length; i++) {
       const w = webviews[i]; if (off[i] || !w || usNoLogin(w)) continue;
-      await injectJustPokedex(w);
+      await injectJustPokedex(w); await injectEhMarket(w);
       try {
         await w.executeJavaScript(`(()=>{const p=document.getElementById('pokemon-reader-panel');if(!p)return 'no';if(p.classList.contains('minimized')){const b=document.getElementById('minimize');if(b)b.click();else{p.classList.remove('minimized');p.style.setProperty('display','flex','important')}}else{p.style.setProperty('display','flex','important')}return 'abierto'})()`);
       } catch {}
@@ -4815,8 +5007,7 @@ body.eh-options-open #grid,body.eh-options-open #cards{margin-left:280px!importa
 
 @media(max-width:850px){:root{--eh-side:62px}#ehBrandText,.eh-title,.eh-account b,.eh-account small{display:none}#ehNav{grid-template-columns:1fr;padding:7px}.eh-nav{font-size:0!important}.eh-nav span{font-size:18px}#ehOptionsPane{width:250px}}
 </style>
-<div id="ehSidebar">
-  <div id="ehBrand"><img src="assets/escarlata-hispana.png"><div id="ehBrandText">ESCARLATA<br>HISPANA<div class="eh-sub">POKE IDLE WORLD</div></div><button id="ehCollapse" title="Contraer menú">‹</button></div>
+<div id="ehSidebar"><div id="ehBrand"><img src="assets/escarlata-hispana.png"><div id="ehBrandText">ESCARLATA<br>HISPANA<div class="eh-sub">POKE IDLE WORLD</div></div><button id="ehCollapse" title="Contraer menú">‹</button></div>
   <button id="ehJustPokedex" title="Abrir Calculadora de IV global"><span>🧮</span> <span class="eh-jp-text">Calculadora de IV</span></button>
   <div id="ehNav">
     <button class="eh-nav" id="ehStart"><span>▶</span>Iniciar</button>
@@ -4842,8 +5033,20 @@ body.eh-options-open #grid,body.eh-options-open #cards{margin-left:280px!importa
       <div><b>🛠 Herramientas</b><small>Analiza tus Pokémon y encuentra las mejores hunts</small></div>
       <button id="ehToolsClose" title="Cerrar">✕</button>
     </div>
-    <div class="eh-tools-tabs"><button class="active">🎯 Hunt Advisor</button></div>
-    <div class="eh-advisor-controls">
+    <div class="eh-tools-tabs">
+<button class="active" data-ehtab="advisor">🎯 Hunt Advisor</button>
+<button id="ehMarketBtn">🌐 Mercado Global</button>
+<button data-ehtab="diag">🧰 Diagnóstico</button>
+</div>
+    <div id="ehFeaturePanels">
+<div id="ehDiagPanel" class="eh-feature-panel eh-tool-main-panel">
+  <h3>🧰 Diagnóstico</h3><p>Información técnica para detectar problemas. No incluye contraseñas, cookies ni tokens.</p>
+  <button id="ehDiagBtn">Generar diagnóstico</button><button id="ehDiagCopyBtn">📋 Copiar diagnóstico</button>
+  <pre id="ehDiagPane"></pre>
+</div>
+</div>
+<div id="ehAdvisorPanel" class="eh-tool-main-panel show">
+<div class="eh-advisor-controls">
       <label>Entrenador<select id="ehAdvisorAccount"></select></label>
       <label>Pokémon<select id="ehAdvisorPokemon"></select></label>
       <label>Nivel máximo de hunt<input id="ehAdvisorMaxLevel" type="number" min="1" max="9999" step="1" placeholder="Ej: 80"></label>
@@ -4851,11 +5054,13 @@ body.eh-options-open #grid,body.eh-options-open #cards{margin-left:280px!importa
       <button id="ehAdvisorCalc">▶ Calcular</button>
     </div>
     <div id="ehAdvisorInfo" class="eh-advisor-info">Selecciona un entrenador y un Pokémon.</div>
-    <div class="eh-advisor-table-wrap">
+
+<div class="eh-advisor-table-wrap">
       <table class="eh-advisor-table"><thead><tr>
         <th>#</th><th>Hunt</th><th>Nivel</th><th>Kills/h</th><th>XP/h</th><th>Botín/h</th><th>Habilidad</th>
       </tr></thead><tbody id="ehAdvisorRows"></tbody></table>
     </div>
+</div>
   </div>
 </div>
 
@@ -4863,6 +5068,178 @@ body.eh-options-open #grid,body.eh-options-open #cards{margin-left:280px!importa
 (()=>{
  const $=id=>document.getElementById(id);
  const body=document.body, menu=$('menu'), list=$('ehOptionList');
+
+ let ehGMIndex=-1, ehGMTimer=null, ehGMRows=[];
+ const ehGMWebview=()=>ehGMIndex>=0&&webviews[ehGMIndex]&&!off[ehGMIndex]?webviews[ehGMIndex]:null;
+ const EHGM_PREF='ehMarketPrefsV1',EHGM_FAV='ehMarketFavsV1';
+ const ehGMGetPrefs=()=>{try{return JSON.parse(localStorage.getItem(EHGM_PREF)||'{}')}catch{return{}}};
+ const ehGMSavePrefs=()=>{const ids=['ehGMCat','ehGMQ','ehGMIVMin','ehGMIVMax','ehGMQMin','ehGMQMax','ehGMLvMin','ehGMLvMax','ehGMCurrency','ehGMSort','ehGMTrainer'];const o={};ids.forEach(id=>{const e=$(id);if(e)o[id]=e.value});o.favOnly=$('ehGMFavOnly')?.classList.contains('on')||false;localStorage.setItem(EHGM_PREF,JSON.stringify(o))};
+ const ehGMLoadPrefs=()=>{const o=ehGMGetPrefs();Object.entries(o).forEach(([id,v])=>{if(id==='favOnly')return;const e=$(id);if(e&&[...e.options||[]].some?.(x=>x.value===String(v)))e.value=String(v);else if(e&&e.tagName==='INPUT')e.value=String(v)});$('ehGMFavOnly')?.classList.toggle('on',!!o.favOnly)};
+ const ehGMFavs=()=>{try{return new Set(JSON.parse(localStorage.getItem(EHGM_FAV)||'[]'))}catch{return new Set()}};
+ const ehGMToggleFav=n=>{const a=ehGMFavs(),k=String(n||'').trim().toLowerCase();a.has(k)?a.delete(k):a.add(k);localStorage.setItem(EHGM_FAV,JSON.stringify([...a]));ehGMRender()};
+ const ehGMTrainerName=i=>{try{const d=lastData?.[i]||{},lead=(d.team||[]).find(x=>x.ld)||(d.team||[])[0],pn=lead?.name||lead?.pokemonName||'';return `${String(d.name||d.trainer||d.character||`Entrenador ${i+1}`)}${pn?` · ${pn}`:''}`}catch{return `Entrenador ${i+1}`}};
+
+
+ const ehGMAccountState=async i=>{const w=webviews[i];if(!w||off[i])return '⚪';try{await ehGMEnsure(w);return await ehGMInHunt(w)?'🔴':'🟢'}catch{return '⚠️'}};
+ const ehGMRefreshTrainerLabels=async()=>{const sel=$('ehGMTrainer');if(!sel)return;for(const o of [...sel.options]){const i=+o.value,state=await ehGMAccountState(i);o.textContent=`${state} ${ehGMTrainerName(i)}`}};
+
+ const ehGMFillTrainers=()=>{
+   const s=$('ehGMTrainer'); if(!s)return;
+   const old=ehGMIndex; s.innerHTML='';
+   webviews.forEach((w,i)=>{if(!w||off[i])return;const o=document.createElement('option');o.value=String(i);o.textContent=ehGMTrainerName(i);s.appendChild(o)});
+   if([...s.options].some(o=>+o.value===old))s.value=String(old); else if(s.options.length){s.selectedIndex=0;ehGMIndex=+s.value} setTimeout(ehGMRefreshTrainerLabels,0);
+ };
+ const ehGMCur=v=>/DIAM|^DD$/i.test(String(v||''))?'DIAMONDS':'GOLD';
+ const ehGMEsc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ async function ehGMEnsure(w){await injectEhMarket(w);}
+ async function ehGMInHunt(w){try{return await w.executeJavaScript(`(()=>{const city=/\\b(?:cerulean(?: city)?|pewter(?: city)?|lavender(?: town)?|viridian(?: city)?|cassino|casino)\\b/i;const loc=String(document.querySelector('.phud-tloc')?.textContent||'').trim();if(loc&&city.test(loc))return false;const here=[...document.querySelectorAll('.hunt-marker.here,[data-guide^="hunt-"].here')].some(x=>!city.test((x.querySelector('.hunt-name')?.textContent||x.textContent||'').trim()));if(here)return true;const battle=!!document.querySelector('.battle-window:not([style*="display: none"]),.hunt-window:not([style*="display: none"]),.battle-area,.battle-screen');if(battle)return true;if(loc&&!city.test(loc))return true;return true})()`)}catch{return true}}
+
+
+ const ehGMHistoryAdd=e=>{try{const a=JSON.parse(localStorage.getItem('ehMarketHistoryV1')||'[]'),r=e.item||e.pokemon||e.product||{};a.unshift({at:new Date().toISOString(),trainer:ehGMTrainerName(ehGMIndex),name:e.name||e.title||e.itemName||e.pokemonName||r.name||'—',iv:e.ivTotal??r.ivTotal??e.iv??r.iv??null,quality:e.quality??r.quality??e.q??r.q??null,price:e.price??e.totalPrice??e.value??0,currency:e.currency||e.currencyType||r.currency||r.currencyType||''});localStorage.setItem('ehMarketHistoryV1',JSON.stringify(a.slice(0,100)))}catch{}};
+
+
+ const EHGM_PROFILES='ehMarketProfilesV1';
+ const ehGMProfiles=()=>{try{return JSON.parse(localStorage.getItem(EHGM_PROFILES)||'[]')}catch{return[]}};
+ const ehGMRefreshProfiles=()=>{const e=$('ehGMProfile');if(!e)return;const v=e.value;e.innerHTML='<option value="">Perfil de búsqueda…</option>'+ehGMProfiles().map((x,i)=>`<option value="${i}">${ehGMEsc(x.name)}</option>`).join('');if([...e.options].some(o=>o.value===v))e.value=v};
+ const ehGMSaveProfile=()=>{const name=prompt('Nombre del perfil de búsqueda:');if(!name)return;const ids=['ehGMCat','ehGMQ','ehGMIVMin','ehGMIVMax','ehGMQMin','ehGMQMax','ehGMLvMin','ehGMLvMax','ehGMCurrency','ehGMSort'];const values={};ids.forEach(id=>values[id]=$(id)?.value??'');const a=ehGMProfiles();a.push({name,values});localStorage.setItem(EHGM_PROFILES,JSON.stringify(a.slice(-20)));ehGMRefreshProfiles()};
+ const ehGMApplyProfile=i=>{const x=ehGMProfiles()[Number(i)];if(!x)return;Object.entries(x.values||{}).forEach(([id,v])=>{if($(id))$(id).value=v});ehGMSavePrefs();ehGMRender()};
+ const ehGMClearFilters=()=>{['ehGMQ','ehGMIVMin','ehGMIVMax','ehGMQMin','ehGMQMax','ehGMLvMin','ehGMLvMax'].forEach(id=>{if($(id))$(id).value=''});$('ehGMCurrency').value='ALL';$('ehGMSort').value='level-desc';$('ehGMFavOnly').classList.remove('on');ehGMSavePrefs();ehGMRender()};
+ const ehGMShowHistory=()=>{const h=$('ehGMHistory'),l=$('ehGMList'),st=$('ehGMStats');const open=h.style.display==='none';h.style.display=open?'block':'none';l.style.display=open?'none':'';st.style.display='none';if(!open){ehGMRender();return}let a=[];try{a=JSON.parse(localStorage.getItem('ehMarketHistoryV1')||'[]')}catch{}h.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center"><b>🕘 Historial de compras (${a.length})</b><button id="ehGMClearHistory">Borrar historial</button></div>`+(a.length?a.map(x=>`<div class="ehgm-hrow"><span>${new Date(x.at).toLocaleString('es-CL')}</span><b>${ehGMEsc(x.name)}</b><span>${x.iv!=null?'IV '+x.iv:''}${x.quality!=null?' · C '+x.quality:''}</span><strong>${Number(x.price||0).toLocaleString('es-CL')} ${ehGMCur(x.currency)==='DIAMONDS'?'DD':'$'}</strong></div>`).join(''):'<p>Sin compras registradas.</p>');$('ehGMClearHistory').onclick=()=>{if(confirm('¿Borrar historial?')){localStorage.removeItem('ehMarketHistoryV1');ehGMShowHistory();ehGMShowHistory()}}};
+
+ const ehGMUpdateSafety=async()=>{
+   const w=ehGMWebview(),el=$('ehGMSafety');if(!el)return false;
+   if(!w){el.textContent='⚪ Sin entrenador';el.classList.remove('safe');return false}
+   try{await ehGMEnsure(w);const hunt=await ehGMInHunt(w);el.textContent=hunt?'🔴 EN HUNT — compras bloqueadas':'🟢 FUERA DE HUNT — compras habilitadas';el.classList.toggle('safe',!hunt);return !hunt}
+   catch{el.textContent='⚠️ Estado desconocido';el.classList.remove('safe');return false}
+ };
+
+ async function ehGMFetch(){
+   const w=ehGMWebview(), st=$('ehGMStatus'); if(!w){st.textContent='No hay cuenta activa.';return;}
+   st.textContent='Actualizando mercado…';
+   try{
+     await ehGMEnsure(w);
+     if(!ehGMItemIconsLoaded)await ehGMLoadItemIcons(w);
+     const cat=$('ehGMCat').value;
+     ehGMRows=await w.executeJavaScript(`(async()=>{const M=window.__EH_MARKET__;if(!M)return [];const p=await M.apiRaw('/api/game/market?category=${encodeURIComponent(cat)}');return M.listingsRaw(p)})()`);
+     try{window.ehRecordMarketPrices?.(ehGMRows);window.ehCheckMarketAlerts?.(ehGMRows)}catch{}
+     ehGMRender();
+   }catch(e){st.textContent='No se pudo cargar el mercado: '+(e?.message||e);}
+ }
+ async function ehGMBuy(e){
+   const w=ehGMWebview(); if(!w)return;
+   if(await ehGMInHunt(w)){alert('🔒 No puedes comprar mientras estás en una hunt. Primero tienes que salir de la hunt.');return;}
+   const p=Number(e.price??e.totalPrice??e.value??0), r=e.item||e.pokemon||e.product||{}, n=e.name||e.title||e.itemName||e.pokemonName||r.name||'anuncio';
+   if(!confirm(`Comprar ${n} por ${p.toLocaleString('es-CL')} ${ehGMCur(e.currency||r.currency)==='DIAMONDS'?'DD':'Dollars'}?`))return;
+   try{
+     if(await ehGMInHunt(w)){alert('🔒 La ubicación cambió. Sal de la hunt antes de comprar.');return;}
+     const cat=$('ehGMCat').value;
+     await w.executeJavaScript(`window.__EH_MARKET__.buyRaw(${JSON.stringify(e)},${JSON.stringify(cat)})`);ehGMHistoryAdd(e);
+     await ehGMFetch();
+   }catch(err){alert('No se pudo comprar: '+(err?.message||err));}
+ }
+   let ehGMItemIcons=new Map(),ehGMItemIconsLoaded=false;
+   const EHGM_STONES={fire_stone:'/assets/items/fire_stone.gif',feather_stone:'/assets/stones/feather_stone.png',leaf_stone:'/assets/items/leaf_stone.gif',rock_stone:'/assets/items/rock_stone.gif',enigma_stone:'/assets/items/enigma_stone.gif',cocoon_stone:'/assets/items/cocoon_stone.gif',thunder_stone:'/assets/items/thunder_stone.gif',earth_stone:'/assets/items/earth_stone.gif',crystal_stone:'/assets/items/crystal_stone.gif',metal_stone:'/assets/stones/metal_stone.png',ancient_stone:'/assets/stones/ancient_stone.gif',water_stone:'/assets/items/water_stone.gif',heart_stone:'/assets/items/heart_stone.gif',skull_stone:'/assets/items/skull_stone.png',ice_stone:'/assets/items/ice_stone.gif',punch_stone:'/assets/items/punch_stone.gif',darkness_stone:'/assets/items/darkness_stone.gif',venom_stone:'/assets/items/venom_stone.gif',deep_stone:'/assets/items/deep_stone.png',flower_stone:'/assets/items/flower_stone.png',aqua_stone:'/assets/items/aqua_stone.png',champion_stone:'/assets/items/champion_stone.png',voltage_stone:'/assets/items/voltage_stone.png',pixie_stone:'/assets/items/pixie_stone.png',tortoise_stone:'/assets/items/tortoise_stone.png',aroma_stone:'/assets/items/aroma_stone.png'};
+   const ehGMNormIcon=x=>{if(!x)return'';x=String(x).trim();if(/^(?:https?:)?\/\//i.test(x)||x.startsWith('/'))return x;if(/^assets\//i.test(x))return '/'+x;if(/^items\//i.test(x))return '/assets/'+x;return '/assets/items/'+x};
+   const ehGMLoadItemIcons=async w=>{if(ehGMItemIconsLoaded)return;try{
+     const data=await w.executeJavaScript(`fetch('https://poke.idleworld.online/game/items.json',{credentials:'include'}).then(r=>{if(!r.ok)throw Error(r.status);return r.json()})`);
+     const arr=Array.isArray(data)?data:(Array.isArray(data?.items)?data.items:Object.values(data?.items||data||{})),m=new Map();
+     for(const x of arr){if(!x||typeof x!=='object')continue;const names=[x.name,x.title,x.slug,x.key].filter(Boolean).map(v=>String(v).trim().toLowerCase()),ids=[x.id,x.itemId,x.refId,x.key].filter(v=>v!==undefined&&v!==null).map(String);const raw=x.icon||x.image||x.sprite||x.img||x.iconUrl||x.imageUrl||'';const rec={...x,_icon:ehGMNormIcon(raw)};for(const n of names)m.set('n:'+n,rec);for(const id of ids)m.set('i:'+id,rec)}
+     ehGMItemIcons=m;ehGMItemIconsLoaded=true;
+   }catch{ehGMItemIconsLoaded=false}};
+   const ehGMImageSources=(e,cat)=>{const r=e.item||e.pokemon||e.product||{},name=String(e.name||e.title||e.itemName||e.pokemonName||r.name||'').trim(),clean=name.toLowerCase();
+     if(clean==='diamonds'||String(cat).toLowerCase()==='diamonds')return['__DIAMOND__'];
+     if(cat==='Pokemon'){const direct=e.image||e.imageUrl||e.icon||e.iconUrl||e.sprite||r.image||r.imageUrl||r.icon||r.iconUrl||r.sprite||e.pokemon?.sprite;if(direct)return[ehGMNormIcon(direct)];const id=Number(e.pokemonId??e.speciesId??r.pokemonId??r.speciesId??0);return id>0&&id<2000?[`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`]:[]}
+     if(clean==='idle ball')return['/assets/markitems/idleball.png'];
+     const ridVals=[e.refId,e.itemId,e.id,r.refId,r.itemId,r.id].filter(v=>v!==undefined&&v!==null).map(String);
+     let item=ehGMItemIcons.get('n:'+clean);if(!item)for(const id of ridVals){item=ehGMItemIcons.get('i:'+id);if(item)break}
+     const direct=e.icon||e.iconUrl||e.image||e.imageUrl||e.sprite||r.icon||r.iconUrl||r.image||r.imageUrl||r.sprite;
+     const key=clean.replace(/\s+/g,'_'),stone=/\bstone\b/.test(clean)||/stones?/i.test(cat);
+     const sources=[];
+     // Prefer exact catalog icon first. This prevents a wrong guessed icon from winning.
+     if(item?._icon)sources.push(item._icon);
+     if(direct)sources.push(ehGMNormIcon(direct));
+     if(stone)sources.push(EHGM_STONES[key],`/assets/stones/${encodeURIComponent(key)}.png`,`/assets/stones/${encodeURIComponent(key)}.gif`,`/assets/items/${encodeURIComponent(key)}.gif`,`/assets/items/${encodeURIComponent(key)}.png`);
+     return [...new Set(sources.filter(Boolean))];
+   };
+
+ const ehGMPriceCluster=prices=>{
+   const a=prices.map(Number).filter(x=>Number.isFinite(x)&&x>0).sort((x,y)=>x-y);
+   if(!a.length)return {price:0,count:0,total:0,share:0};
+   if(a.length<5){const price=a[Math.floor((a.length-1)/2)];return {price,count:a.length,total:a.length,share:1}}
+   const median=a[Math.floor((a.length-1)/2)];let best=[];
+   for(const center of a){const lo=center*.85,hi=center*1.15,cl=a.filter(x=>x>=lo&&x<=hi);
+     if(cl.length>best.length)best=cl;
+     else if(cl.length===best.length&&cl.length){const bm=best[Math.floor((best.length-1)/2)]||Infinity,cm=cl[Math.floor((cl.length-1)/2)]||Infinity;if(Math.abs(cm-median)<Math.abs(bm-median))best=cl}
+   }
+   if(!best.length)best=[median];
+   return {price:best[Math.floor((best.length-1)/2)],count:best.length,total:a.length,share:best.length/a.length};
+ };
+ const ehGMReferencePrice=prices=>ehGMPriceCluster(prices).price;
+
+ function ehGMRender(){
+   try{window.ehRecordMarketPrices?.(ehGMRows||[]);window.ehCheckMarketAlerts?.(ehGMRows||[])}catch{}
+   const q=$('ehGMQ').value.toLowerCase(), ivMin=$('ehGMIVMin').value===''?null:Number($('ehGMIVMin').value), ivMax=$('ehGMIVMax').value===''?null:Number($('ehGMIVMax').value), qMin=$('ehGMQMin').value===''?null:Number($('ehGMQMin').value), qMax=$('ehGMQMax').value===''?null:Number($('ehGMQMax').value), lvMin=$('ehGMLvMin').value===''?null:Number($('ehGMLvMin').value), lvMax=$('ehGMLvMax').value===''?null:Number($('ehGMLvMax').value), cf=$('ehGMCurrency').value, sort=$('ehGMSort').value, cat=$('ehGMCat').value;
+   const lvl=e=>Number(e.level??e.pokemon?.level??e.product?.level??0), price=e=>Number(e.price??e.totalPrice??e.value??0);
+   const ivOf=e=>{const r=e.item||e.pokemon||e.product||{};return Number(e.ivTotal??r.ivTotal??e.iv??r.iv??0)};
+   const qualityOf=e=>{const r=e.item||e.pokemon||e.product||{};const v=e.quality??r.quality??e.q??r.q;return v==null||v===''?null:Number(v)};
+   const favs=ehGMFavs(),favOnly=$('ehGMFavOnly')?.classList.contains('on');let a=ehGMRows.filter(e=>{const r=e.item||e.pokemon||e.product||{},n=String(e.name||e.title||e.itemName||e.pokemonName||r.name||''),c=ehGMCur(e.currency||e.currencyType||r.currency||r.currencyType),iv=ivOf(e),qual=qualityOf(e),fk=n.trim().toLowerCase();return(!q||n.toLowerCase().includes(q))&&(ivMin==null||iv>=ivMin)&&(ivMax==null||iv<=ivMax)&&(qMin==null||(qual!=null&&qual>=qMin))&&(qMax==null||(qual!=null&&qual<=qMax))&&(lvMin==null||lvl(e)>=lvMin)&&(lvMax==null||lvl(e)<=lvMax)&&(cf==='ALL'||c===cf)&&(!favOnly||favs.has(fk))});
+   if(sort==='level-desc')a.sort((x,y)=>lvl(y)-lvl(x)||ivOf(y)-ivOf(x));else if(sort==='level-asc')a.sort((x,y)=>lvl(x)-lvl(y));else if(sort==='iv-desc')a.sort((x,y)=>ivOf(y)-ivOf(x));else if(sort==='iv-asc')a.sort((x,y)=>ivOf(x)-ivOf(y));else if(sort==='quality-desc')a.sort((x,y)=>(qualityOf(y)??-1)-(qualityOf(x)??-1));else if(sort==='quality-asc')a.sort((x,y)=>(qualityOf(x)??1e9)-(qualityOf(y)??1e9));else if(sort==='price-asc')a.sort((x,y)=>price(x)-price(y));else a.sort((x,y)=>price(y)-price(x));
+   const groups=new Map();a.forEach(e=>{const r=e.item||e.pokemon||e.product||{},n=String(e.name||e.title||e.itemName||e.pokemonName||r.name||'').trim().toLowerCase(),c=ehGMCur(e.currency||e.currencyType||r.currency||r.currencyType),k=n+'|'+c;if(!groups.has(k))groups.set(k,[]);groups.get(k).push(price(e))});const stats=$('ehGMStats'),exact=q.trim()?a.filter(e=>String(e.name||e.title||e.itemName||e.pokemonName||(e.item||e.pokemon||e.product||{}).name||'').toLowerCase().includes(q.trim())):[];if(exact.length){const ps=exact.map(price).filter(Number.isFinite),mn=Math.min(...ps),mx=Math.max(...ps),pc=ehGMPriceCluster(ps),av=pc.price;stats.style.display='block';stats.textContent=`Precios filtrados: mínimo ${Math.round(mn).toLocaleString('es-CL')} · precio típico ${Math.round(av).toLocaleString('es-CL')} (${pc.count}/${pc.total} anuncios en el rango principal) · máximo ${Math.round(mx).toLocaleString('es-CL')}`}else stats.style.display='none';const list=$('ehGMList');list.innerHTML='';
+   a.slice(0,300).forEach(e=>{const r=e.item||e.pokemon||e.product||{},n=e.name||e.title||e.itemName||e.pokemonName||r.name||'—',p=price(e),l=lvl(e),ivt=e.ivTotal??r.ivTotal??e.iv??r.iv,qual=qualityOf(e),qty=Number(e.quantity??e.qty??e.amount??e.ids?.length??1),c=ehGMCur(e.currency||e.currencyType||r.currency||r.currencyType);const row=document.createElement('div');row.className='ehgm-row';const g=groups.get(String(n).trim().toLowerCase()+'|'+c)||[],pc=ehGMPriceCluster(g),avg=pc.price;const reliable=pc.total>=10&&pc.count>=6&&pc.share>=.40;if(reliable&&avg>0){if(p<=avg*.5)row.classList.add('ehgm-deal','ehgm-great');else if(p<=avg*.75)row.classList.add('ehgm-good')}row.innerHTML=`<button class="ehgm-star" title="Favorito">${favs.has(String(n).trim().toLowerCase())?'★':'☆'}</button>${(()=>{const srcs=ehGMImageSources(e,cat);if(srcs[0]==='__DIAMOND__')return '<span class="ehgm-img-fallback">💎</span>';if(!srcs.length)return `<span class="ehgm-img-fallback">${cat==='Pokemon'?'◉':'🎒'}</span>`;return `<img class="ehgm-img" src="${ehGMEsc(srcs[0])}" data-fallbacks="${ehGMEsc(JSON.stringify(srcs.slice(1)))}" alt="">`})()}<div><b>${ehGMEsc(n)}${l?` <span style="color:#aab6c7;font-size:13px;font-weight:700">Nv.${l}</span>`:''}</b><small>${ivt!=null?`IV <b style="display:inline;font-size:12.5px">${ehGMEsc(ivt)}/192</b>`:''}${cat==='Pokemon'&&qual!=null?` &nbsp;•&nbsp; Calidad <b style="display:inline;font-size:12.5px">${Number(qual).toFixed(2)}</b>`:''}${cat!=='Pokemon'?`Cantidad ${qty.toLocaleString('es-CL')}`:''}</small></div><strong>${c==='DIAMONDS'?'💎 '+p.toLocaleString('es-CL')+' DD':'💲 '+p.toLocaleString('es-CL')+' Dollars'}</strong>`;const im=row.querySelector('.ehgm-img');if(im)im.onerror=()=>{let a=[];try{a=JSON.parse(im.dataset.fallbacks||'[]')}catch{}const nx=a.shift();if(nx){im.dataset.fallbacks=JSON.stringify(a);im.src=nx}else im.outerHTML=`<span class="ehgm-img-fallback">${cat==='Pokemon'?'◉':'🎒'}</span>`};row.querySelector('.ehgm-star').onclick=()=>ehGMToggleFav(n);const b=document.createElement('button');b.textContent='Comprar';b.onclick=()=>ehGMBuy(e);row.appendChild(b);list.appendChild(row)});
+   $('ehGMStatus').textContent=`${a.length} anuncios · actualización automática cada 20 segundos`;
+ }
+ async function ehGMTeleport(){
+   const w=ehGMWebview(),btn=$('ehGMTeleport');if(!w||btn?.classList.contains('busy'))return;const original=btn.textContent;btn.classList.add('busy');btn.textContent='🧭 Preparando…';
+   await ehGMUpdateSafety();
+   try{
+     await ehGMEnsure(w);
+     const result=await w.executeJavaScript(`(async()=>{
+       const wait=ms=>new Promise(r=>setTimeout(r,ms));
+       const visible=e=>!!(e&&e.isConnected&&getComputedStyle(e).display!=='none');
+       const cityRx=/\\b(?:cerulean(?: city)?|pewter(?: city)?|lavender(?: town)?|viridian(?: city)?|cassino|casino)\\b/i;
+       const current=String(document.querySelector('.phud-tloc')?.textContent||'').trim();
+       const clickMarket=()=>{
+         const els=[...document.querySelectorAll('[data-guide*="market" i],[data-guide*="mercado" i],button,[role="button"],a')];
+         const b=els.find(x=>visible(x)&&(/mercado\\s*global|global\\s*market|mercado/i.test((x.textContent||'').trim())||/market|mercado/i.test(x.getAttribute?.('data-guide')||'')));
+         if(b){b.click();return true} return false;
+       };
+       if(!cityRx.test(current)){
+         const mapBtn=document.querySelector('button[data-guide="dock-map"]'); if(mapBtn)mapBtn.click();
+         for(let n=0;n<15&&!document.querySelector('.map-window');n++)await wait(100);
+         const mw=document.querySelector('.map-window'); if(!mw)return {ok:false,msg:'No se pudo abrir el mapa.'};
+         let city=[...mw.querySelectorAll('.hunt-marker,[data-guide^="hunt-"]')].find(m=>cityRx.test((m.querySelector('.hunt-name')?.textContent||m.textContent||'').trim()));
+         if(!city){
+           const tabs=[...mw.querySelectorAll('.map-area:not(.locked),.map-plate:not(.locked)')];
+           for(const t of tabs){t.click();await wait(180);city=[...mw.querySelectorAll('.hunt-marker,[data-guide^="hunt-"]')].find(m=>cityRx.test((m.querySelector('.hunt-name')?.textContent||m.textContent||'').trim()));if(city)break;}
+         }
+         if(!city)return {ok:false,msg:'No encontré una ciudad disponible para salir de la hunt.'};
+         city.click();
+         await wait(1200);
+         for(let n=0;n<40;n++){await wait(300);const loc=String(document.querySelector('.phud-tloc')?.textContent||'').trim();if(cityRx.test(loc)){await wait(1500);break;}}
+       } else {
+         await wait(900);
+       }
+       for(let n=0;n<20;n++){if(clickMarket())return {ok:true};await wait(350)}
+       return {ok:false,msg:'Llegaste a la ciudad, pero no encontré el botón del Mercado Global.'};
+     })()`);
+     if(!result?.ok){alert(result?.msg||'No se pudo ir al mercado.');return;}
+     btn.textContent='🧭 Abriendo mercado…';await new Promise(r=>setTimeout(r,900));$('ehGeneralMarket').classList.remove('show');
+   }catch(e){alert('No se pudo ir al mercado: '+(e?.message||e));}
+   finally{btn.classList.remove('busy');btn.textContent=original}
+ }
+ const openEhMarket=async()=>{
+   const tools=$('ehToolsModal'); if(tools){tools.classList.remove('show','on','open');tools.style.removeProperty('display');}
+   let i=Number($('ehAdvisorAccount')?.value);if(!Number.isInteger(i)||i<0||!webviews[i]||off[i])i=webviews.findIndex((w,j)=>w&&!off[j]);
+   if(i<0){alert('No hay ninguna cuenta activa.');return;}
+   ehGMIndex=i; ehGMFillTrainers(); ehGMLoadPrefs(); if($('ehGMTrainer')?.value!=='')ehGMIndex=+$('ehGMTrainer').value; $('ehGeneralMarket').classList.add('show'); clearInterval(ehGMTimer); await ehGMFetch(); ehGMTimer=setInterval(ehGMFetch,20000);setTimeout(ehGMUpdateSafety,250);
+ };
+ setTimeout(()=>{
+   const b=$('ehMarketBtn');if(b)b.onclick=openEhMarket;
+   $('ehGMClose').onclick=()=>{clearInterval(ehGMTimer);ehGMTimer=null;$('ehGeneralMarket').classList.remove('show')};
+   $('ehGMRefresh').onclick=ehGMFetch;$('ehGMTeleport').onclick=ehGMTeleport;$('ehGMSaveProfile').onclick=ehGMSaveProfile;$('ehGMProfile').onchange=e=>ehGMApplyProfile(e.target.value);$('ehGMClear').onclick=ehGMClearFilters;$('ehGMHistoryBtn').onclick=ehGMShowHistory;ehGMRefreshProfiles();$('ehGMTrainer').onchange=async e=>{ehGMIndex=+e.target.value;ehGMSavePrefs();await ehGMFetch()};
+   $('ehGMCat').onchange=()=>{ehGMSavePrefs();ehGMFetch()};$('ehGMQ').oninput=()=>{ehGMSavePrefs();ehGMRender()};['ehGMIVMin','ehGMIVMax','ehGMQMin','ehGMQMax','ehGMLvMin','ehGMLvMax'].forEach(id=>$(id).oninput=()=>{ehGMSavePrefs();ehGMRender()});$('ehGMCurrency').onchange=()=>{ehGMSavePrefs();ehGMRender()};$('ehGMSort').onchange=()=>{ehGMSavePrefs();ehGMRender()};$('ehGMFavOnly').onclick=()=>{$('ehGMFavOnly').classList.toggle('on');ehGMSavePrefs();ehGMRender()};
+ },0);
+
  const EH_STATE_IDS=['dock','alerts','sellguard','chat','cleanHud','muteAll','awake','minTray','sndShiny','voltaHunt','layout','propNat','scriptsBtn'];
  function syncEhOptionStates(){
    // Reaplica los estados reales guardados antes de pintar el panel.
@@ -4898,7 +5275,16 @@ body.eh-options-open #grid,body.eh-options-open #cards{margin-left:280px!importa
  };
  $('ehStart').onclick=()=>{const b=$('loginAll');if(b)b.click()};
  $('ehAccountsBtn').onclick=()=>{const b=$('accounts');if(b)b.click()};
- $('ehToolsBtn').onclick=()=>openAdvisor();
+ const ehTabs=[...document.querySelectorAll('.eh-tools-tabs [data-ehtab]')];
+ const ehPanels={advisor:$('ehAdvisorPanel'),diag:$('ehDiagPanel')};
+ const showEhTab=tab=>{
+   Object.values(ehPanels).forEach(x=>x&&x.classList.remove('show'));
+   ehTabs.forEach(x=>x.classList.toggle('active',x.dataset.ehtab===tab));
+   if(ehPanels[tab])ehPanels[tab].classList.add('show');
+ };
+ ehTabs.forEach(b=>b.onclick=()=>showEhTab(b.dataset.ehtab));
+
+ $('ehToolsBtn').onclick=()=>{const m=$('ehToolsModal');if(m)m.style.removeProperty('display');openAdvisor()};
  $('ehToolsClose').onclick=()=>$('ehToolsModal').classList.remove('show');
  $('ehToolsModal').onclick=e=>{if(e.target===$('ehToolsModal'))$('ehToolsModal').classList.remove('show')};
  $('ehAdvisorAccount').onchange=()=>loadAdvisorPokemon();
@@ -5078,6 +5464,18 @@ async function renderAdvisor(){
 
  document.addEventListener('keydown' ,e=>{if(e.key==='Escape')body.classList.remove('eh-options-open')});
 })();
+</script>
+
+
+<script>
+document.addEventListener('keydown',async e=>{if(!(e.ctrlKey&&e.shiftKey&&e.code==='KeyD'))return;try{const w=typeof ehGMWebview==='function'?ehGMWebview():null;const game=w?await w.executeJavaScript(`(()=>({loc:document.querySelector('.phud-tloc')?.textContent||'',markers:[...document.querySelectorAll('.map-window .hunt-marker')].map(m=>({name:m.querySelector('.hunt-name')?.textContent||'',level:m.querySelector('.hunt-lvl')?.textContent||'',guide:m.getAttribute('data-guide')||'',here:m.classList.contains('here')})).slice(0,300)}))()`):null;const d={at:new Date().toISOString(),marketRows:typeof ehGMRows!=='undefined'?ehGMRows.length:null,account:typeof ehGMIndex!=='undefined'?ehGMIndex:null,game};localStorage.setItem('ehDiagnosticLast',JSON.stringify(d));console.info('[Escarlata diagnóstico]',d)}catch(err){console.warn('[Escarlata diagnóstico]',err)}})
+
+(()=>{
+ const $=id=>document.getElementById(id);
+ function diagnostic(){return {app:'Escarlata Hispana',version:'1.0.5',time:new Date().toISOString(),webviews:[...document.querySelectorAll('webview')].length}}
+ $('ehDiagBtn')?.addEventListener('click',()=>{const x=$('ehDiagPane');if(x)x.textContent=JSON.stringify(diagnostic(),null,2)});
+ $('ehDiagCopyBtn')?.addEventListener('click',async()=>{const t=JSON.stringify(diagnostic(),null,2);try{await navigator.clipboard.writeText(t);alert('Diagnóstico copiado.')}catch{prompt('Copia este diagnóstico:',t)}});
+})();;
 </script>
 
 </body>
