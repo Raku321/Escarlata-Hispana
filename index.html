@@ -5046,7 +5046,7 @@ async function renderAdvisor(){
  if(v) v.textContent='v'+(window.pokeAPI?.appVersion||'1.0.0');
  function paintUpdate(u){
    if(!u||!st)return; st.textContent=u.message||'';
-   if(dl) dl.style.display=u.state==='available'?'block':'none';
+   if(dl) dl.style.display='none';
    if(ins) ins.style.display=u.state==='ready'?'block':'none';
    if(ck) ck.disabled=u.state==='checking'||u.state==='downloading';
  }
