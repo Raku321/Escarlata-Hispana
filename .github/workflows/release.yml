@@ -18,7 +18,7 @@ jobs:
         with:
           node-version: 22
       - name: Instalar dependencias
-        run: npm install
+        run: npm ci
       - name: Compilar instalador
         run: npx electron-builder --win nsis --publish never
       - name: Publicar Release
@@ -27,5 +27,4 @@ jobs:
           files: |
             dist/Instalador-Escarlata-Hispana-*.exe
             dist/*.blockmap
-            dist/latest.yml
           generate_release_notes: true

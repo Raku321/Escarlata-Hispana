@@ -568,6 +568,11 @@ webview{background:#050405}
  #menuWrap{margin-left:0!important}
 }
 
+
+#ehSimpleBtn{display:inline-flex!important;align-items:center;gap:6px;background:#17251c;border:1px solid #315d3c;color:#eaffef;font-weight:800}
+#ehSimpleBtn:hover{background:#203629;border-color:#438452}
+#ehSimpleBtn.on{background:#238636!important;border-color:#3fb950!important;color:#fff!important}
+
 </style>
 
   <style id="escarlata-active-checks">
@@ -635,6 +640,7 @@ webview{background:#050405}
     <button id="loginAll" class="primary">▶ Iniciar equipo</button>
     <button id="accounts">👤 Cuentas</button>
     <button id="reloadAll">⟳ Actualizar todo</button>
+    <button id="ehSimpleBtn" title="Modo simple de PokeGrid">🍃 Modo simple</button>
     <button id="dock" title="Muestra u oculta el menú de iconos del juego. F2 alterna en el panel activo.">🎛 Menú del juego</button>
     <button id="statsBtn" title="Resumen de la cuenta activa (gold/h, XP/h, bolsa y drops)">📊 Panel</button>
     <button id="cardsBtn" title="Vista ultraligera: oculta el juego y muestra solo los números">🃏 Vista ligera</button>
@@ -4298,7 +4304,12 @@ lw:!!(window.__loginWatch||window.document?.querySelector('input[autocomplete=on
     webviews.forEach((w, i) => { if (off[i] || !w) return; try { w.setAudioMuted(cardsOn || muted); w.executeJavaScript(ultraScript(leve())).catch(() => {}); w.executeJavaScript(ecoScript(ecoFps())).catch(() => {}); w.executeJavaScript(chatScript(cardsOn || chatHidden)).catch(() => {}); } catch {} });
     if (cardsOn) { cdHtmlAnt = ''; cardsEl.innerHTML = '<div class="cd-empty" style="padding:20px">' + t('cdWaiting') + '</div>'; refreshCards(); }
   }
-  cardsBtn.onclick = () => { cardsOn = !cardsOn; applyCards(); };
+  cardsBtn.onclick = () => { cardsOn = !cardsOn; applyCards(); const sb=document.getElementById('ehSimpleBtn'); if(sb) sb.classList.toggle('on',cardsOn); };
+  const ehSimpleBtn=document.getElementById('ehSimpleBtn');
+  if(ehSimpleBtn){
+    ehSimpleBtn.onclick=()=>cardsBtn.click();
+    ehSimpleBtn.classList.toggle('on',cardsOn);
+  }
   function aplicaJanela(vis) {
     const oc = !vis; if (oc === janelaOculta) return;
     janelaOculta = oc;
@@ -5046,7 +5057,7 @@ async function renderAdvisor(){
  if(v) v.textContent='v'+(window.pokeAPI?.appVersion||'1.0.0');
  function paintUpdate(u){
    if(!u||!st)return; st.textContent=u.message||'';
-   if(dl) dl.style.display='none';
+   if(dl) dl.style.display=u.state==='available'?'block':'none';
    if(ins) ins.style.display=u.state==='ready'?'block':'none';
    if(ck) ck.disabled=u.state==='checking'||u.state==='downloading';
  }

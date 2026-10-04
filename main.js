@@ -1,5 +1,4 @@
 const { app, BrowserWindow, ipcMain, safeStorage, Tray, Menu, powerSaveBlocker, shell, session, Notification } = require('electron');
-const { autoUpdater } = require('electron-updater');
 const path = require('path');
 const fs = require('fs');
 const https = require('https');
@@ -274,33 +273,104 @@ app.userAgentFallback = app.userAgentFallback
 // versao do app pro badge do topo (sendSync: disponivel no load, mesmo com o preload em sandbox)
 ipcMain.on('app:version', (e) => { e.returnValue = app.getVersion(); });
 
-// ===== Actualizaciones automáticas =====
-// El repositorio es público: los usuarios no necesitan token de GitHub.
+// ===== Actualizaciones SIN TOKEN =====
+// Consulta el último Release PÚBLICO de GitHub mediante HTTPS anónimo.
+// No usa electron-updater, Authorization, GH_TOKEN ni GITHUB_TOKEN.
+const UPDATE_API='https://api.github.com/repos/Raku321/Escarlata-Hispana/releases/latest';
 let updateState={state:'idle',version:app.getVersion(),availableVersion:null,percent:0,message:'Estás actualizado.'};
-const sendUpdateState=()=>{ try { BrowserWindow.getAllWindows().forEach(w=>{ if(!w.isDestroyed()) w.webContents.send('update:status',updateState); }); } catch {} };
-const setUpdateState=(patch)=>{ updateState={...updateState,...patch,version:app.getVersion()}; sendUpdateState(); return updateState; };
-autoUpdater.autoDownload=true;
-autoUpdater.autoInstallOnAppQuit=true;
-autoUpdater.allowPrerelease=false;
-autoUpdater.on('checking-for-update',()=>setUpdateState({state:'checking',message:'Buscando actualizaciones…'}));
-autoUpdater.on('update-available',(info)=>setUpdateState({state:'downloading',availableVersion:info.version,percent:0,message:'Nueva versión v'+info.version+' disponible. Descargando…'}));
-autoUpdater.on('update-not-available',()=>setUpdateState({state:'idle',availableVersion:null,percent:0,message:'Estás actualizado.'}));
-autoUpdater.on('download-progress',(p)=>setUpdateState({state:'downloading',percent:Math.round(p.percent||0),message:'Descargando actualización… '+Math.round(p.percent||0)+'%'}));
-autoUpdater.on('update-downloaded',(info)=>setUpdateState({state:'ready',availableVersion:info.version,percent:100,message:'Versión v'+info.version+' lista. Reinicia para instalar.'}));
-autoUpdater.on('error',()=>setUpdateState({state:'error',message:'No se pudo comprobar la actualización. Puedes intentarlo nuevamente.'}));
+let updateAsset=null, updateFile=null;
+const sendUpdateState=()=>{try{BrowserWindow.getAllWindows().forEach(w=>{if(!w.isDestroyed())w.webContents.send('update:status',updateState)})}catch{}};
+const setUpdateState=(p)=>{updateState={...updateState,...p,version:app.getVersion()};sendUpdateState();return updateState};
+const versionParts=v=>String(v||'').replace(/^v/i,'').split('.').map(x=>parseInt(x,10)||0);
+function versionGreater(a,b){const A=versionParts(a),B=versionParts(b);for(let i=0;i<Math.max(A.length,B.length);i++){const x=A[i]||0,y=B[i]||0;if(x!==y)return x>y}return false}
+function httpsJson(url,redirects=0){
+ return new Promise((resolve,reject)=>{
+  let u;try{u=new URL(url)}catch(e){reject(e);return}
+  if(u.protocol!=='https:'||u.hostname!=='api.github.com'){reject(new Error('Host de actualización no permitido'));return}
+  const req=https.get(u,{headers:{'User-Agent':'Escarlata-Hispana/'+app.getVersion(),'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}},res=>{
+   if(res.statusCode>=300&&res.statusCode<400&&res.headers.location&&redirects<3){res.resume();httpsJson(new URL(res.headers.location,u).toString(),redirects+1).then(resolve,reject);return}
+   if(res.statusCode!==200){res.resume();reject(new Error('GitHub HTTP '+res.statusCode));return}
+   let body='',n=0;res.setEncoding('utf8');
+   res.on('data',c=>{n+=Buffer.byteLength(c);if(n>2*1024*1024){req.destroy(new Error('Respuesta demasiado grande'));return}body+=c});
+   res.on('end',()=>{try{resolve(JSON.parse(body))}catch(e){reject(e)}})
+  });req.setTimeout(15000,()=>req.destroy(new Error('timeout')));req.on('error',reject)
+ })
+}
 async function checkUpdates(){
-  if(!app.isPackaged) return setUpdateState({state:'idle',message:'Actualizador disponible en la versión instalada.'});
-  try { await autoUpdater.checkForUpdates(); } catch {}
-  return updateState;
+ setUpdateState({state:'checking',message:'Buscando actualizaciones…'});
+ try{
+  const r=await httpsJson(UPDATE_API), latest=String(r.tag_name||'').replace(/^v/i,'');
+  if(!latest||!versionGreater(latest,app.getVersion())){updateAsset=null;return setUpdateState({state:'idle',availableVersion:null,percent:0,message:'Estás actualizado.'})}
+  const assets=Array.isArray(r.assets)?r.assets:[];
+  const asset=assets.find(a=>new RegExp('^Instalador-Escarlata-Hispana-'+latest.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'\\.exe$','i').test(String(a.name||'')));
+  if(!asset||!asset.browser_download_url)throw new Error('El Release no contiene el instalador esperado');
+  const expected='https://github.com/Raku321/Escarlata-Hispana/releases/download/';
+  if(!String(asset.browser_download_url).startsWith(expected))throw new Error('URL de descarga no permitida');
+  updateAsset={version:latest,url:asset.browser_download_url,name:asset.name,size:Number(asset.size)||0};
+  return setUpdateState({state:'available',availableVersion:latest,percent:0,message:'Nueva versión v'+latest+' disponible.'})
+ }catch(e){return setUpdateState({state:'error',message:'No se pudo comprobar la actualización. Inténtalo nuevamente.'})}
+}
+const allowedDownloadHost=h=>h==='github.com'||h==='objects.githubusercontent.com'||h==='release-assets.githubusercontent.com'||h.endsWith('.githubusercontent.com');
+function downloadHttps(url,file,redirects=0){
+ return new Promise((resolve,reject)=>{
+  let u;try{u=new URL(url)}catch(e){reject(e);return}
+  if(u.protocol!=='https:'||!allowedDownloadHost(u.hostname)){reject(new Error('Host de descarga no permitido'));return}
+  const req=https.get(u,{headers:{'User-Agent':'Escarlata-Hispana/'+app.getVersion(),'Accept':'application/octet-stream'}},res=>{
+   if(res.statusCode>=300&&res.statusCode<400&&res.headers.location&&redirects<6){res.resume();downloadHttps(new URL(res.headers.location,u).toString(),file,redirects+1).then(resolve,reject);return}
+   if(res.statusCode!==200){res.resume();reject(new Error('Descarga HTTP '+res.statusCode));return}
+   const total=Number(res.headers['content-length'])||updateAsset?.size||0;let got=0,last=-1;
+   const out=fs.createWriteStream(file);
+   res.on('data',c=>{got+=c.length;const pct=total?Math.min(99,Math.floor(got*100/total)):0;if(pct!==last){last=pct;setUpdateState({state:'downloading',percent:pct,message:'Descargando actualización… '+pct+'%'})}});
+   res.pipe(out);out.on('finish',()=>out.close(()=>resolve(true)));out.on('error',reject)
+  });req.setTimeout(30000,()=>req.destroy(new Error('timeout')));req.on('error',reject)
+ })
+}
+async function downloadUpdate(){
+ if(!updateAsset){await checkUpdates();if(!updateAsset)return false}
+ try{
+  const dir=path.join(app.getPath('temp'),'Escarlata-Hispana-Update');fs.mkdirSync(dir,{recursive:true});
+  const file=path.join(dir,updateAsset.name);try{fs.unlinkSync(file)}catch{}
+  setUpdateState({state:'downloading',percent:0,message:'Descargando actualización… 0%'});
+  await downloadHttps(updateAsset.url,file);
+  if(!fs.existsSync(file)||fs.statSync(file).size<1024*1024)throw new Error('Instalador incompleto');
+  updateFile=file;setUpdateState({state:'ready',percent:100,message:'Versión v'+updateAsset.version+' lista. Pulsa Instalar y reiniciar.'});return true
+ }catch(e){try{if(updateFile)fs.unlinkSync(updateFile)}catch{};updateFile=null;setUpdateState({state:'error',message:'No se pudo descargar la actualización. Inténtalo nuevamente.'});return false}
+}
+function installUpdate(){
+ if(!updateFile||!fs.existsSync(updateFile))return false;
+ try{
+  const {spawn}=require('child_process');
+  const child=spawn(updateFile,[],{detached:true,stdio:'ignore',windowsHide:false});child.unref();
+  setTimeout(()=>app.quit(),250);return true
+ }catch{return false}
 }
 ipcMain.handle('update:status',()=>updateState);
 ipcMain.handle('update:check',()=>checkUpdates());
-ipcMain.handle('update:download',async()=>{ try { await autoUpdater.downloadUpdate(); return true; } catch { return false; } });
-ipcMain.handle('update:install',()=>{ if(updateState.state!=='ready') return false; setImmediate(()=>autoUpdater.quitAndInstall(false,true)); return true; });
-if (lockOk) app.whenReady().then(() => {
-  setTimeout(() => { checkUpdates(); }, 6000);
-  setInterval(() => { checkUpdates(); }, 6 * 60 * 60 * 1000);
+ipcMain.handle('update:download',()=>downloadUpdate());
+ipcMain.handle('update:install',()=>installUpdate());
+if(lockOk)app.whenReady().then(()=>{setTimeout(async()=>{const st=await checkUpdates();if(st.state==='available')downloadUpdate()},7000);setInterval(async()=>{const st=await checkUpdates();if(st.state==='available')downloadUpdate()},6*60*60*1000)});
+
+
+// ===== Servicios internos restaurados de la versión funcional (Trabajo 53) =====
+ipcMain.handle('notify', (_e, title, body) => {
+  try { if (Notification.isSupported()) new Notification({ title, body }).show(); } catch {}
 });
+
+// CRÍTICO: carga presets/justpokedex.js dentro de cada webview.
+ipcMain.handle('preset:read', (_e, name) => {
+  if (typeof name !== 'string' || !/^[\w.-]+\.js$/.test(name)) return '';
+  try { return fs.readFileSync(path.join(__dirname, 'presets', name), 'utf8'); } catch { return ''; }
+});
+
+let awakeId = null;
+ipcMain.handle('awake:set', (_e, on) => {
+  if (on && awakeId === null) awakeId = powerSaveBlocker.start('prevent-app-suspension');
+  if (!on && awakeId !== null) { powerSaveBlocker.stop(awakeId); awakeId = null; }
+  return awakeId !== null;
+});
+
+let minToTray = true;
+ipcMain.handle('mintray:set', (_e, on) => { minToTray = !!on; return minToTray; });
 
 // ===== Abrir com o Windows (desligado por padrao) =====
 // Feito com um atalho na pasta Inicializar do usuario, e nao escrevendo na chave Run do registro
