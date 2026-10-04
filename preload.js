@@ -12,16 +12,13 @@ contextBridge.exposeInMainWorld('pokeAPI', {
   onHotkey: (cb) => ipcRenderer.on('hotkey', (_e, k) => cb(k)),
   onJanela: (cb) => ipcRenderer.on('janela', (_e, v) => cb(!!v)), // janela visivel (true) ou minimizada/na bandeja (false)
   notify: (title, body) => ipcRenderer.invoke('notify', title, body),
+  onLocalNotify: (cb) => ipcRenderer.on('notify:local', (_e, data) => cb(data)),
+  copyText: (text) => ipcRenderer.invoke('clipboard:write', String(text || '')),
   readPreset: (name) => ipcRenderer.invoke('preset:read', name),
-  openOptions: () => ipcRenderer.invoke('options:open'),
-  optionAction: (id) => ipcRenderer.send('options:action', id),
-  onOptionAction: (cb) => ipcRenderer.on('options:action', (_e, id) => cb(id)),
-  sendOptionStates: (states) => ipcRenderer.send('options:states', states),
-  onOptionStates: (cb) => ipcRenderer.on('options:states', (_e, states) => cb(states)),
   saveBackup: (nome, conteudo, cabecalho) => ipcRenderer.invoke('backup:save', nome, conteudo, cabecalho),
   clearAccount: (i) => ipcRenderer.invoke('conta:limpar', i),
   fetchUserScript: (url) => ipcRenderer.invoke('userscript:fetch', url),
-  // versao do app: vem do processo principal (a UA nao carrega mais o token pokegrid/x, e o
+  // versao do app: vem do processo principal (a UA nao carrega mais o token del cliente, e o
   // preload roda em sandbox, entao require de arquivo local nao e confiavel)
   getUpdateStatus: () => ipcRenderer.invoke('update:status'),
   checkUpdates: () => ipcRenderer.invoke('update:check'),

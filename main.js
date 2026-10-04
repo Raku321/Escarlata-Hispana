@@ -1,7 +1,14 @@
-const { app, BrowserWindow, ipcMain, safeStorage, Tray, Menu, powerSaveBlocker, shell, session, Notification } = require('electron');
+const { app, BrowserWindow, ipcMain, safeStorage, Tray, Menu, powerSaveBlocker, shell, session, Notification, clipboard } = require('electron');
 const path = require('path');
 const fs = require('fs');
 const https = require('https');
+
+// Datos persistentes de Escarlata Hispana: SIEMPRE fuera de la instalacion.
+// Una sola carpeta fija para todas las versiones. No se buscan ni migran cuentas antiguas.
+const EH_APPDATA = app.getPath('appData');
+const EH_STABLE_USER_DATA = path.join(EH_APPDATA, 'Escarlata Hispana');
+try { fs.mkdirSync(EH_STABLE_USER_DATA, { recursive: true }); } catch {}
+app.setPath('userData', EH_STABLE_USER_DATA);
 
 // Silencia o spam do Chromium no terminal (ex.: STUN/WebRTC do jogo que a rede nao resolve).
 // E so log, nao afeta o app. Mantem so erros fatais.
@@ -225,36 +232,64 @@ app.on('web-contents-created', (_e, contents) => {
 
 const credFile = () => path.join(app.getPath('userData'), 'accounts.enc');
 
-// Contas salvas: criptografadas em disco via DPAPI/keychain do SO (safeStorage).
+// Cuentas guardadas: una única ubicación estable para todas las actualizaciones.
+// El archivo nunca vive dentro de la carpeta de instalación, por lo que actualizar o
+// reinstalar la aplicación no debe eliminar las cuentas.
+function normalizeCreds(accounts) {
+  const out = (Array.isArray(accounts) ? accounts : []).slice(0, 4).map(a => ({
+    name: String(a && a.name || ''),
+    email: String(a && a.email || ''),
+    senha: String(a && a.senha || '')
+  }));
+  while (out.length < 4) out.push({ name:'', email:'', senha:'' });
+  return out;
+}
+function decodeCreds(buf) {
+  const raw = safeStorage.isEncryptionAvailable() ? safeStorage.decryptString(buf) : buf.toString('utf8');
+  return normalizeCreds(JSON.parse(raw));
+}
+function readCredsFile(file) {
+  if (!fs.existsSync(file)) return null;
+  return decodeCreds(fs.readFileSync(file));
+}
+
 ipcMain.handle('creds:load', () => {
-  let buf;
-  try { buf = fs.readFileSync(credFile()); } catch { return []; } // nunca salvo
-  try {
-    if (safeStorage.isEncryptionAvailable()) return JSON.parse(safeStorage.decryptString(buf));
-    return JSON.parse(buf.toString('utf8')); // fallback se o SO nao oferecer cripto
-  } catch {
-    // Ilegivel (ex.: chave de cripto mudou apos upgrade do Electron): preserva o
-    // arquivo antes que um save por cima destrua a unica copia.
-    try { fs.copyFileSync(credFile(), credFile() + '.bak-' + Date.now()); } catch {}
-    return [];
+  const f = credFile();
+  // Principal primero; si quedó dañado por un cierre inesperado, usa la copia anterior.
+  for (const candidate of [f, f + '.bak']) {
+    try {
+      const accounts = readCredsFile(candidate);
+      if (!accounts) continue;
+      if (candidate.endsWith('.bak')) {
+        try { fs.copyFileSync(candidate, f); } catch {}
+      }
+      return accounts;
+    } catch {}
   }
+  return normalizeCreds([]);
 });
 
 ipcMain.handle('creds:save', (_e, accounts) => {
+  const f = credFile();
+  const clean = normalizeCreds(accounts);
+  const json = JSON.stringify(clean);
   try {
-    const json = JSON.stringify(accounts);
-    // sem cripto do sistema, gravar em texto puro seria quebrar a promessa do app calado:
-    // melhor recusar e dizer, que o renderer avisa e o relatorio de erros guarda o motivo
-    if (!safeStorage.isEncryptionAvailable()) { logErro('creds', 'sistema sin cifrado (safeStorage no disponible): las contrasenas NO se guardaron'); return false; }
-    const data = safeStorage.encryptString(json);
-    const f = credFile();
+    fs.mkdirSync(path.dirname(f), { recursive: true });
+    const data = safeStorage.isEncryptionAvailable()
+      ? safeStorage.encryptString(json)
+      : Buffer.from(json, 'utf8');
+
+    // Escribe y valida primero un temporal. Solo después sustituye el archivo vigente.
     fs.writeFileSync(f + '.tmp', data);
-    fs.renameSync(f + '.tmp', f); // troca atomica: fechar o app no meio nao corrompe
+    const check = decodeCreds(fs.readFileSync(f + '.tmp'));
+    if (JSON.stringify(check) !== json) throw new Error('verificación de cuentas fallida');
+
+    try { if (fs.existsSync(f)) fs.copyFileSync(f, f + '.bak'); } catch {}
+    fs.renameSync(f + '.tmp', f);
     return true;
   } catch (e) {
-    // disco cheio, antivirus segurando o .tmp (EPERM), pasta sem permissao: quem chamou precisa saber,
-    // senao o modal fecha como se tivesse salvo e a senha some no proximo boot
-    logErro('creds', 'error al guardar cuentas: ' + e.message);
+    try { fs.unlinkSync(f + '.tmp'); } catch {}
+    logErro('creds', 'error al guardar cuentas: ' + (e && e.message || e));
     return false;
   }
 });
@@ -264,7 +299,7 @@ ipcMain.handle('creds:save', (_e, accounts) => {
 // Deriva da versão real do Chromium, então acompanha upgrades do Electron sozinho.
 app.userAgentFallback = app.userAgentFallback
   .replace(/ Electron\/[\d.]+/, '')
-  // tira tambem o token do proprio app (pokegrid/1.5.x): a UA nao precisa entregar quem usa o
+  // tira tambem o token de identificación del cliente: a UA nao precisa entregar quem usa o
   // Escarlata Hispana pro servidor do jogo
   .replace(/ [\w.-]+\/[\d.]+ (?=Chrome\/)/i, ' ')
   .replace(/(Chrome\/\d+)[\d.]+/, '$1.0.0.0');
@@ -272,6 +307,7 @@ app.userAgentFallback = app.userAgentFallback
 // Notificacao do SO (alertas de queda e de sem pokebola).
 // versao do app pro badge do topo (sendSync: disponivel no load, mesmo com o preload em sandbox)
 ipcMain.on('app:version', (e) => { e.returnValue = app.getVersion(); });
+ipcMain.handle('clipboard:write', (_e, text) => { try { clipboard.writeText(String(text || '')); return true; } catch { return false; } });
 
 // ===== Actualizaciones SIN TOKEN =====
 // Consulta el último Release PÚBLICO de GitHub mediante HTTPS anónimo.
@@ -353,10 +389,22 @@ if(lockOk)app.whenReady().then(()=>{setTimeout(async()=>{const st=await checkUpd
 
 // ===== Servicios internos restaurados de la versión funcional (Trabajo 53) =====
 ipcMain.handle('notify', (_e, title, body) => {
-  try { if (Notification.isSupported()) new Notification({ title, body }).show(); } catch {}
+  title = String(title || 'Escarlata Hispana').slice(0, 120);
+  body = String(body || '').slice(0, 700);
+  let native = false;
+  try {
+    if (Notification.isSupported()) {
+      const n = new Notification({ title, body, icon: path.join(__dirname, 'assets', 'escarlata-hispana.png') });
+      n.on('failed', (_ev, err) => logErro('notify', 'Windows no mostró la notificación: ' + String(err || 'error desconocido')));
+      n.show(); native = true;
+    }
+  } catch (e) { logErro('notify', 'notificación nativa: ' + e.message); }
+  // Respaldo independiente de Windows: el renderer siempre recibe el aviso y lo muestra dentro de Escarlata.
+  try { if (mainWin && !mainWin.isDestroyed()) { mainWin.webContents.send('notify:local', { title, body }); if (!mainWin.isFocused()) mainWin.flashFrame(true); } } catch (e) { logErro('notify', 'aviso interno: ' + e.message); }
+  return { ok: true, native };
 });
 
-// CRÍTICO: carga presets/justpokedex.js dentro de cada webview.
+// CRÍTICO: carga presets/escarlata-calculadora.js dentro de cada webview.
 ipcMain.handle('preset:read', (_e, name) => {
   if (typeof name !== 'string' || !/^[\w.-]+\.js$/.test(name)) return '';
   try { return fs.readFileSync(path.join(__dirname, 'presets', name), 'utf8'); } catch { return ''; }
@@ -387,7 +435,7 @@ function setAutoStart(on) {
   if (process.platform !== 'win32') return false;
   try {
     if (on) {
-      const opts = { target: exeReal(), description: 'Escarlata Hispana', appUserModelId: 'online.idleworld.pokegrid' };
+      const opts = { target: exeReal(), description: 'Escarlata Hispana', appUserModelId: 'com.escarlatahispana.app' };
       if (!app.isPackaged) opts.args = `"${app.getAppPath()}"`; // rodando pelo codigo: electron + a pasta do app
       shell.writeShortcutLink(startupLnk(), 'create', opts);
     } else {
@@ -421,19 +469,9 @@ ipcMain.handle('webhook:send', (_e, url, text) => {
 });
 
 let tray; // referencia viva para o icone nao sumir (GC)
-let optionsWin = null;
 let mainWin = null;
-ipcMain.handle('options:open', () => {
-  try {
-    if (optionsWin && !optionsWin.isDestroyed()) { optionsWin.show(); optionsWin.focus(); return true; }
-    optionsWin = new BrowserWindow({ width: 720, height: 650, minWidth: 520, minHeight: 500, title: 'Opciones — Escarlata Hispana', autoHideMenuBar: true, backgroundColor: '#0d0709', parent: mainWin || undefined, webPreferences: { preload: path.join(__dirname, 'preload.js'), contextIsolation: true, nodeIntegration: false } });
-    optionsWin.loadFile(path.join(__dirname, 'options.html'));
-    optionsWin.on('closed', () => { optionsWin = null; });
-    return true;
-  } catch (e) { logErro('opciones', e && e.message || e); return false; }
-});
-ipcMain.on('options:action', (_e, id) => { try { if (mainWin && !mainWin.isDestroyed()) mainWin.webContents.send('options:action', String(id)); } catch {} });
-ipcMain.on('options:states', (_e, states) => { try { if (optionsWin && !optionsWin.isDestroyed()) optionsWin.webContents.send('options:states', states || {}); } catch {} });
+// Opciones vive dentro de index.html. Se eliminó la ventana options.html antigua para evitar
+// dos implementaciones distintas y una ruta a un archivo que ya no forma parte del paquete.
 
 
 app.whenReady().then(() => {
@@ -441,7 +479,7 @@ app.whenReady().then(() => {
   // Nada aqui pode derrubar a criacao da janela: se qualquer peca do sistema falhar (registro,
   // particao de sessao corrompida, bandeja), o app tem que abrir assim mesmo. Antes destas
   // guardas, uma excecao aqui deixava o processo vivo e SEM JANELA, que e o pior sintoma possivel.
-  try { app.setAppUserModelId('com.escarlatahispana.pokegrid'); } catch (e) { logErro('boot', 'appUserModelId: ' + e.message); } // notificacoes do Windows com o nome certo
+  try { app.setAppUserModelId('com.escarlatahispana.app'); } catch (e) { logErro('boot', 'appUserModelId: ' + e.message); } // notificacoes do Windows com o nome certo
 
   // Nega pedidos de permissao dos jogos (mic, camera, localizacao, notificacao...). So a escrita no clipboard passa:
   // sem ela os botoes Copiar do jogo (Recovery Key, codigos 2FA, Pix, link de indicacao) falhavam calados. O Chromium
@@ -472,9 +510,9 @@ app.whenReady().then(() => {
   // gravado no disco ou arrastado pra janela abria sem a CSP e com o pokeAPI). Passa so a recarga da propria pagina:
   // o importar backup termina em location.reload(), que no Electron 43 tambem dispara will-navigate. Pro navegador de
   // fora vao so os links fixos da interface; antes ia qualquer URL, e um XSS mandava as senhas na query de um link.
-  const LINKS = new Set(['https://github.com/soufoka/Escarlata Hispana-source', 'https://github.com/soufoka/Escarlata Hispana-source/blob/main/FAQ.md',
-    'https://github.com/soufoka/Escarlata Hispana-source/blob/main/MANUAL.md', 'https://link.mercadopago.com.br/pokegrid',
-    'https://github.com/soufoka/Escarlata Hispana/releases/latest']); // selo de versao nova no instalador/portatil
+  const LINKS = new Set(['https://github.com/Raku321/Escarlata-Hispana', 'https://github.com/Raku321/Escarlata-Hispana',
+    'https://github.com/Raku321/Escarlata-Hispana', '',
+    'https://github.com/Raku321/Escarlata-Hispana/releases/latest']); // selo de versao nova no instalador/portatil
   const linkFixo = (url) => { if (LINKS.has(url)) abreFora(url); };
   win.webContents.on('will-navigate', (e, url) => { if (url !== win.webContents.getURL()) { e.preventDefault(); linkFixo(url); } });
   win.webContents.setWindowOpenHandler(({ url }) => { linkFixo(url); return { action: 'deny' }; });
@@ -548,7 +586,7 @@ app.whenReady().then(() => {
     try {
       const marca = path.join(app.getPath('userData'), 'runkey-limpo-2');
       if (process.platform === 'win32' && !fs.existsSync(marca)) {
-        for (const name of ['online.idleworld.pokegrid', 'electron.app.Escarlata Hispana'])
+        for (const name of ['com.escarlatahispana.app', 'electron.app.Escarlata Hispana'])
           try { app.setLoginItemSettings({ openAtLogin: false, name }); } catch (e) { logErro('boot', 'runkey ' + name + ': ' + e.message); }
         // 'electron.app.Electron' e o nome de qualquer app Electron sem marca: nao da pra apagar as cegas.
         // Apaga so o que o proprio Electron casa com o NOSSO exe e que abria escondido (--hidden). O caminho vai entre

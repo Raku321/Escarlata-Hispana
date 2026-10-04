@@ -4,15 +4,16 @@
   if (window.__EH_MARKET__) return;
 
   const inHunt = () => {
-    const city = /(?:cerulean(?: city)?|pewter(?: city)?|lavender(?: town)?|viridian(?: city)?|cassino|casino)/i;
+    const city = /\b(?:cerulean(?: city)?|pewter(?: city)?|lavender(?: town)?|viridian(?: city)?|cassino|casino)\b/i;
     const loc = String(document.querySelector('.phud-tloc,[data-guide="player-location"],[data-guide="location"],.phud-location,.location-name')?.textContent || '').trim();
     if (loc && city.test(loc)) return false;
     const here = [...document.querySelectorAll('.hunt-marker.here,[data-guide^="hunt-"].here')]
       .some(x => !city.test((x.querySelector('.hunt-name')?.textContent || x.textContent || '').trim()));
     if (here) return true;
-    if (document.querySelector('[data-guide="capture-bar"],.hunt-ui,.battle-window,.wild-pokemon,.battle-area,.battle-screen')) return true;
-    // Fail closed: if we cannot prove the trainer is in a city, market purchases stay blocked.
-    return true;
+    const battle = [...document.querySelectorAll('[data-guide="capture-bar"],.hunt-ui,.battle-window,.wild-pokemon,.battle-area,.battle-screen')].some(x => { const cs=getComputedStyle(x); return cs.display!=='none' && cs.visibility!=='hidden' && x.getClientRects().length>0; });
+    if (battle) return true;
+    if (loc && !city.test(loc)) return true;
+    return false;
   };
 
   const tokens = () => { try { return JSON.parse(sessionStorage.getItem('pokeweb:tokens') || 'null'); } catch { return null; } };

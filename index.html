@@ -29,8 +29,8 @@
   button.primary:hover { background: #f0491f; }
   button.on { background: #238636; border-color: #238636; }
   /* pílula IV's: mesmo visual do botão da extensão dentro do jogo */
-  #justPokedexBtn { display:inline-flex; align-items:center; gap:6px; background:linear-gradient(135deg,#7d1020,#d91f32); border-color:#ff5964; color:#fff; font-weight:800; }
-  #justPokedexBtn:hover { background:linear-gradient(135deg,#a51428,#ef3045); }
+  #escarlataCalculatorBtn { display:inline-flex; align-items:center; gap:6px; background:linear-gradient(135deg,#7d1020,#d91f32); border-color:#ff5964; color:#fff; font-weight:800; }
+  #escarlataCalculatorBtn:hover { background:linear-gradient(135deg,#a51428,#ef3045); }
   #ivsBtn { display: inline-flex; align-items: center; gap: 6px; background: linear-gradient(135deg, #e3350d, #b91c1c); border-color: #8f1408; border-radius: 999px; color: #fff; font-weight: 700; }
   #ivsBtn:hover { background: linear-gradient(135deg, #f0491f, #d42020); border-color: #e3350d; }
   #ivsBtn svg { flex: none; }
@@ -768,6 +768,14 @@ webview{background:#050405}
 #menu #countRow button { min-height: 38px !important; }
 @media (max-width: 900px) { #menu { grid-template-columns: repeat(2,minmax(160px,1fr)); } }
 @media (max-width: 600px) { #menu { grid-template-columns: 1fr; top: 96px !important; padding: 14px !important; } }
+
+#ehAlertSettings{grid-column:1/-1;border:1px solid #5b1b28;border-radius:14px;background:#140a0d;padding:16px;margin-bottom:4px}
+#ehAlertSettings h3{margin:0 0 4px;color:#fff;font-size:18px}
+#ehAlertSettings .eh-as-sub{color:#aeb7c4;font-size:12px;margin-bottom:12px}
+#ehAlertGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:9px}
+.eh-alert-toggle{display:flex;align-items:center;justify-content:space-between;gap:10px;background:#211015;border:1px solid #4a1a24;border-radius:10px;padding:10px 12px;cursor:pointer;min-height:48px}
+.eh-alert-toggle:hover{border-color:#b23850;background:#2b1118}.eh-alert-toggle span{font-size:13px;font-weight:700}.eh-alert-toggle input{width:20px;height:20px;accent-color:#d52b45}
+#ehLootHint{grid-column:1/-1;color:#7f8b9b;font-size:11px;margin-top:8px}
 </style>
 
 <style id="ehGeneralMarketStyle">
@@ -780,14 +788,62 @@ webview{background:#050405}
 #ehGMList{flex:1;overflow:auto;padding:0 14px}.ehgm-row{display:grid;grid-template-columns:1fr 170px 100px;gap:10px;align-items:center;padding:10px;border-bottom:1px solid #222c3a}
 .ehgm-row small{display:block;color:#9da9ba;margin-top:3px}.ehgm-row strong{color:#f2c55c}.ehgm-row button{background:#238636;color:#fff;border:1px solid #3fb950;border-radius:7px;padding:8px;font-weight:800}.ehgm-row button:disabled{opacity:.35}
 #ehGMStatus{padding:8px 14px;border-top:1px solid #252e3b;color:#b8c0ce;font-size:12px}
+
+/* Centro de estado de cuentas — Escarlata Hispana */
+#ehStatusCenter{display:none;position:fixed;inset:0;z-index:10030;background:rgba(3,7,12,.82);backdrop-filter:blur(3px);align-items:center;justify-content:center;padding:22px}
+#ehStatusCenter.show{display:flex}
+#ehStatusBox{width:min(1050px,96vw);max-height:88vh;display:flex;flex-direction:column;background:#0d1520;border:1px solid #394b62;border-radius:14px;box-shadow:0 24px 70px #000;overflow:hidden;color:#eef4fa}
+#ehStatusHead{display:flex;align-items:center;gap:10px;padding:13px 16px;background:#111d2b;border-bottom:1px solid #2b3b50}
+#ehStatusHead b{font-size:17px}#ehStatusHead small{color:#9eb0c5;flex:1}#ehStatusHead button{margin:0;padding:7px 10px}
+#ehStatusGrid{overflow:auto;padding:14px;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px}
+.eh-status-card{background:#101b29;border:1px solid #2c3e54;border-radius:11px;padding:12px;min-height:175px}.eh-status-card.ok{border-color:#287a4a}.eh-status-card.warn{border-color:#9b7629}.eh-status-card.off{opacity:.72}
+.eh-status-title{display:flex;align-items:center;gap:8px;margin-bottom:10px}.eh-status-title strong{font-size:15px;flex:1}.eh-status-dot{width:10px;height:10px;border-radius:50%;background:#6d7785}.eh-status-card.ok .eh-status-dot{background:#3dcc72;box-shadow:0 0 10px #3dcc72}.eh-status-card.warn .eh-status-dot{background:#e5ad38}.eh-status-rows{display:grid;grid-template-columns:1fr 1fr;gap:7px}.eh-status-cell{background:#0b131e;border-radius:7px;padding:7px 8px}.eh-status-cell span{display:block;color:#8192a7;font-size:10px;text-transform:uppercase}.eh-status-cell b{display:block;margin-top:2px;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.eh-status-foot{margin-top:10px;color:#9eacbd;font-size:11px}
+</style>
+
+<style id="eh-internal-tabs-fix">
+#ehToolsModal .eh-tools-card{height:min(840px,94vh)}
+#ehFeaturePanels{display:contents}
+#ehMarketPanel.show,#ehControlPanel.show,#ehActivityPanel.show,#ehMarketHistoryPanel.show{height:100%;overflow:auto}
+#ehGeneralMarket.eh-embedded{display:flex!important;position:relative!important;left:auto!important;top:auto!important;right:auto!important;bottom:auto!important;inset:auto!important;transform:none!important;width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;margin:0!important;box-sizing:border-box!important;z-index:auto!important;border:0!important;border-radius:0!important;box-shadow:none!important}
+#ehGeneralMarket.eh-embedded #ehGMClose{display:none!important}
+#ehMarketPanel.show{display:flex!important;flex-direction:column;overflow:hidden!important;min-width:0;min-height:0;width:100%!important;max-width:100%!important;flex:1 1 auto!important}
+#ehGeneralMarket.eh-embedded{min-width:0!important;min-height:0!important;flex:1 1 auto!important;overflow:hidden!important}
+#ehGeneralMarket.eh-embedded #ehGMHead{flex:0 0 auto;min-width:0}
+#ehGeneralMarket.eh-embedded #ehGMControls{flex:0 0 auto;overflow:auto;max-height:38%;align-content:flex-start}
+#ehGeneralMarket.eh-embedded #ehGMList{min-width:0;min-height:0;overflow:auto}
+#ehGeneralMarket.eh-embedded #ehGMStatus{flex:0 0 auto}
+@media (max-width:1050px){.ehgm-row{grid-template-columns:minmax(0,1fr) minmax(120px,150px) 88px}.ehgm-row>div{min-width:0}.ehgm-row b{overflow-wrap:anywhere}}
+@media (max-width:760px){#ehGMHead{flex-wrap:wrap}#ehGMHead b{flex-basis:100%;font-size:15px}#ehGMControls{gap:6px;padding:8px}.ehgm-row{grid-template-columns:minmax(0,1fr) auto}.ehgm-row>strong{grid-column:1/2}.ehgm-row>button:not(.ehgm-star){grid-column:2/3;grid-row:1/3}.ehgm-row{padding:8px;gap:6px}.ehgm-img,.ehgm-img-fallback{max-width:34px;max-height:34px}}
+@media (max-width:520px){#ehGMControls>*{flex:1 1 140px;min-width:0}.ehgm-row{grid-template-columns:minmax(0,1fr)}.ehgm-row>strong,.ehgm-row>button:not(.ehgm-star){grid-column:1;grid-row:auto}.ehgm-row>button:not(.ehgm-star){width:100%}}
+#ehCommandCenter.eh-embedded{display:flex!important;position:relative!important;inset:auto!important;width:100%!important;height:100%!important;min-height:560px;z-index:auto!important;border:0!important;border-radius:0!important;box-shadow:none!important}
+#ehCommandCenter.eh-embedded .ehcc-head{display:none!important}
+#ehOptionsPane .eh-opt-nav{display:flex;gap:7px;flex-wrap:wrap;padding:10px 16px;border-bottom:1px solid #202a40}
+#ehOptionsPane .eh-opt-nav button{background:#40151d;color:#fff;border:1px solid #a83245;border-radius:8px;padding:8px 14px;font-weight:800;opacity:.72}
+#ehOptionsPane .eh-opt-nav button.active{opacity:1;background:#8e2338}
+#ehOptionList.eh-tabbed .eh-opt-section{display:none}
+#ehOptionList.eh-tabbed .eh-opt-section.eh-opt-show{display:block}
+</style>
+
+<style id="ehNotifyFallbackStyle">
+#ehNotifyFallback{position:fixed;right:18px;bottom:18px;z-index:2147483646;display:flex;flex-direction:column;gap:9px;pointer-events:none;max-width:min(430px,calc(100vw - 36px))}
+.eh-notify-toast{background:#121925;border:1px solid #a52d43;border-left:5px solid #d73a55;color:#f5f7fb;border-radius:10px;padding:12px 14px;box-shadow:0 12px 38px #000b;font:13px Arial,sans-serif;animation:ehToastIn .18s ease-out}
+.eh-notify-toast b{display:block;margin-bottom:5px;color:#fff;font-size:14px}.eh-notify-toast span{display:block;line-height:1.35;color:#dce4ef}
+@keyframes ehToastIn{from{transform:translateY(12px);opacity:0}to{transform:none;opacity:1}}
 </style>
 </head>
 <body>
+
+<div id="ehStatusCenter" aria-hidden="true">
+  <div id="ehStatusBox">
+    <div id="ehStatusHead"><b>🩺 Centro de estado de cuentas</b><small>Resumen en vivo · se actualiza automáticamente</small><button id="ehStatusRefresh">↻ Actualizar</button><button id="ehStatusClose">✕</button></div>
+    <div id="ehStatusGrid"></div>
+  </div>
+</div>
 <div id="ehGeneralMarket">
   <div id="ehGMHead"><b>🌐 Mercado Global — Escarlata Hispana</b><span id="ehGMSafety">Comprobando…</span><select id="ehGMTrainer" title="Entrenador"></select><button id="ehGMClose">✕</button></div>
   <div id="ehGMControls">
     <select id="ehGMCat"><option value="Pokemon">Pokémon</option><option value="Items">Ítems</option><option value="Stones">Stones</option><option value="Poke Balls">Poké Balls</option><option value="Diamonds">Diamantes</option><option value="All">Todo</option></select>
-    <input id="ehGMQ" placeholder="🔎 Buscar Pokémon o ítem…">
+    <input id="ehGMQ" list="ehGMQOptions" autocomplete="off" placeholder="🔎 Buscar y seleccionar Pokémon o ítem…"><datalist id="ehGMQOptions"></datalist>
     <input id="ehGMIVMin" type="number" min="0" max="192" placeholder="IV mín.">
     <input id="ehGMIVMax" type="number" min="0" max="192" placeholder="IV máx.">
     <input id="ehGMQMin" type="number" min="0" step="0.01" placeholder="Calidad mín.">
@@ -815,23 +871,39 @@ webview{background:#050405}
       ESCARLATA HISPANA
       <span class="ver" id="appVer"></span>
     </span>
-    <button id="justPokedexBtn" class="primary" title="Abrir calculadora de Pokémon">🧮 Calculadora</button>
+    <button id="escarlataCalculatorBtn" class="primary" title="Abrir calculadora de Pokémon">🧮 Calculadora</button>
     <button id="loginAll" class="primary">▶ Iniciar equipo</button>
     <button id="accounts">👤 Cuentas</button>
+    <button id="ehAccountStatusBtn" title="Resumen en vivo de todas las cuentas">🩺 Centro de estado</button>
     <button id="reloadAll">⟳ Actualizar todo</button>
-    <button id="ehSimpleBtn" title="Modo simple de PokeGrid">🍃 Modo simple</button>
+    <button id="ehSimpleBtn" title="Modo simple de Escarlata Hispana">🍃 Modo simple</button>
     <button id="dock" title="Muestra u oculta el menú de iconos del juego. F2 alterna en el panel activo.">🎛 Menú del juego</button>
     <button id="statsBtn" title="Resumen de la cuenta activa (gold/h, XP/h, bolsa y drops)">📊 Panel</button>
     <button id="cardsBtn" title="Vista ultraligera: oculta el juego y muestra solo los números">🃏 Vista ligera</button>
     <button id="ivsBtn" title="Abre o cierra la calculadora de IV en todos los paneles"><svg width="14" height="14" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#fff"/><path d="M2 12h20" stroke="#8f1408" stroke-width="3"/><circle cx="12" cy="12" r="3.4" fill="#fff" stroke="#8f1408" stroke-width="2.5"/></svg>IV's</button>
     <div id="menuWrap">
-      <button id="menuBtn">☰ Opciones</button>
+      <button id="menuBtn">⚙ Configuración</button>
       <div id="menu">
         <button id="tierBtn">🏆 Tierlist</button>
         <button id="dittoBtn" title="Onde caçar com o Ditto (comum ou shiny) e em que pokémon virar, no seu nível">✨ Ditto</button>
         <button id="scriptsBtn" title="Ejecuta userscripts en los paneles">🧩 Scripts</button>
         <div id="countRow" title="Cantidad de cuentas abiertas al mismo tiempo. Al reducir paneles se cierran solo los últimos."><span>🔢 Paneles</span><button data-n="1">1</button><button data-n="2">2</button><button data-n="3">3</button><button data-n="4">4</button></div>
-        <button id="alerts" title="Avisa cuando una cuenta se desconecta o queda sin pokébolas">🔔 Alertas</button>
+        <div id="ehAlertSettings">
+  <h3>🔔 Alertas y hallazgos</h3>
+  <div class="eh-as-sub">Elige qué avisos quieres recibir. La configuración queda guardada en este PC.</div>
+  <div id="ehAlertGrid">
+    <label class="eh-alert-toggle"><span>✨ Shiny encontrado</span><input type="checkbox" data-alert="shiny"></label>
+    <label class="eh-alert-toggle"><span>🍃 Pheromona encontrada</span><input type="checkbox" data-alert="pheromone"></label>
+    <label class="eh-alert-toggle"><span>🪙 Bronze Boss Token</span><input type="checkbox" data-alert="bronze"></label>
+    <label class="eh-alert-toggle"><span>💰 Objeto vendido en Mercado</span><input type="checkbox" data-alert="sale"></label>
+    <label class="eh-alert-toggle"><span>🔴 Cuenta desconectada</span><input type="checkbox" data-alert="down"></label>
+    <label class="eh-alert-toggle"><span>⏸ Farmeo detenido</span><input type="checkbox" data-alert="stalled"></label>
+    <label class="eh-alert-toggle"><span>⚾ Pokéballs / pociones bajas</span><input type="checkbox" data-alert="balls"></label>
+    <label class="eh-alert-toggle"><span>💀 Equipo derrotado</span><input type="checkbox" data-alert="faint"></label>
+  </div>
+  <div id="ehLootHint">Los contadores muestran lo obtenido durante esta sesión. Una subida del inventario se considera un hallazgo.</div>
+</div>
+<button id="alerts" title="Interruptor general de todas las alertas">🔔 Alertas generales</button>
         <button id="sellguard" title="Pide confirmación antes de vender shiny, Legendario+ o un objeto raro">🛡 Venta protegida</button>
         <button id="chat" title="Muestra u oculta el chat del juego en todos los paneles">💬 Chat</button>
         <button id="cleanHud" title="Oculta el auto-helper, la ventana de captura, los avisos de combate y el HUD de la esquina; la cuenta y el menú del juego aparecen al pasar el mouse">🧼 Limpiar juego</button>
@@ -981,7 +1053,7 @@ const HOME_URL  = 'https://poke.idleworld.online/';
   // ----- Idioma (interface + jogo) -----
   const I18N = {
     pt: {
-      loginAll:'▶ Iniciar equipo', accounts:'👤 Treinadores', reloadAll:'⟳ Actualizar todo', layout:'▦ Cuadrícula', layoutCol:'▤ Uma coluna', propOn:'🖼 Proporción original', asOn:'🚀 Abre com o Windows', asOff:'🚀 Abrir con Windows', asTitle:'Cria um atalho do PokeGrid na pasta Inicializar do Windows, o mesmo lugar onde você colocaria um atalho à mão. Não mexe no registro e você pode remover pelo Win+R > shell:startup.', propOff:'🖼 Esticar na tela', propTitle:'Mantém a proporção original do jogo, sem esticar a imagem. Sobra fundo escuro quando o painel não bate com a proporção; desligado, a imagem preenche tudo mas distorce.', layoutRow:'▥ Uma linha', layoutTitle:'Como os painéis se organizam. Clique pra alternar: grade, uma coluna (empilhado) ou uma linha (lado a lado).',
+      loginAll:'▶ Iniciar equipo', accounts:'👤 Treinadores', reloadAll:'⟳ Actualizar todo', layout:'▦ Cuadrícula', layoutCol:'▤ Uma coluna', propOn:'🖼 Proporción original', asOn:'🚀 Abre com o Windows', asOff:'🚀 Abrir con Windows', asTitle:'Cria um atalho do Escarlata Hispana na pasta Inicializar do Windows, o mesmo lugar onde você colocaria um atalho à mão. Não mexe no registro e você pode remover pelo Win+R > shell:startup.', propOff:'🖼 Esticar na tela', propTitle:'Mantém a proporção original do jogo, sem esticar a imagem. Sobra fundo escuro quando o painel não bate com a proporção; desligado, a imagem preenche tudo mas distorce.', layoutRow:'▥ Uma linha', layoutTitle:'Como os painéis se organizam. Clique pra alternar: grade, uma coluna (empilhado) ou uma linha (lado a lado).',
       sound:'🔊 Som', muted:'🔇 Mudo', eco:'⚡ Eco', ecoOff:'⚡ Eco off', sleep:'💤 Mantener activo', awake:'☕ Acordado',
       chatHidden:'💬 Chat oculto', chatShown:'💬 Chat visível',
       optionsBtn:'☰ Opciones',
@@ -1000,7 +1072,7 @@ const HOME_URL  = 'https://poke.idleworld.online/';
       sellguard:'🛡 Venta protegida', sellguardTitle:'Pide confirmación antes de vender shiny, Legendario+ o un objeto raro (verde = ligado)',
       clean:'🧼 Limpiar juego', cleanTitle:'Esconde o popup de captura, os avisos de combate (XP por kill) e o HUD do canto; o auto-helper (onde troca a pokébola), a conta e o menu aparecem ao passar o mouse (verde = ligado)',
       reset:'Zerar', resetTitle:'Zera as estatísticas da sessão (todas as contas), pra monitorar a partir de agora', resetConfirm:'Zerar as estatísticas da sessão de todas as contas? Os totais da conta (gold, nível, shinies de vida) não mudam.',
-      msgShiny:'encontrou um SHINY! ✨', msgShinyCap:'CAPTUROU um SHINY! ✨🎉', spTitle:'Shiny capturado!', spClose:'Cerrar o aviso', msgFaint:'teve o time inteiro derrotado (foi pro Centro Pokémon)', msgBallsLow:'está com poucas pokébolas', msgPotionsLow:'está com poucas potions',
+      msgShiny:'encontrou um SHINY! ✨', msgPheromone:'encontrou uma Pheromona! 🍃', msgBronze:'encontrou um Bronze Boss Token! 🪙', msgMarketSale:'vendeu um objeto no Mercado! 💰', msgShinyCap:'CAPTUROU um SHINY! ✨🎉', spTitle:'Shiny capturado!', spClose:'Cerrar o aviso', msgFaint:'teve o time inteiro derrotado (foi pro Centro Pokémon)', msgBallsLow:'está com poucas pokébolas', msgPotionsLow:'está com poucas potions',
       stAllTitle:'Resumo geral', stTotal:'Total', stAcc:'Conta', stCompare:'Comparação (hunt anterior)', stPrev:'anterior', stCur:'atual', stMoney:'dólares', stPerAcc:'Por conta',
       stShinyFound:'Shiny enc.', stShinyCap:'✨ Shiny capturados', stShinyF:'Shiny enc.', stShinyC:'Shiny capt.', stSupplies:'Suprimentos', stAssets:'Patrimônio',
       stKpis:'Ritmo (por hora)', stPinned:'Itens fixados', cfgSections:'Seções (arraste para ordenar, marque para mostrar)', cfgBagItems:'Mostrar TODOS os itens da bag', cfgImportantOnly:'Só itens importantes (Ultra Ball, melhor potion, Rare Picture, Strange Pheromone)', cfgSearch:'Buscar item, bola, pedra…', cfgNoCat:'Abra o jogo pra carregar a lista de itens', cfgBagCats:'Bag: categorias (arraste, marque pra mostrar)', cfgBagHideItems:'Bag: esconder itens específicos',
@@ -1019,7 +1091,7 @@ const HOME_URL  = 'https://poke.idleworld.online/';
       msgStalled:'parece ter parado de farmar (10 min sem kills)',
       cdToday:'Hoje', cdWeek:'7 dias', cdAllTime:'Total', goalG:'Meta gold/dia', goalC:'Meta capturas/dia', csvTitle:'Baixa o resumo por dia em CSV (planilha)', csvDia:'Dia', csvHunts:'Hunts', csvHuntsTitle:'Baixa duas planilhas: uma linha por hunt (tempo, kills/h, XP/h, capturas, gold) e uma linha por item dropado, com drop por kill pra calcular a porcentagem. O registro é automático: cada vez que você troca de hunt, a anterior entra no log.', cdLifeHint:'contadores: sessão · lista: histórico',
       cdTargets:'Alvos', cdCritIvQ:'IV × qual.', cdCritIv:'IV', cdCritQ:'Qualidade', cdBestCritTitle:'Critério do melhor catch. A qualidade multiplica os stats e o poder, então IV × qualidade reflete melhor a força real.', cdTargetsHint:'Sem alvos ainda: no modo Total, passe o mouse num card e clique na ★ para marcar', cdTargetsMark:'Marcar/desmarcar como alvo',
-      whTitle:'Webhook do Discord: cole a URL do seu servidor pra receber avisos', whTest:'Testar', whTestOk:'✅ Chegou!', whTestErr:'❌ Falhou', sgAviso:'PokeGrid: voce esta vendendo coisas valiosas:', sgConfirma:'Confirmar a venda?', whShiny:'Avisar shiny', alLocalTitle:'\u{1F514} Alertas no Windows (por tipo)', alLocalHint:'O botão \u{1F514} no topo liga/desliga tudo. Aqui você escolhe quais tipos avisam na sua máquina (o Discord tem as opções próprias abaixo).', alLocal_shiny:'\u2728 Shiny', alLocal_down:'\u{1F534} Conta caiu', alLocal_stalled:'\u{1F7E0} Parou de farmar', alLocal_balls:'\u{1F535} Suprimento baixo (pokébola, potion)', alLocal_faint:'\u{1F480} Time derrotado', whProb:'Avisar problema (conta caiu, parou de farmar, sem bola)', whSum:'Resumo diário', whDay:'📊 Resumo de', whCaught:'CAPTURADO ✅', whSeen:'apareceu 👀', whTestMsg:'✅ PokeGrid conectado! Os avisos vão chegar aqui.',
+      whTitle:'Webhook do Discord: cole a URL do seu servidor pra receber avisos', whTest:'Testar', whTestOk:'✅ Chegou!', whTestErr:'❌ Falhou', sgAviso:'Escarlata Hispana: voce esta vendendo coisas valiosas:', sgConfirma:'Confirmar a venda?', whShiny:'Avisar shiny', alLocalTitle:'\u{1F514} Alertas no Windows (por tipo)', alLocalHint:'O botão \u{1F514} no topo liga/desliga tudo. Aqui você escolhe quais tipos avisam na sua máquina (o Discord tem as opções próprias abaixo).', alLocal_shiny:'\u2728 Shiny', alLocal_down:'\u{1F534} Conta caiu', alLocal_stalled:'\u{1F7E0} Parou de farmar', alLocal_balls:'\u{1F535} Suprimento baixo (pokébola, potion)', alLocal_faint:'\u{1F480} Time derrotado', whProb:'Avisar problema (conta caiu, parou de farmar, sem bola)', whSum:'Resumo diário', whDay:'📊 Resumo de', whCaught:'CAPTURADO ✅', whSeen:'apareceu 👀', whTestMsg:'✅ Escarlata Hispana conectado! Os avisos vão chegar aqui.',
       bkExp:'💾 Exportar configuración', bkImp:'📂 Importar configuración', bkExpTitle:'Guarda la configuración y el historial sin incluir contraseñas', bkImpTitle:'Restaura configuración e historial desde un archivo exportado', bkConfirm:'Substituir as configurações e o histórico (hunts, shinies, gráficos) pelos do arquivo? Uma cópia do estado atual é salva antes. O app vai recarregar. (Senhas não são afetadas.)', bkBad:'Arquivo inválido.', bkNoCopy:'Não foi possível salvar a cópia do estado atual (pasta de backups inacessível, disco cheio ou histórico acima de 2 MB). Importar mesmo assim? O histórico atual será perdido.',
       tlNotaTip:'{p} de 100 (o melhor da aba é a base 100)', acLife:'bolas em shiny', closeT:'Cerrar', rmTitle:'Remover', shCapT:'capturado', shDefT:'derrotado',
       scHint:'Ejecuta userscripts (estilo Tampermonkey) dentro de cada cuenta del juego. La calculadora de IV ya viene incluida. Puedes agregar los tuyos. <b>Agrega solo scripts en los que confíes</b>, porque tienen acceso completo a la página del juego.',
@@ -1028,7 +1100,7 @@ const HOME_URL  = 'https://poke.idleworld.online/';
       rqDivine:'Divina', rqAncient:'Anciã', rqMythic:'Mítica', rqLegendary:'Lendária', rqEpic:'Épica', rqRare:'Rara', rqUncommon:'Incomum', rqCommon:'Comum', rqWeak:'Fraca'
     },
     en: {
-      loginAll:'▶ Log in all', accounts:'👤 Accounts', reloadAll:'⟳ Reload all', layout:'▦ Grid', layoutCol:'▤ Single column', propOn:'🖼 Original aspect', asOn:'🚀 Opens with Windows', asOff:'🚀 Open with Windows', asTitle:'Creates a PokeGrid shortcut in the Windows Startup folder, the same place you would put one by hand. It does not touch the registry and you can remove it via Win+R > shell:startup.', propOff:'🖼 Stretch to fill', propTitle:'Keeps the game original aspect ratio instead of stretching the image. Dark bars appear when the panel does not match the ratio; turned off, the image fills everything but gets distorted.', layoutRow:'▥ Single row', layoutTitle:'How the panels are arranged. Click to cycle: grid, single column (stacked) or single row (side by side).',
+      loginAll:'▶ Log in all', accounts:'👤 Accounts', reloadAll:'⟳ Reload all', layout:'▦ Grid', layoutCol:'▤ Single column', propOn:'🖼 Original aspect', asOn:'🚀 Opens with Windows', asOff:'🚀 Open with Windows', asTitle:'Creates a Escarlata Hispana shortcut in the Windows Startup folder, the same place you would put one by hand. It does not touch the registry and you can remove it via Win+R > shell:startup.', propOff:'🖼 Stretch to fill', propTitle:'Keeps the game original aspect ratio instead of stretching the image. Dark bars appear when the panel does not match the ratio; turned off, the image fills everything but gets distorted.', layoutRow:'▥ Single row', layoutTitle:'How the panels are arranged. Click to cycle: grid, single column (stacked) or single row (side by side).',
       sound:'🔊 Sound', muted:'🔇 Muted', eco:'⚡ Eco', ecoOff:'⚡ Eco off', sleep:'💤 Sleep', awake:'☕ Awake',
       chatHidden:'💬 Chat hidden', chatShown:'💬 Chat shown',
       optionsBtn:'☰ Options',
@@ -1047,7 +1119,7 @@ const HOME_URL  = 'https://poke.idleworld.online/';
       sellguard:'🛡 Sell guard', sellguardTitle:'Asks for confirmation before selling shiny, Legendary+ or rare items (green = on)',
       clean:'🧼 Clean game', cleanTitle:'Hides the capture popup, the combat notices (XP per kill) and the corner HUD; the auto-helper (where you switch pokéballs), account and menu appear on hover (green = on)',
       reset:'Reset', resetTitle:'Resets the session stats (all accounts), to monitor from now on', resetConfirm:'Reset the session stats for all accounts? Account totals (gold, level, lifetime shinies) are unchanged.',
-      msgShiny:'found a SHINY! ✨', msgShinyCap:'CAUGHT a SHINY! ✨🎉', spTitle:'Shiny caught!', spClose:'Close this notice', msgFaint:'had the whole team defeated (sent to the Pokémon Center)', msgBallsLow:'is low on Poké Balls', msgPotionsLow:'is low on potions',
+      msgShiny:'found a SHINY! ✨', msgPheromone:'found a Pheromone! 🍃', msgBronze:'found a Bronze Boss Token! 🪙', msgMarketSale:'sold an item on the Market! 💰', msgShinyCap:'CAUGHT a SHINY! ✨🎉', spTitle:'Shiny caught!', spClose:'Close this notice', msgFaint:'had the whole team defeated (sent to the Pokémon Center)', msgBallsLow:'is low on Poké Balls', msgPotionsLow:'is low on potions',
       stAllTitle:'Overview', stTotal:'Total', stAcc:'Account', stCompare:'Comparison (previous hunt)', stPrev:'previous', stCur:'current', stMoney:'dollars', stPerAcc:'Per account',
       stShinyFound:'Shiny found', stShinyCap:'✨ Shiny captured', stShinyF:'Shiny found', stShinyC:'Shiny capt.', stSupplies:'Supplies', stAssets:'Assets',
       stKpis:'Rate (per hour)', stPinned:'Pinned items', cfgSections:'Sections (drag to reorder, check to show)', cfgBagItems:'Show ALL bag items', cfgImportantOnly:'Only important items (Ultra Ball, best potion, Rare Picture, Strange Pheromone)', cfgSearch:'Search item, ball, stone…', cfgNoCat:'Open the game to load the item list', cfgBagCats:'Bag: categories (drag, check to show)', cfgBagHideItems:'Bag: hide specific items',
@@ -1066,7 +1138,7 @@ const HOME_URL  = 'https://poke.idleworld.online/';
       msgStalled:'seems to have stopped farming (10 min without kills)',
       cdToday:'Today', cdWeek:'7 days', cdAllTime:'All time', goalG:'Gold goal/day', goalC:'Catch goal/day', csvTitle:'Downloads the daily summary as a CSV (spreadsheet)', csvDia:'Day', csvHunts:'Hunts', csvHuntsTitle:'Downloads two spreadsheets: one row per hunt (time, kills/h, XP/h, captures, gold) and one row per dropped item, with drop per kill so you can work out the percentage. Logging is automatic: every time you switch hunts, the previous one is recorded.', cdLifeHint:'counters: session · list: all-time',
       cdTargets:'Targets', cdCritIvQ:'IV × qual.', cdCritIv:'IV', cdCritQ:'Quality', cdBestCritTitle:'Best-catch criterion. Quality multiplies stats and power, so IV × quality reflects real strength better.', cdTargetsHint:'No targets yet: in Total mode, hover a card and click the ★ to mark it', cdTargetsMark:'Mark/unmark as target',
-      whTitle:'Discord webhook: paste your server URL to receive alerts', whTest:'Test', whTestOk:'✅ Delivered!', whTestErr:'❌ Failed', sgAviso:'PokeGrid: you are selling valuable things:', sgConfirma:'Confirm the sale?', whShiny:'Shiny alerts', alLocalTitle:'\u{1F514} Windows alerts (by type)', alLocalHint:'The \u{1F514} button at the top turns everything on/off. Here you pick which types notify on this machine (Discord has its own options below).', alLocal_shiny:'\u2728 Shiny', alLocal_down:'\u{1F534} Account dropped', alLocal_stalled:'\u{1F7E0} Stopped farming', alLocal_balls:'\u{1F535} Low supplies (balls, potions)', alLocal_faint:'\u{1F480} Team defeated', whProb:'Problem alerts (dropped, stopped farming, out of balls)', whSum:'Daily summary', whDay:'📊 Summary of', whCaught:'CAUGHT ✅', whSeen:'appeared 👀', whTestMsg:'✅ PokeGrid connected! Alerts will arrive here.',
+      whTitle:'Discord webhook: paste your server URL to receive alerts', whTest:'Test', whTestOk:'✅ Delivered!', whTestErr:'❌ Failed', sgAviso:'Escarlata Hispana: you are selling valuable things:', sgConfirma:'Confirm the sale?', whShiny:'Shiny alerts', alLocalTitle:'\u{1F514} Windows alerts (by type)', alLocalHint:'The \u{1F514} button at the top turns everything on/off. Here you pick which types notify on this machine (Discord has its own options below).', alLocal_shiny:'\u2728 Shiny', alLocal_down:'\u{1F534} Account dropped', alLocal_stalled:'\u{1F7E0} Stopped farming', alLocal_balls:'\u{1F535} Low supplies (balls, potions)', alLocal_faint:'\u{1F480} Team defeated', whProb:'Problem alerts (dropped, stopped farming, out of balls)', whSum:'Daily summary', whDay:'📊 Summary of', whCaught:'CAUGHT ✅', whSeen:'appeared 👀', whTestMsg:'✅ Escarlata Hispana connected! Alerts will arrive here.',
       bkExp:'💾 Export config', bkImp:'📂 Import config', bkExpTitle:'Saves a file with all settings and history (passwords stay out)', bkImpTitle:'Restores settings and history from an exported file', bkConfirm:'Replace the current settings and history (hunts, shinies, charts) with the file? A copy of the current state is saved first. The app will reload. (Passwords are not affected.)', bkBad:'Invalid file.', bkNoCopy:'Could not save a copy of the current state (backup folder unavailable, disk full or history above 2 MB). Import anyway? The current history will be lost.',
       tlNotaTip:'{p} out of 100 (the best in the tab is the 100 baseline)', acLife:'balls at shinies', closeT:'Close', rmTitle:'Remove', shCapT:'caught', shDefT:'defeated',
       scHint:'Run userscripts (Tampermonkey style) inside each game panel. The IV calc comes built in. You can paste your own. <b>Only add scripts you trust</b>, they get full access to the game page.',
@@ -1075,7 +1147,7 @@ const HOME_URL  = 'https://poke.idleworld.online/';
       rqDivine:'Divine', rqAncient:'Ancient', rqMythic:'Mythic', rqLegendary:'Legendary', rqEpic:'Epic', rqRare:'Rare', rqUncommon:'Uncommon', rqCommon:'Common', rqWeak:'Weak'
     },
     es: {
-      loginAll:'▶ Iniciar equipo', accounts:'👤 Entrenadores', reloadAll:'⟳ Recargar todo', layout:'▦ Cuadrícula', layoutCol:'▤ Una columna', propOn:'🖼 Proporción original', asOn:'🚀 Abre con Windows', asOff:'🚀 Abrir con Windows', asTitle:'Crea un acceso directo de PokeGrid en la carpeta Inicio de Windows, el mismo lugar donde lo pondrías a mano. No toca el registro y puedes quitarlo con Win+R > shell:startup.', propOff:'🖼 Estirar en pantalla', propTitle:'Mantiene la proporción original del juego, sin estirar la imagen. Queda fondo oscuro cuando el panel no coincide con la proporción; apagado, la imagen llena todo pero se distorsiona.', layoutRow:'▥ Una fila', layoutTitle:'Cómo se organizan los paneles. Clic para alternar: cuadrícula, una columna (apilado) o una fila (lado a lado).',
+      loginAll:'▶ Iniciar equipo', accounts:'👤 Entrenadores', reloadAll:'⟳ Recargar todo', layout:'▦ Cuadrícula', layoutCol:'▤ Una columna', propOn:'🖼 Proporción original', asOn:'🚀 Abre con Windows', asOff:'🚀 Abrir con Windows', asTitle:'Crea un acceso directo de Escarlata Hispana en la carpeta Inicio de Windows, el mismo lugar donde lo pondrías a mano. No toca el registro y puedes quitarlo con Win+R > shell:startup.', propOff:'🖼 Estirar en pantalla', propTitle:'Mantiene la proporción original del juego, sin estirar la imagen. Queda fondo oscuro cuando el panel no coincide con la proporción; apagado, la imagen llena todo pero se distorsiona.', layoutRow:'▥ Una fila', layoutTitle:'Cómo se organizan los paneles. Clic para alternar: cuadrícula, una columna (apilado) o una fila (lado a lado).',
       sound:'🔊 Sonido', muted:'🔇 Silencio', eco:'⚡ Eco', ecoOff:'⚡ Eco off', sleep:'💤 Mantener activo', awake:'☕ Despierto',
       chatHidden:'💬 Chat oculto', chatShown:'💬 Chat visible',
       optionsBtn:'☰ Opciones',
@@ -1094,7 +1166,7 @@ const HOME_URL  = 'https://poke.idleworld.online/';
       sellguard:'🛡 Venta protegida', sellguardTitle:'Pide confirmación antes de vender shiny, Legendaria+ o ítem raro (verde = activado)',
       clean:'🧼 Limpiar juego', cleanTitle:'Oculta el popup de captura, los avisos de combate (XP por kill) y el HUD de la esquina; el auto-helper (donde cambias la pokébola), la cuenta y el menú aparecen al pasar el mouse (verde = activado)',
       reset:'Reiniciar', resetTitle:'Reinicia las estadísticas de la sesión (todas las cuentas), para monitorear desde ahora', resetConfirm:'¿Reiniciar las estadísticas de sesión de todas las cuentas? Los totales de la cuenta (oro, nivel, shinies de vida) no cambian.',
-      msgShiny:'¡encontró un SHINY! ✨', msgShinyCap:'¡CAPTURÓ un SHINY! ✨🎉', spTitle:'¡Shiny capturado!', spClose:'Cerrar el aviso', msgFaint:'tuvo el equipo entero derrotado (fue al Centro Pokémon)', msgBallsLow:'tiene pocas Pokéballs', msgPotionsLow:'tiene pocas pociones',
+      msgShiny:'¡encontró un SHINY! ✨', msgPheromone:'ha encontrado una Pheromona 🍃', msgBronze:'ha encontrado un Bronze Boss Token 🪙', msgMarketSale:'ha vendido un objeto en el Mercado 💰', msgShinyCap:'¡CAPTURÓ un SHINY! ✨🎉', spTitle:'¡Shiny capturado!', spClose:'Cerrar el aviso', msgFaint:'tuvo el equipo entero derrotado (fue al Centro Pokémon)', msgBallsLow:'tiene pocas Pokéballs', msgPotionsLow:'tiene pocas pociones',
       stAllTitle:'Resumen general', stTotal:'Total', stAcc:'Cuenta', stCompare:'Comparación (hunt anterior)', stPrev:'anterior', stCur:'actual', stMoney:'dólares', stPerAcc:'Por cuenta',
       stShinyFound:'Shiny enc.', stShinyCap:'✨ Shiny capturados', stShinyF:'Shiny enc.', stShinyC:'Shiny capt.', stSupplies:'Suministros', stAssets:'Patrimonio',
       stKpis:'Ritmo (por hora)', stPinned:'Ítems fijados', cfgSections:'Secciones (arrastra para ordenar, marca para mostrar)', cfgBagItems:'Mostrar TODOS los ítems de la bolsa', cfgImportantOnly:'Solo ítems importantes (Ultra Ball, mejor poción, Rare Picture, Strange Pheromone)', cfgSearch:'Buscar ítem, ball, piedra…', cfgNoCat:'Abre el juego para cargar la lista de ítems', cfgBagCats:'Bolsa: categorías (arrastra, marca para mostrar)', cfgBagHideItems:'Bolsa: ocultar ítems específicos',
@@ -1253,6 +1325,12 @@ wv.addEventListener('console-message', async (ev) => {
           try { const d = stSane(JSON.parse(m.slice(8))); if (d) { stCache[i] = { t: Date.now(), d }; try { const tm = Array.isArray(d.team) ? d.team : []; const lead = tm.find(p => p && p.ld) || tm[0] || null; window.__ehTrainerLead = window.__ehTrainerLead || {}; if (lead && lead.sid) { const did = dexId(lead.sid); window.__ehTrainerLead[i] = { name: String(lead.name || 'Pokémon'), sprite: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' + (lead.shiny ? 'shiny/' : '') + did + '.png' }; } else delete window.__ehTrainerLead[i]; } catch {} dtPush(); } } catch {}
           return;
         }
+        // Las ventas del colector restaurado usan __EHSALE__. Se mantiene __PGSALE__
+        // solo por compatibilidad con instalaciones anteriores. Ambos llegan al mismo manejador.
+        if ((m.lastIndexOf('__EHSALE__', 0) === 0 || m.lastIndexOf('__PGSALE__', 0) === 0) && m.length < 12000) {
+          try { handleMarketSale(i, JSON.parse(m.slice(10))); } catch {}
+          return;
+        }
         if (m.lastIndexOf('__PGIV__', 0) !== 0) return;
         try { ivRecebe(i, JSON.parse(m.slice(8))); } catch {}
       });
@@ -1292,24 +1370,34 @@ wv.addEventListener('console-message', async (ev) => {
    E estimativa, nao extrato. Upgrade: rastrear pelo evento de uso do item, se o jogo expor um. */
 if(S.supBase){for(const id in S.supBase){const antes=S.supBase[id]||0,agora=(cur[id]!=null?cur[id]:0),d=antes-agora;if(d>0){const it=cat0[id]||{};S.supGold=(S.supGold||0)+d*(it.priceGold||it.npcPrice||0);S.supN=(S.supN||0)+d;}}}
 S.supBase=cur;if(S.picBase==null){S.picBase=now;}else{if(now>S.picBase){const doc=P.api['/game/items.json'];const it=doc&&doc.items&&doc.items.find(x=>x.id===59195);const d=S.drops[59195]||(S.drops[59195]={name:(it&&it.name)||'Rare Pokémon Picture',qty:0});d.qty+=(now-S.picBase);}S.picBase=now;}}else if(m.type==='chat'||m.type==='history'){const chS=(mm)=>{try{if(!mm||!mm.body)return;const re=/\\[poke!([A-Za-z0-9_-]+)\\]/g;let mt;while((mt=re.exec(mm.body))){try{const j=JSON.parse(atob(mt[1].replace(/-/g,'+').replace(/_/g,'/')));if(j&&j.k==='poke'){const CS=P.chatShares=P.chatShares||[];const N=(v)=>{v=Number(v);return isFinite(v)?v:0;};const cn=String(j.n||'?').slice(0,40),cf=String(mm.fromName||'').slice(0,40);if(!CS.some(c=>c.n===cn&&c.iv===N(j.iv)&&c.lv===N(j.lv)&&c.fr===cf)){CS.push({fr:cf,n:cn,sh:!!j.sh,lv:N(j.lv),q:N(j.q),iv:N(j.iv),pw:N(j.pw),t:Date.now()});if(CS.length>15)CS.shift();}}}catch(x){}}}catch(x){}};if(m.type==='chat')chS(m.msg);else['world','trade','help'].forEach(c2=>(m[c2]||[]).forEach(chS));}}}}catch(x){}});return s;};window.WebSocket.prototype=OW.prototype;['CONNECTING','OPEN','CLOSING','CLOSED'].forEach(k=>{try{window.WebSocket[k]=OW[k]}catch(x){}});const OF=window.fetch;window.fetch=function(...a){try{let H;const r0=a[0],ini=a[1];if(ini&&ini.headers)H=ini.headers;else if(r0&&typeof r0==='object'&&r0.headers)H=r0.headers;if(H){let au;if(typeof H.get==='function')au=H.get('authorization');else au=H.Authorization||H.authorization;if(au){auth=au;P.auth=au;}}}catch(x){}const p=OF.apply(this,a);try{let u=(a[0]&&a[0].url)||a[0];if(typeof u==='string'&&/\\/api\\/|items\\.json/.test(u)){p.then(r=>{const c=r.clone();c.json().then(j=>{const key=u.split('?')[0];if(key==='/api/game/used-balls'){if(j&&j.pokemons){/* attempts zera ao capturar (bolas desde a ultima captura), total nunca zera. Capturado: o jogo manda a lista caught (dexId) no topo e so usa na forma normal; no shiny, total > attempts = ja capturou */const cs=new Set(Array.isArray(j.caught)?j.caught:[]);P.shinyEnc=j.pokemons.reduce((s,p)=>s+(p.shiny?(+p.total||0):0),0);P.usedList=j.pokemons.map(p=>({sid:p.speciesId||p.dexId,name:p.name,shiny:!!p.shiny,attempts:p.attempts||0,total:p.total||0,caught:!!p.caught||(p.shiny?(+p.total||0)>(+p.attempts||0):cs.has(p.dexId!=null?p.dexId:p.speciesId))}));}return;}if(key==='/api/characters/me'){if(!j||!j.character){P.meMiss=(P.meMiss||0)+1;return;}P.meMiss=0;const o0=P.api[key];if(o0&&o0.character&&o0.character.id!==j.character.id){P.knownPokes={};P.pokesBaselined=false;}/* trocou de conta sem recarregar (Sair do jogo): a caixa da conta nova vira base, nao captura */}P.api[key]=j}).catch(()=>{})}).catch(()=>{})}}catch(x){}return p;};const poll=()=>{try{while(P.catchLog&&P.catchLog.length>400)P.catchLog.shift();while(P.shinyLog&&P.shinyLog.length>300)P.shinyLog.shift();const o=auth?{headers:{Authorization:auth}}:undefined;fetch('/api/characters/me',o).catch(()=>{});fetch('/api/game/used-balls',o).catch(()=>{});try{if(P.sock&&P.sock.readyState===1){P.sock.send(JSON.stringify({type:'inv-get'}));P.sock.send(JSON.stringify({type:'analyzer-get'}));}}catch(x){}}catch(x){}};setInterval(poll,30000);setTimeout(poll,9000);/* chip de boosts do jogo: so pede boosts-refresh ao montar e no focus da janela, e o boost do Discord (live) tem until curto. Com 4 paineis so um tem foco e o chip 'na call' sumia nos outros (o buff em si segue no servidor). Pede pelo socket do jogo: 25 s com boost live, ~2 min sem (pega quem entrou na call depois) */let bT=0;setInterval(()=>{try{const B=P.ws.boosts,lv=!!(B&&Array.isArray(B.boosts)&&B.boosts.some(b=>b&&b.live));if((lv||++bT%5===0)&&P.sock&&P.sock.readyState===1)P.sock.send(JSON.stringify({type:'boosts-refresh'}));}catch(x){}},25000);})()`).catch(() => {}); // coletor de estado + sessao (refetch autenticado de gold/nivel a cada 30s)
+          // Detector de ventas reales. Combina historial visible + mutaciones y usa el colector
+          // común P.addSale, por lo que una misma venta no puede alertar dos veces.
+          wv.executeJavaScript(`(()=>{if(window.__ehSaleHistoryWatch)return;window.__ehSaleHistoryWatch=1;let ready=false;const scan=()=>{try{const P=window.__poke;if(!P||typeof P.addSale!=='function')return;const els=[...document.querySelectorAll('body *')].filter(e=>{const t=(e.innerText||e.textContent||'').trim();return /(?:\bVendiste\b|Has\s+vendido|You\s+sold|Voc[eê]\s+vendeu|\bVendeu\b)/i.test(t)&&t.length<800});els.sort((a,b)=>((a.innerText||a.textContent||'').length-(b.innerText||b.textContent||'').length));for(const e of els){const raw=(e.innerText||e.textContent||'').replace(/\s+/g,' ').trim();if(!ready)continue;P.addSale({raw},'market-history-dom')}}catch{}};scan();ready=true;const mo=new MutationObserver(ms=>{try{const P=window.__poke;if(!P||typeof P.addSale!=='function')return;for(const m of ms)for(const n of m.addedNodes||[]){const raw=String(n.innerText||n.textContent||'').replace(/\s+/g,' ').trim();if(/(?:\bVendiste\b|Has\s+vendido|You\s+sold|Voc[eê]\s+vendeu|\bVendeu\b)/i.test(raw)&&raw.length<1200)P.addSale({raw},'market-history-mutation')}}catch{};scan()});mo.observe(document.documentElement,{subtree:true,childList:true,characterData:true});setInterval(scan,1500);})()`).catch(()=>{});
+          // Puente de ventas: el colector estable conserva Hunt/Panel y este módulo añade solo el registro de ventas.
+          // Los detectores de mercado (historial/API/DOM) pasan todos por addSale para deduplicar y notificar una sola vez.
+          wv.executeJavaScript(`(()=>{if(window.__ehSaleBridgeTimer)return;window.__ehSaleBridgeTimer=setInterval(()=>{const P=window.__poke;if(!P||typeof P.addSale==='function')return;P.saleLog=Array.isArray(P.saleLog)?P.saleLog:[];P.saleSeen=P.saleSeen||new Set();const txt=v=>String(v==null?'':v).replace(/\\s+/g,' ').trim();const num=v=>{if(typeof v==='number')return v;let z=txt(v).replace(/[^0-9.,]/g,'');if(!z)return 0;if(z.includes('.')&&z.includes(','))z=z.lastIndexOf(',')>z.lastIndexOf('.')?z.replace(/\\./g,'').replace(',','.'):z.replace(/,/g,'');else if((z.match(/\\./g)||[]).length>1)z=z.replace(/\\./g,'');else if((z.match(/,/g)||[]).length>1)z=z.replace(/,/g,'');else z=z.replace(',','.');return +z||0};P.addSale=(x,src,force)=>{try{x=x||{};let raw=txt(x.raw||x.message||x.msg||'');let n=txt(x.name||x.itemName||x.pokemonName||'');let q=+(x.q||x.qty||x.quantity||x.amount||1)||1;let pr=num(x.p??x.price??x.totalPrice??x.value??0);let c=txt(x.c||x.currency||x.currencyType||'');if(raw){let m=raw.match(/(?:Vendiste|Has\\s+vendido|You\\s+sold|Voc[eê]\\s+vendeu|Vendeu)\\s+(?:(\\d+)\\s*[x×]?\\s*)?(.+?)(?:\\s+(?:por|for|por)\\s+[$]?\\s*([0-9][0-9.,]*))?(?:\\s*(DD|diamantes?|diamonds?|gold|oro|d[oó]lares?|dollars?|\\$))?(?:$|[.!])/i);if(m){if(m[1])q=+m[1]||q;if(!n)n=txt(m[2]);if(!pr&&m[3])pr=num(m[3]);if(!c&&m[4])c=m[4]}}if(!n)n='Venta del mercado';const stamp=txt(x.displayTime||x.id||x.saleId||'');const fp=txt(x.fp||[stamp,q,n.toLowerCase(),pr,c.toLowerCase()].join('|'));if(P.saleSeen.has(fp))return false;P.saleSeen.add(fp);if(P.saleSeen.size>500){const a=[...P.saleSeen];P.saleSeen=new Set(a.slice(-300))}const e={n,q,p:pr,c:c||'GOLD',t:Date.now(),fp,src:src||'market'};P.saleLog.push(e);if(P.saleLog.length>80)P.saleLog.splice(0,P.saleLog.length-80);try{console.log('__EHSALE__'+JSON.stringify(e))}catch{}return true}catch(e){return false}};clearInterval(window.__ehSaleBridgeTimer);window.__ehSaleBridgeTimer=0;},250)})()`).catch(()=>{});
+          // Detector principal de ventas tomado del enfoque de sistema de historial del mercado: consulta el historial REAL
+          // de /api/game/market, marca como base lo que ya existía al abrir y avisa una sola vez por ID nuevo.
+          // No depende de que el usuario tenga abierta la ventana del Mercado ni de textos visibles en el DOM.
+          wv.executeJavaScript(`(()=>{if(window.__ehMarketHistoryPoll)return;window.__ehMarketHistoryPoll=1;let currentKey='',init=false,seen=new Set();const load=(cid)=>{const k='eh:market-sold:'+String(cid||'unknown');if(k===currentKey)return;currentKey=k;init=false;seen=new Set();try{const a=JSON.parse(localStorage.getItem(k)||'[]');if(Array.isArray(a))a.slice(-400).forEach(x=>seen.add(String(x)))}catch{}};const save=()=>{try{if(currentKey)localStorage.setItem(currentKey,JSON.stringify([...seen].slice(-400)))}catch{}};const poll=async()=>{try{const P=window.__poke;if(!P||typeof P.addSale!=='function')return;const me=P.api&&P.api['/api/characters/me'];const ch=me&&me.character;const cid=ch&&ch.id;if(!cid){try{const opt=P.auth?{headers:{Authorization:P.auth}}:undefined;const mr=await fetch('/api/characters/me',opt);if(mr&&mr.ok){const mj=await mr.json();if(mj&&mj.character){P.api=P.api||{};P.api['/api/characters/me']=mj}}}catch{};return}load(cid);const opt=P.auth?{headers:{Authorization:P.auth}}:undefined;const r=await fetch('/api/game/market?category=Diamonds',opt);if(!r||!r.ok)return;const j=await r.json();if(j&&j.emailGate)return;const hist=Array.isArray(j&&j.history)?j.history:[];const firstLook=!init&&!seen.size;init=true;for(const h of hist){if(!h||h.bought||h.id==null||seen.has(String(h.id)))continue;const id=String(h.id);seen.add(id);if(firstLook)continue;const q=+(h.amount||1)||1,gold=String(h.currency||'GOLD')==='GOLD',unit=+(h.price||0)||0,total=gold?unit*q:unit;P.addSale({name:h.name||'Venta del mercado',q,p:total,c:gold?'GOLD':(h.currency||'DIAMONDS'),displayTime:'market:'+cid+':'+id},'market-history',true)}save()}catch(e){try{console.warn('[Escarlata mercado]',e&&e.message||e)}catch{}}};setTimeout(poll,5000);setInterval(poll,10000)})()`).catch(()=>{});
           armaVolta(); // volta pra hunt (experimental), depois do coletor (precisa do window.__poke)
           wv.executeJavaScript(ecoScript(ecoFps())).catch(() => {});
           wv.executeJavaScript(PUSH_STATE()).catch(() => {}); // painel Simples le daqui sem perguntar
           // jogo congelado com pagina viva: WebGL perdeu o contexto e nao restaurou em 4s -> recarrega
-          wv.executeJavaScript("(()=>{if(window.__pgGlWd)return;window.__pgGlWd=1;let tm;document.addEventListener('webglcontextlost',()=>{clearTimeout(tm);tm=setTimeout(()=>location.reload(),4000);},true);document.addEventListener('webglcontextrestored',()=>clearTimeout(tm),true);})()").catch(() => {});
+          wv.executeJavaScript("(()=>{if(window.__ehGlWd)return;window.__ehGlWd=1;let tm;document.addEventListener('webglcontextlost',()=>{clearTimeout(tm);tm=setTimeout(()=>location.reload(),4000);},true);document.addEventListener('webglcontextrestored',()=>clearTimeout(tm),true);})()").catch(() => {});
           if (leve()) wv.executeJavaScript(ultraScript(true)).catch(() => {}); // reaplica o ultra apos reload/relogin (Simples ou janela escondida)
           wv.executeJavaScript(POPUP_SCRIPT).catch(() => {});
           wv.executeJavaScript(cleanScript(cleanOn)).catch(() => {});
           wv.executeJavaScript(SELLGUARD).catch(() => {});
-          wv.executeJavaScript('window.__pgSellGuardOn=' + (sellGuardOn ? 'true' : 'false') + ';window.__pgSellLock=' + JSON.stringify(sellLock) + ';window.__pgSellTxt=' + JSON.stringify([t('sgAviso'), t('sgConfirma')])).catch(() => {});
+          wv.executeJavaScript('window.__ehSellGuardOn=' + (sellGuardOn ? 'true' : 'false') + ';window.__ehSellLock=' + JSON.stringify(sellLock) + ';window.__ehSellTxt=' + JSON.stringify([t('sgAviso'), t('sgConfirma')])).catch(() => {});
           wv.executeJavaScript(QOL_UI).catch(() => {});
-          // Hunt Analyzer del mapa ahora viaja dentro de JustPokedex, que ya usa la inyección estable del juego.
+          // Hunt Analyzer del mapa ahora viaja dentro de Calculadora Escarlata, que ya usa la inyección estable del juego.
           wv.executeJavaScript(chatScript(chatHidden || cardsOn)).catch(() => {});
           wv.executeJavaScript(dockScript(dockHidden)).catch(() => {});
           // so na tela de login, pra nao rodar a toa dentro do jogo
           if ((wv.getURL() || '').startsWith(LOGIN_URL)) wv.executeJavaScript(scrollLoginScript).catch(() => {});
           wv.executeJavaScript(`(()=>{if(!localStorage.getItem('poke_lang')) localStorage.setItem('poke_lang','es')})()`).catch(() => {}); // español solo como valor inicial; después respeta la elección del jugador
-          injectJustPokedex(wv); injectEhMarket(wv); // funciones integradas por cuenta
+          injectEscarlataCalculator(wv); injectEhMarket(wv); // funciones integradas por cuenta
           injectScripts(wv); // userscripts opcionales del usuario
         } catch {}
       });
@@ -1349,12 +1437,12 @@ S.supBase=cur;if(S.picBase==null){S.picBase=now;}else{if(now>S.picBase){const do
         if (e.isMainFrame === false) return;
         // Sair pelo dock (rota interna pra /login, sem did-navigate): o documento e o mesmo onde os userscripts rodaram, e eles
         // leriam a senha que o autoLogin digita. Pagina nova primeiro: o dom-ready dela nao injeta script e o did-navigate loga
-        if (wv.__pgSemScripts === false && usNoLoginUrl(e.url)) { wv.__pgSemScripts = true; try { Promise.resolve(wv.loadURL(e.url)).catch(() => {}); } catch {} return; }
+        if (wv.__ehSemScripts === false && usNoLoginUrl(e.url)) { wv.__ehSemScripts = true; try { Promise.resolve(wv.loadURL(e.url)).catch(() => {}); } catch {} return; }
         autoLogin(e);
         if (String(e.url || '').startsWith('https://poke.idleworld.online/play')) armaVolta(); // o login vai pro /play com router.push, sem dom-ready
       });
       // saiu do /login por rota interna da SPA (sem novo dom-ready): agora sim os userscripts entram
-      wv.addEventListener('did-navigate-in-page', (e) => { try { if (e.isMainFrame && !usNoLoginUrl(e.url)) { injectJustPokedex(wv); injectEhMarket(wv); if (wv.__pgSemScripts) injectScripts(wv); } } catch {} });
+      wv.addEventListener('did-navigate-in-page', (e) => { try { if (e.isMainFrame && !usNoLoginUrl(e.url)) { injectEscarlataCalculator(wv); injectEhMarket(wv); if (wv.__ehSemScripts) injectScripts(wv); } } catch {} });
 
       panel.querySelector('.reload').onclick = () => { if (!off[i]) { try { wv.reloadIgnoringCache(); } catch { wv.reload(); } } };
       panel.querySelector('.expand').onclick = () => toggleExpand(i);
@@ -1546,8 +1634,53 @@ S.supBase=cur;if(S.picBase==null){S.picBase=now;}else{if(now>S.picBase){const do
   // Push de estado: no Simples o app nao pergunta pras 4 contas de N em N segundos; cada jogo
   // publica a propria leitura (a mesma do READ_STATE) a cada 10s e o app so escuta (__PGST__).
   // funcao, nao constante: o READ_STATE so e declarado mais abaixo; no dom-ready ja existe
-  const PUSH_STATE = () => '(()=>{if(window.__pgPush)return;window.__pgPush=1;setInterval(()=>{try{const d=' + READ_STATE + ';if(d&&d.ok){console.clear();console.log("__PGST__"+JSON.stringify(d))}}catch(x){}},10000)})()'; // clear: o console do painel guardava cada push (ate 10 MB)
+  const PUSH_STATE = () => '(()=>{if(window.__ehPush)return;window.__ehPush=1;setInterval(()=>{try{const d=' + READ_STATE + ';if(d&&d.ok){console.clear();console.log("__PGST__"+JSON.stringify(d))}}catch(x){}},10000)})()'; // clear: o console do painel guardava cada push (ate 10 MB)
   const stCache = {};
+  // Centro de estado: reutiliza el colector ya saneado del programa; no consulta credenciales ni expone contraseñas.
+  const ehStatusCenter = document.getElementById('ehStatusCenter');
+  const ehStatusGrid = document.getElementById('ehStatusGrid');
+  const ehEsc = v => String(v == null ? '' : v).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const ehNum = v => Number.isFinite(+v) ? Math.round(+v).toLocaleString('es-CL') : '—';
+  function ehAccountState(i) {
+    const cache = stCache[i], d = cache && cache.d, age = cache ? Date.now() - cache.t : Infinity;
+    const enabled = i < count && !off[i];
+    if (!enabled) return { cls:'off', label:'Apagada', d:null, age };
+    if (!d || !d.ok || age > 45000) return { cls:'warn', label: cache ? 'Sin datos recientes' : 'Conectando…', d:d||null, age };
+    return { cls:'ok', label:'Conectada', d, age };
+  }
+  function ehFarmLabel(d) {
+    if (!d) return '—';
+    if (d.hunt) return (d.a && +d.a.kph > 0) ? 'Farmeando' : 'En Hunt';
+    return 'Fuera de Hunt';
+  }
+  function ehRenderAccountStatus() {
+    if (!ehStatusGrid) return;
+    const rows=[];
+    for(let i=0;i<count;i++){
+      const st=ehAccountState(i), d=st.d||{}, a=d.a||{};
+      const display=(accounts[i]&&accounts[i].name)||d.name||defName(i);
+      const character=d.name && d.name!==display ? d.name : '—';
+      const inf=x=>(+x>=999999?'∞':ehNum(x));
+      rows.push(`<div class="eh-status-card ${st.cls}"><div class="eh-status-title"><i class="eh-status-dot"></i><strong>${ehEsc(display)}</strong><span>${ehEsc(st.label)}</span></div><div class="eh-status-rows">`+
+        `<div class="eh-status-cell"><span>Personaje</span><b>${ehEsc(character)}</b></div>`+
+        `<div class="eh-status-cell"><span>Nivel</span><b>${d.level?ehNum(d.level):'—'}</b></div>`+
+        `<div class="eh-status-cell"><span>Estado</span><b>${ehEsc(ehFarmLabel(d))}</b></div>`+
+        `<div class="eh-status-cell"><span>Hunt / ubicación</span><b title="${ehEsc(d.hunt||'')}">${ehEsc(d.hunt||'Ciudad / sin Hunt')}</b></div>`+
+        `<div class="eh-status-cell"><span>Gold</span><b>${d.ok?ehNum(d.gold):'—'}</b></div>`+
+        `<div class="eh-status-cell"><span>Diamantes</span><b>${d.ok?ehNum(d.diamonds):'—'}</b></div>`+
+        `<div class="eh-status-cell"><span>Pokébolas</span><b>${d.ok?inf(d.balls):'—'}</b></div>`+
+        `<div class="eh-status-cell"><span>Curaciones / Revive</span><b>${d.ok?(inf(d.potions)+' / '+inf(d.revives)):'—'}</b></div>`+
+        `</div><div class="eh-status-foot">${d.ok?('Rendimiento actual: '+ehNum(a.kph||0)+' kills/h · '+ehNum(a.xph||0)+' XP/h'):'Esperando información del juego.'}</div></div>`);
+    }
+    ehStatusGrid.innerHTML=rows.join('')||'<div class="eh-status-card warn">No hay cuentas abiertas.</div>';
+  }
+  function ehOpenAccountStatus(){ ehRenderAccountStatus(); ehStatusCenter.classList.add('show'); ehStatusCenter.setAttribute('aria-hidden','false'); }
+  function ehCloseAccountStatus(){ ehStatusCenter.classList.remove('show'); ehStatusCenter.setAttribute('aria-hidden','true'); }
+  document.getElementById('ehAccountStatusBtn').onclick=ehOpenAccountStatus;
+  document.getElementById('ehStatusClose').onclick=ehCloseAccountStatus;
+  document.getElementById('ehStatusRefresh').onclick=ehRenderAccountStatus;
+  ehStatusCenter.addEventListener('click',e=>{if(e.target===ehStatusCenter)ehCloseAccountStatus();});
+  setInterval(()=>{if(ehStatusCenter.classList.contains('show'))ehRenderAccountStatus();},5000);
   // Depot por conta (pedido do Semai: "aparece o depot da familia?"). Busca preguicosa: so com o
   // Simples aberto e a secao de inventario visivel, no maximo a cada 2 min por conta. A resposta
   // vem de codigo injetado, entao e saneada: so chaves simples, quantidade > 0, teto de 500 itens.
@@ -1629,13 +1762,13 @@ S.supBase=cur;if(S.picBase==null){S.picBase=now;}else{if(now>S.picBase){const do
   // ----- Guarda de venda: intercepta os POSTs de venda e pede confirmacao pra coisa valiosa -----
   // Protege sem agir no jogo: shiny e qualidade Lendaria+ (>=1.7), e itens raros nomeados.
   const SELLGUARD = `(() => {
-    if (window.__pgSellGuard) return; window.__pgSellGuard = true;
+    if (window.__ehSellGuard) return; window.__ehSellGuard = true;
     // dialogo nativo aberto (a confirmacao abaixo e o 'Sair da familia'; o prompt, no Electron, volta null na hora) trava a pagina: o READ_ALERTS
     // nao volta e o vigia de 60s do app recarregava a conta, que ia pra cidade. Avisa o app enquanto ele estiver aberto
     ['alert', 'confirm', 'prompt'].forEach(k => { const o = window[k]; if (typeof o !== 'function') return; window[k] = function (...a) { console.log('__PGDLG__1'); try { return o.apply(window, a); } finally { console.log('__PGDLG__0'); } }; });
-    // base sempre protegida + o que o usuario travou na engrenagem (window.__pgSellLock)
+    // base sempre protegida + o que o usuario travou na engrenagem (window.__ehSellLock)
     const BASE = ['strange pheromone', 'rare pokémon picture', 'rare pokemon picture'];
-    const listaProt = () => { const u = Array.isArray(window.__pgSellLock) ? window.__pgSellLock : []; return BASE.concat(u); };
+    const listaProt = () => { const u = Array.isArray(window.__ehSellLock) ? window.__ehSellLock : []; return BASE.concat(u); };
     const nomeItem = (id) => { try { const P = window.__poke; const doc = P && P.api && P.api['/game/items.json']; const it = doc && doc.items && doc.items.find(x => x.id === id); return it ? it.name : ''; } catch (x) { return ''; } };
     const nL=v=>{const m=String(v==null?'':v).match(/[0-9]+([.,][0-9]+)?/);return m?+m[0].replace(',','.'):0};
     const OF2 = window.fetch;
@@ -1653,10 +1786,10 @@ S.supBase=cur;if(S.picBase==null){S.picBase=now;}else{if(now>S.picBase){const do
             const PROT = listaProt();
             its.forEach(x => { const nm = nomeItem(x.itemId); if (nm && PROT.includes(nm.toLowerCase())) avisos.push(nm + ' x' + (x.qty || 1)); });
           }
-          if (avisos.length && window.__pgSellGuardOn !== false) {
-            const T = window.__pgSellTxt || ['PokeGrid: voce esta vendendo coisas valiosas:', 'Confirmar a venda?'];
+          if (avisos.length && window.__ehSellGuardOn !== false) {
+            const T = window.__ehSellTxt || ['Escarlata Hispana: voce esta vendendo coisas valiosas:', 'Confirmar a venda?'];
             const ok = window.confirm(T[0] + '\\n\\n' + avisos.join('\\n') + '\\n\\n' + T[1]);
-            if (!ok) return Promise.reject(new Error('Venda cancelada pelo PokeGrid'));
+            if (!ok) return Promise.reject(new Error('Venda cancelada pelo Escarlata Hispana'));
           }
         }
       } catch (x) {}
@@ -1666,7 +1799,7 @@ S.supBase=cur;if(S.picBase==null){S.picBase=now;}else{if(now>S.picBase){const do
 
   // ----- Filtros na Pokedex e no Mercado (so leitura: esconde/ordena o que ja esta na tela) -----
   const QOL_UI = `(() => {
-    if (window.__pgQol) return; window.__pgQol = true;
+    if (window.__ehQol) return; window.__ehQol = true;
     const css = document.createElement('style'); css.id = 'pg-qol-css';
     css.textContent = '.pg-qbar{display:flex;gap:6px;align-items:center;padding:6px 10px;background:rgba(0,0,0,.25);border-bottom:1px solid rgba(255,255,255,.07);font-size:11px;flex-wrap:wrap}'
       + '.pg-qbar select,.pg-qbar input,.pg-qbar button{background:#151d2a;border:1px solid rgba(255,255,255,.12);border-radius:5px;color:#fff;font-size:11px;padding:3px 7px;cursor:pointer;outline:none}'
@@ -1708,7 +1841,7 @@ S.supBase=cur;if(S.picBase==null){S.picBase=now;}else{if(now>S.picBase){const do
       parent.insertBefore(bar, head);
       const ap = () => aplicaMercado(parent);
       bar.querySelector('#pg-mk-r').onchange = ap; bar.querySelector('#pg-mk-iv').oninput = ap; bar.querySelector('#pg-mk-s').onchange = ap;
-      if (!parent.__pgObs) { parent.__pgObs = new MutationObserver(ap); parent.__pgObs.observe(parent, { childList: true }); }
+      if (!parent.__ehObs) { parent.__ehObs = new MutationObserver(ap); parent.__ehObs.observe(parent, { childList: true }); }
     }
     function aplicaMercado(parent) {
       try {
@@ -1977,11 +2110,11 @@ new MutationObserver(()=>render()).observe(document.documentElement,{childList:t
   const alertBtn = document.getElementById('alerts');
   let alertsOn = lsGet('alerts') !== '0'; // ligado por padrao
   // Alertas locais (Windows) por tipo (pedido do Abel: desligar SO o shiny, manter "parou de farmar").
-  let alLocal = { shiny: true, down: true, stalled: true, balls: true, faint: true };
+  let alLocal = { shiny: true, pheromone: true, bronze: true, sale: true, down: true, stalled: true, balls: true, faint: true };
   try { alLocal = Object.assign(alLocal, lsObj('alLocal') || {}); } catch {}
-  ['shiny', 'down', 'stalled', 'balls', 'faint'].forEach(k => alLocal[k] = alLocal[k] !== false);
+  ['shiny', 'pheromone', 'bronze', 'sale', 'down', 'stalled', 'balls', 'faint'].forEach(k => alLocal[k] = alLocal[k] !== false);
   const saveAl = () => { try { lsSet('alLocal', JSON.stringify(alLocal)); } catch {} };
-  const alCat = (c) => (c === 'msgShiny' || c === 'msgShinyCap') ? 'shiny' : c === 'msgStalled' ? 'stalled' : (c === 'msgBalls' || c.slice(-3) === 'Low') ? 'balls' : c === 'msgFaint' ? 'faint' : 'down';
+  const alCat = (c) => (c === 'msgShiny' || c === 'msgShinyCap') ? 'shiny' : c === 'msgPheromone' ? 'pheromone' : c === 'msgBronze' ? 'bronze' : c === 'msgMarketSale' ? 'sale' : c === 'msgStalled' ? 'stalled' : (c === 'msgBalls' || c.slice(-3) === 'Low') ? 'balls' : c === 'msgFaint' ? 'faint' : 'down';
   function applyAlerts() {
     alertBtn.textContent = t('alerts');
     alertBtn.title = t('alertsTitle');
@@ -1989,8 +2122,12 @@ new MutationObserver(()=>render()).observe(document.documentElement,{childList:t
     lsSet('alerts', alertsOn ? '1' : '0');
   }
   alertBtn.onclick = () => { alertsOn = !alertsOn; applyAlerts(); };
+  function syncAlertSettings(){ document.querySelectorAll('#ehAlertGrid input[data-alert]').forEach(x=>{x.checked=alLocal[x.dataset.alert]!==false;x.disabled=!alertsOn;}); }
+  document.querySelectorAll('#ehAlertGrid input[data-alert]').forEach(x=>{ x.onchange=()=>{ alLocal[x.dataset.alert]=!!x.checked; saveAl(); }; });
+  const _applyAlerts=applyAlerts; applyAlerts=function(){ _applyAlerts(); syncAlertSettings(); };
+  syncAlertSettings();
 
-  // ----- Proteção de venda (toggle): o guard injetado lê window.__pgSellGuardOn -----
+  // ----- Proteção de venda (toggle): o guard injetado lê window.__ehSellGuardOn -----
   const sgBtn = document.getElementById('sellguard');
   let sellGuardOn = lsGet('sellguard') !== '0'; // ligado por padrao
   // Itens que o usuario quer proteger, alem dos que ja vem travados. Nome minusculo (o guard
@@ -2003,13 +2140,13 @@ new MutationObserver(()=>render()).observe(document.documentElement,{childList:t
     sgBtn.title = t('sellguardTitle');
     sgBtn.classList.toggle('on', sellGuardOn);
     lsSet('sellguard', sellGuardOn ? '1' : '0');
-    webviews.forEach((w, i) => { if (off[i] || !w) return; try { w.executeJavaScript('window.__pgSellGuardOn=' + (sellGuardOn ? 'true' : 'false') + ';window.__pgSellLock=' + JSON.stringify(sellLock) + ';window.__pgSellTxt=' + JSON.stringify([t('sgAviso'), t('sgConfirma')])).catch(() => {}); } catch {} });
+    webviews.forEach((w, i) => { if (off[i] || !w) return; try { w.executeJavaScript('window.__ehSellGuardOn=' + (sellGuardOn ? 'true' : 'false') + ';window.__ehSellLock=' + JSON.stringify(sellLock) + ';window.__ehSellTxt=' + JSON.stringify([t('sgAviso'), t('sgConfirma')])).catch(() => {}); } catch {} });
   }
   sgBtn.onclick = () => { sellGuardOn = !sellGuardOn; applySellGuard(); };
   function alerta(i, chave) {
     if (!alertsOn) return;
     const nome = (accounts[i] && accounts[i].name) || defName(i);
-    if (alLocal[alCat(chave)] !== false) { try { window.pokeAPI.notify('PokeGrid', nome + ' ' + t(chave)); } catch {} } // notify local so se o tipo estiver ligado
+    if (alLocal[alCat(chave)] !== false) { try { window.pokeAPI.notify('Escarlata Hispana', nome + ' ' + t(chave)); } catch {} } // notify local so se o tipo estiver ligado
     // pedido do Arthur: o mesmo aviso vai pro Discord, pra chegar no celular quando uma conta
     // cai ou para de farmar e voce nao esta no PC (shiny e resumo tem as chaves proprias deles)
     // shiny tem preferencia propria (whCfg.shiny) e caminho proprio; aqui so avisos de PROBLEMA
@@ -2020,20 +2157,22 @@ new MutationObserver(()=>render()).observe(document.documentElement,{childList:t
     }
   }
   // Alertas via coletor: shiny, pokemon derrubado e inventario baixo (contagem exata do jogo).
-  const READ_ALERTS = `(()=>{const P=window.__poke;if(!P||!P.ws)return null;const ws=P.ws,api=P.api||{};const cat={};const doc=api['/game/items.json'];if(doc&&doc.items)doc.items.forEach(it=>cat[it.id]=it);let balls=0,ballsInf=false;const bm=ws.balls;if(bm&&bm.counts){const exB=bm.expires||{},catB={};(bm.catalog||[]).forEach(b=>{catB[String(b.id)]=b;});const nowB=Date.now();for(const k in bm.counts){const qB=+bm.counts[k]||0;if(!(qB>0))continue;const vB=exB[k]?Date.parse(exB[k]):0;if(vB&&vB<=nowB)continue;const bB=catB[k];if(bB&&bB.infinite){ballsInf=true;continue;}balls+=qB;}}if(ballsInf)balls=Math.max(balls,999999);let potions=0,revives=0;const inv=(ws.inventory&&ws.inventory.items)||[];let potInf=false;const nowI=Date.now();inv.forEach(it=>{const vI=it.expiresAt?Date.parse(it.expiresAt):0;if(vI&&vI<=nowI)return;const c=(cat[it.itemId]||{}).category;if(c==='heal'||c==='potion'){if(it.infinite)potInf=true;else potions+=it.quantity;}else if(c==='revive')revives+=it.quantity;});if(potInf)potions=Math.max(potions,999999);const S=P.sess||{};const ch=(api['/api/characters/me']&&api['/api/characters/me'].character)||{};let lootGold=0;for(const id in (S.drops||{})){const dd=S.drops[id];lootGold+=(dd.qty||0)*((cat[id]||{}).npcPrice||0);}const hasBalls=!!(bm&&bm.counts),hasInv=!!(ws.inventory&&ws.inventory.items),live=!!(ch.id||hasBalls||hasInv)&&!((P.meMiss||0)>=2&&!(P.sock&&P.sock.readyState===1)&&P.wc===4001);
+  const READ_ALERTS = `(()=>{const P=window.__poke;if(!P||!P.ws)return null;const ws=P.ws,api=P.api||{};const cat={};const doc=api['/game/items.json'];if(doc&&doc.items)doc.items.forEach(it=>cat[it.id]=it);let balls=0,ballsInf=false;const bm=ws.balls;if(bm&&bm.counts){const exB=bm.expires||{},catB={};(bm.catalog||[]).forEach(b=>{catB[String(b.id)]=b;});const nowB=Date.now();for(const k in bm.counts){const qB=+bm.counts[k]||0;if(!(qB>0))continue;const vB=exB[k]?Date.parse(exB[k]):0;if(vB&&vB<=nowB)continue;const bB=catB[k];if(bB&&bB.infinite){ballsInf=true;continue;}balls+=qB;}}if(ballsInf)balls=Math.max(balls,999999);let potions=0,revives=0,pherCur=0,bronzeCur=0,pherIcon='',bronzeIcon='';const inv=(ws.inventory&&ws.inventory.items)||[];let potInf=false;const nowI=Date.now();inv.forEach(it=>{const vI=it.expiresAt?Date.parse(it.expiresAt):0;if(vI&&vI<=nowI)return;const ci=(cat[it.itemId]||{}),c=ci.category,nm=String(ci.name||it.name||'');if(/pheromon/i.test(nm)){pherCur+=+it.quantity||0;if(!pherIcon)pherIcon=ci.icon||ci.image||ci.sprite||ci.img||ci.iconUrl||ci.imageUrl||'';}if(/bronze.*boss.*token|boss.*token.*bronze/i.test(nm)){bronzeCur+=+it.quantity||0;if(!bronzeIcon)bronzeIcon=ci.icon||ci.image||ci.sprite||ci.img||ci.iconUrl||ci.imageUrl||'';}if(c==='heal'||c==='potion'){if(it.infinite)potInf=true;else potions+=it.quantity;}else if(c==='revive')revives+=it.quantity;});if(potInf)potions=Math.max(potions,999999);const S=P.sess||{};const ch=(api['/api/characters/me']&&api['/api/characters/me'].character)||{};let lootGold=0;for(const id in (S.drops||{})){const dd=S.drops[id];lootGold+=(dd.qty||0)*((cat[id]||{}).npcPrice||0);}const hasBalls=!!(bm&&bm.counts),hasInv=!!(ws.inventory&&ws.inventory.items),live=!!(ch.id||hasBalls||hasInv)&&!((P.meMiss||0)>=2&&!(P.sock&&P.sock.readyState===1)&&P.wc===4001);
 /* sessao morta: /me sem personagem 2x E socket fechado pelo servidor com 4001 (auth recusada, o jogo desistiu de renovar). O /me do coletor vai com o ultimo token que ele viu, que vence com a tela parada (o jogo renova pelo socket): sem exigir o 4001, uma queda comum de 60 s (restart do servidor) virava relogin, e o jogo teria reconectado sozinho */
 /* resumo de uma hunt encerrada: o app grava isso no log e usa pra exportar (drop por kill etc) */
 const resumo=(X)=>{if(!X||!X.start||!X.kills)return null;let lg=0;const dr=[];for(const id in (X.drops||{})){const dd=X.drops[id];const g=(dd.qty||0)*((cat[id]||{}).npcPrice||0);lg+=g;dr.push({id:+id||0,n:dd.name||'',q:dd.qty||0,g});}
 return {start:X.start,end:X.end||Date.now(),slug:X.slug||'',kills:X.kills||0,xp:X.xp||0,caps:X.captures||0,sf:X.shinyN||0,sc:X.shinyCapN||0,balls:X.balls||0,pots:X.supN||0,loot:lg,sell:X.sellG||0,sup:(X.supGold||0),drops:dr};};
 /* saldo pro historico diario (so entra em delta): com o Hunt Analyzer e o BRUTO do servidor, balance + fotos (Rare Pokemon Picture vem fora do balance), sem a base do Zerar; srv diz a fonte e anS mostra quando o analyzer zerou (Limpar sessao do jogo, Zerar, troca de hunt) */
 const A=ws.analyzer,srv=!!(A&&typeof A==='object'&&+A.seconds>0&&Number.isFinite(+A.balance));
-return {live,sk:!!(P.sock&&P.sock.readyState===1),hasBalls,hasInv,balls,potions,revives,prevHunt:resumo(P.prev),shinyN:S.shinyN||0,faintN:S.faintN||0,cid:ch.id||'',kills:S.kills||0,xp:S.xp||0,caps:S.captures||0,shinyCapN:S.shinyCapN||0,saldo:srv?(+A.balance||0)+(+A.photos||0)*(+A.photoNpcGold||0):lootGold+(S.sellG||0)-(S.supGold||0),srv:srv?1:(doc&&doc.items?0:2),anS:srv?+A.seconds:0,shinyLog:P.shinyLog||[],catchLog:P.catchLog||[],sess:S,slug:P.lastSlug||'',anBase:(P.anBase&&typeof P.anBase==='object')?P.anBase:null,
+return {live,pherCur,bronzeCur,pherIcon,bronzeIcon,sk:!!(P.sock&&P.sock.readyState===1),hasBalls,hasInv,balls,potions,revives,prevHunt:resumo(P.prev),shinyN:S.shinyN||0,faintN:S.faintN||0,cid:ch.id||'',kills:S.kills||0,xp:S.xp||0,caps:S.captures||0,shinyCapN:S.shinyCapN||0,saldo:srv?(+A.balance||0)+(+A.photos||0)*(+A.photoNpcGold||0):lootGold+(S.sellG||0)-(S.supGold||0),srv:srv?1:(doc&&doc.items?0:2),anS:srv?+A.seconds:0,shinyLog:P.shinyLog||[],catchLog:P.catchLog||[],saleLog:P.saleLog||[],sess:S,slug:P.lastSlug||'',anBase:(P.anBase&&typeof P.anBase==='object')?P.anBase:null,
 /* pro destrava: hunt em que a pagina esta (field-init valido), ms desde o ultimo field, restart-freeze do servidor e a janela "Servidor reiniciado" do jogo aberta */
 inH:String((ws['field-init']&&ws['field-init'].slug)||''),fa:Date.now()-Math.max(P.fT||0,P.fiT||0),rf:+((ws['restart-freeze']||{}).frozenAt)||0,rsf:!!window.document?.querySelector('.rsf-overlay .rsf-cta:not([disabled])'),
 /* pro relogin do /login: vigia de captcha do loginPanel rodando ou tela do codigo 2FA aberta (alguem pode estar resolvendo a mao) */
 lw:!!(window.__loginWatch||window.document?.querySelector('input[autocomplete=one-time-code]'))};})()`;
   const BALL_MIN = 100, POTION_MIN = 15; // limites do "está com poucos ..." (revive saiu: o jogo aposentou o item em 02/10/2026)
   const lastShiny = [], lastFaint = [], lowOn = [{}, {}, {}, {}];
+  const lootLast=[null,null,null,null], lootFound=[{pheromone:0,bronze:0},{pheromone:0,bronze:0},{pheromone:0,bronze:0},{pheromone:0,bronze:0}];
+  const marketSaleFingerprints=[new Set(),new Set(),new Set(),new Set()];
   function checkLow(i, key, val, min, msgKey) {
     if (val < min) { if (!lowOn[i][key]) { lowOn[i][key] = true; alerta(i, msgKey); } }
     else lowOn[i][key] = false; // reabasteceu: pode avisar de novo depois
@@ -2060,7 +2199,7 @@ lw:!!(window.__loginWatch||window.document?.querySelector('input[autocomplete=on
     // desligado: a conta posta na hunt pelo VOLTA deixa de ser segurada nela quando o socket reconecta
     if (!voltaHuntOn) webviews.forEach((w, i) => { if (off[i] || !w) return; try { w.executeJavaScript('window.__poke&&(window.__poke.vSlug=null)').catch(() => {}); } catch {} });
   };
-  const VOLTA_JS = (slug) => `(()=>{const P=window.__poke;if(!P)return 'sem-coletor';if(window.__pgVolta)return 'ja';window.__pgVolta=1;const sl=${JSON.stringify(String(slug))};if(!sl||['cerulean','pewter','viridian','cassino','arena_pvp','goldenrod','shopping'].includes(sl)||sl.startsWith('gym_'))return 'cidade';let t0=Date.now(),n=0,tk=0,kl=(P.sess||{}).kills||0;const iv=setInterval(()=>{try{const k=(P.sess||{}).kills||0;if((P.fiT||0)>t0||k>kl||n>=3||++tk>10){clearInterval(iv);return;}kl=k;if(P.sock&&P.sock.readyState===1){P.sock.send(JSON.stringify({type:'enter-hunt',slug:sl}));n++;P.vSlug=sl;P.vT=t0=Date.now();}}catch(e){}},12000);return 'armado';})()`;
+  const VOLTA_JS = (slug) => `(()=>{const P=window.__poke;if(!P)return 'sem-coletor';if(window.__ehVolta)return 'ja';window.__ehVolta=1;const sl=${JSON.stringify(String(slug))};if(!sl||['cerulean','pewter','viridian','cassino','arena_pvp','goldenrod','shopping'].includes(sl)||sl.startsWith('gym_'))return 'cidade';let t0=Date.now(),n=0,tk=0,kl=(P.sess||{}).kills||0;const iv=setInterval(()=>{try{const k=(P.sess||{}).kills||0;if((P.fiT||0)>t0||k>kl||n>=3||++tk>10){clearInterval(iv);return;}kl=k;if(P.sock&&P.sock.readyState===1){P.sock.send(JSON.stringify({type:'enter-hunt',slug:sl}));n++;P.vSlug=sl;P.vT=t0=Date.now();}}catch(e){}},12000);return 'armado';})()`;
   // acoes do destrava (ver destrava()): o mesmo enter-hunt que o jogo manda ao reconectar, e o clique no botao do proprio jogo
   const ENTRA_JS = (slug) => `(()=>{const P=window.__poke,s=P&&P.sock;if(!s||s.readyState!==1)return 0;s.send(JSON.stringify({type:'enter-hunt',slug:${JSON.stringify(String(slug))}}));return 1;})()`;
   const RSF_JS = `(()=>{const b=document.querySelector('.rsf-overlay .rsf-cta:not([disabled])');if(!b)return 0;b.click();return 1;})()`;
@@ -2258,8 +2397,8 @@ lw:!!(window.__loginWatch||window.document?.querySelector('input[autocomplete=on
           csvNum(porKill, 4), csvNum(porKill * 100, 3)]);
       });
     });
-    baixa('pokegrid-hunts.csv', a);
-    baixa('pokegrid-drops.csv', b);
+    baixa('escarlata-hispana-hunts.csv', a);
+    baixa('escarlata-hispana-drops.csv', b);
   }
   function exportCSV() {
     let csv = csvLinha(['Dia', 'Conta', 'Gold', 'XP', 'Kills', 'Capturas', 'Shiny apareceu', 'Shiny capturado']);
@@ -2268,7 +2407,7 @@ lw:!!(window.__loginWatch||window.document?.querySelector('input[autocomplete=on
       const b = histDay[k][i2];
       csv += csvLinha([diaBR(k), csvCel(tabNames[i2] || stName(+i2)), csvNum(b.g), csvNum(b.x), csvNum(b.kl), csvNum(b.c), csvNum(b.sf), csvNum(b.sc)]);
     }));
-    baixa('pokegrid-historico.csv', csv);
+    baixa('escarlata-hispana-historico.csv', csv);
   }
 
   // ----- Logs vitalicios: shinies e capturas sobrevivem ao fechar o app -----
@@ -2355,6 +2494,44 @@ lw:!!(window.__loginWatch||window.document?.querySelector('input[autocomplete=on
       : { ac: 'enter', msg: 'hunt ' + sl + ' parada (10 min sem kill, ' + Math.round(r.fa / 1000) + 's sem field, socket aberto)' + k + 'mandando enter-hunt' };
   }
 
+  function updateLootBadge(i,w,r){
+    const L=lootFound[i]||{pheromone:0,bronze:0};
+    // Usa el mismo resolvedor de imagenes del Mercado Global. Las rutas /assets/... se
+    // convierten al origen real de Poke Idle World y no a los assets de Escarlata.
+    const pSrc=ehGMNormIcon(r?.pherIcon||'');
+    const bSrc=ehGMNormIcon(r?.bronzeIcon||'');
+    const js=`(()=>{const esc=s=>String(s||'').replace(/[&<>\"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#39;'}[c]));let e=document.getElementById('__ehLootBadge');if(!e){e=document.createElement('div');e.id='__ehLootBadge';e.style.cssText='position:fixed;right:12px;top:8px;z-index:2147483000;background:rgba(8,13,20,.90);border:1px solid #7d2838;border-radius:9px;padding:7px 10px;color:#fff;font:700 12px Arial,sans-serif;line-height:1.65;box-shadow:0 5px 18px #0008;pointer-events:none;text-align:left;min-width:160px';document.body.appendChild(e);}const row=(src,label,n,fallback)=>'<div style=\"display:flex;align-items:center;gap:6px;height:23px\">'+(src?'<img src=\"'+esc(src)+'\" style=\"width:20px;height:20px;object-fit:contain\" onerror=\"this.style.display=\'none\';this.nextElementSibling.style.display=\'inline\'\"><span style=\"display:none\">'+fallback+'</span>':'<span>'+fallback+'</span>')+'<span>'+label+': <b>'+n+'</b></span></div>';e.innerHTML=row(${JSON.stringify(pSrc)},'Pheromonas',${L.pheromone},'🍃')+row(${JSON.stringify(bSrc)},'Bronze Tokens',${L.bronze},'🪙');return 1;})()`;
+    try{w.executeJavaScript(js).catch(()=>{});}catch{}
+  }
+  function trackLoot(i,r,w){
+    const cur={pheromone:+r.pherCur||0,bronze:+r.bronzeCur||0}, prev=lootLast[i];
+    if(prev){
+      const dp=Math.max(0,cur.pheromone-prev.pheromone), db=Math.max(0,cur.bronze-prev.bronze);
+      if(dp){lootFound[i].pheromone+=dp;if(alertsOn&&alLocal.pheromone!==false)alerta(i,'msgPheromone');}
+      if(db){lootFound[i].bronze+=db;if(alertsOn&&alLocal.bronze!==false)alerta(i,'msgBronze');}
+    }
+    lootLast[i]=cur; updateLootBadge(i,w,r);
+  }
+  function handleMarketSale(i,x){
+    if(!x)return false;
+    const seen=marketSaleFingerprints[i]||(marketSaleFingerprints[i]=new Set());
+    // El origen de detección NO forma parte de la huella: socket, DOM y sondeo pueden ver la misma venta.
+    const fp=String(x.fp||[x.displayTime||'',x.q||1,String(x.n||'').toLowerCase(),x.p||0,String(x.c||'').toLowerCase()].join('|'));
+    if(seen.has(fp))return false; seen.add(fp);
+    if(seen.size>300){const a=[...seen];seen.clear();a.slice(-180).forEach(v=>seen.add(v));}
+    const nome=(accounts[i]&&accounts[i].name)||defName(i);
+    const money=(+x.p||0)>0?' por '+Number(x.p).toLocaleString('es-CL')+(/diam|dd/i.test(x.c)?' DD':(/dollar|gold|\$/i.test(x.c)?' dollars':'')):'';
+    const qty=(+x.q||1)>1?(+x.q||1)+'× ':'';
+    const msg=nome+' vendió '+qty+(x.n||'un objeto')+money+' en el Mercado 💰';
+    try{window.ehRegisterEvent?.(i,'sale',msg,{price:+x.p||0,q:+x.q||1,name:x.n||'',currency:x.c||''})}catch{}
+    if(alertsOn&&alLocal.sale!==false){try{window.pokeAPI.notify('Escarlata Hispana',msg)}catch{}}
+    return true;
+  }
+  function trackMarketSales(i,r){
+    const log=Array.isArray(r.saleLog)?r.saleLog:[]; if(!log.length)return;
+    log.slice().sort((a,b)=>(+a.t||0)-(+b.t||0)).forEach(x=>handleMarketSale(i,x));
+  }
+
   const pendA = [0, 0, 0, 0]; // ticks seguidos sem resposta (renderer travado deixa a promise pendente pra sempre)
   const dlgT = [0, 0, 0, 0]; // desde quando o painel esta num alert/confirm/prompt (0 = nenhum): a pagina para ali sem estar travada
   const sessSnap = []; // fotografia da sessao por conta: re-semeia o coletor apos reload (o jogo segue no servidor)
@@ -2370,6 +2547,8 @@ lw:!!(window.__loginWatch||window.document?.querySelector('input[autocomplete=on
       w.executeJavaScript(READ_ALERTS).then(r => {
         pendA[i] = 0;
         if (!r) return;
+        if (r.live && r.hasInv) trackLoot(i,r,w);
+        if (r.live) trackMarketSales(i,r);
         if (r.live && r.sess && r.sess.start) { // so de conta VIVA: foto tirada no login/erro nunca vencia os 10 min
           const o = sessSnap[i];
           if (r.cid && o && o.cid && o.cid !== r.cid) { delete sessSnap[i]; w.executeJavaScript(RESET_SESS + ';window.__poke&&window.__poke.ws&&(window.__poke.ws.analyzer=null);window.__poke&&(window.__poke.sess.lastKillT=window.__poke.sess.saiuT=0)').catch(() => {}); return; } // trocou de conta no painel: nao herda sessao nem hunt da anterior, nem o analyzer dela (o proximo tique ve srv 0 e a chegada do da conta nova vira base), nem o ultimo kill que o Zerar guarda (armaria o VOLTA da conta nova na hunt da anterior)
@@ -2393,13 +2572,13 @@ lw:!!(window.__loginWatch||window.document?.querySelector('input[autocomplete=on
           // no /login nada tentava de novo (o loginPanel clica uma vez, o autoLogin so roda em navegacao e o deadT fica parado ali):
           // contador proprio, 10 min no login sem entrar (o mesmo teto do vigia de captcha do loginPanel) abre o login de novo.
           // Nunca com o vigia de captcha rodando nem com a tela do codigo 2FA aberta (r.lw): pode ter alguem resolvendo a mao
-          if (u.startsWith(LOGIN_URL) && cr && cr.email && cr.senha) { if ((w.__pgLogT = (w.__pgLogT || 0) + 1) >= 100 && !r.lw) { w.__pgLogT = 0; try { Promise.resolve(w.loadURL(LOGIN_URL)).catch(() => {}); } catch {} } } else w.__pgLogT = 0;
+          if (u.startsWith(LOGIN_URL) && cr && cr.email && cr.senha) { if ((w.__ehLogT = (w.__ehLogT || 0) + 1) >= 100 && !r.lw) { w.__ehLogT = 0; try { Promise.resolve(w.loadURL(LOGIN_URL)).catch(() => {}); } catch {} } } else w.__ehLogT = 0;
           // so conta onde a sessao viva e esperada: /play (WS 4001, pagina de erro) e a manutencao. No login (captcha a mao),
           // na landing do Modo Soneca (Zzz: relogar em 5 min cancela o farm offline), em criar personagem e verificar e-mail o contador nao anda
           if (!u.startsWith('https://poke.idleworld.online/play') && !u.includes('maintenance=1')) deadT[i] = 0;
           else if (cr && cr.email && cr.senha && ++deadT[i] >= ((w.getURL() || '').includes('maintenance=1') ? 100 : 10)) { deadT[i] = 0; try { Promise.resolve(w.loadURL(LOGIN_URL)).catch(() => {}); } catch {} } // em manutencao tenta a cada 10 min, nao a cada 60s
           return; }
-        deadT[i] = 0; w.__pgLogT = 0;
+        deadT[i] = 0; w.__ehLogT = 0;
         checkStall(i, r); // farm parado
         // restart do servidor fica no log mesmo sem acao (4 paineis no mesmo minuto = foi o servidor)
         if (r.rf && r.rf !== rfVisto[i]) { rfVisto[i] = r.rf; }
@@ -2504,7 +2683,7 @@ lw:!!(window.__loginWatch||window.document?.querySelector('input[autocomplete=on
 
   // Sistema de referido eliminado de Escarlata Hispana.
   document.getElementById('reloadAll').onclick = () => webviews.forEach((w, i) => { if (!off[i]) { try { w.reloadIgnoringCache(); } catch { w.reload(); } } }); // ignora cache: resolve pagina de login velha em cache (sem captcha)
-  document.getElementById('faqBtn').onclick = () => window.open('https://github.com/soufoka/PokeGrid-source/blob/main/FAQ.md');
+  document.getElementById('faqBtn').onclick = () => window.open('https://github.com/Raku321/Escarlata-Hispana');
   // versao pequena ao lado do logo, vinda do processo principal (a UA nao carrega mais o token do app)
   try {
     const vAtual = window.pokeAPI && window.pokeAPI.appVersion;
@@ -2524,13 +2703,13 @@ lw:!!(window.__loginWatch||window.document?.querySelector('input[autocomplete=on
       // instalador, portatil e zip rodam de resources/app.asar (Resources no Mac); o codigo-fonte roda da pasta do repositorio.
       // Quem tem o instalador vai pros downloads dele: o README do codigo-fonte nao aponta pro instalador
       const empacotado = /\/resources\/app(\.asar)?\//i.test(String(location.pathname || ''));
-      a2.onclick = () => window.open(empacotado ? 'https://github.com/soufoka/PokeGrid/releases/latest' : 'https://github.com/soufoka/PokeGrid-source');
+      a2.onclick = () => window.open(empacotado ? 'https://github.com/Raku321/Escarlata-Hispana/releases/latest' : 'https://github.com/Raku321/Escarlata-Hispana');
       elVer.appendChild(a2);
     };
     const cacheV = lsObj('verNova');
     if (cacheV.tag) vMostra(cacheV.tag);
     if (vAtual && Date.now() - (+cacheV.t || 0) > 22 * 3600e3) setTimeout(() => {
-      fetch('https://api.github.com/repos/soufoka/PokeGrid/releases/latest').then(r => r.json()).then(j => {
+      fetch('https://api.github.com/repos/Raku321/Escarlata-Hispana/releases/latest').then(r => r.json()).then(j => {
         const tag = j && typeof j.tag_name === 'string' ? j.tag_name : '';
         lsSet('verNova', JSON.stringify({ t: Date.now(), tag: /^v?[\d.]{1,12}$/.test(tag) ? tag : '' }));
         vMostra(tag);
@@ -2586,7 +2765,7 @@ lw:!!(window.__loginWatch||window.document?.querySelector('input[autocomplete=on
     const o = coletaConfig();
     const a = document.createElement('a');
     a.href = 'data:application/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(o));
-    a.download = 'pokegrid-config.json'; a.click(); menu.classList.remove('show');
+    a.download = 'escarlata-hispana-config.json'; a.click(); menu.classList.remove('show');
   };
   document.getElementById('bkImp').onclick = () => {
     menu.classList.remove('show');
@@ -2785,7 +2964,7 @@ lw:!!(window.__loginWatch||window.document?.querySelector('input[autocomplete=on
   let cfg = loadStatsCfg();
   let lastData = null; // ultimo d valido (pra listar itens da bag na config)
   const saveStatsCfg = () => { try { lsSet('statsCfg', JSON.stringify(cfg)); } catch {} };
-  // Shinies encontrados na vida da conta (acumulado pelo PokeGrid, por id de personagem)
+  // Shinies encontrados na vida da conta (acumulado por Escarlata Hispana, por id de personagem)
   const loadShinyLife = () => { try { return lsObj('shinyLife'); } catch { return {}; } };
   const addShinyLife = (cid, n) => { if (!cid || !n) return; const m = loadShinyLife(); m[cid] = (m[cid] || 0) + n; try { lsSet('shinyLife', JSON.stringify(m)); } catch {} };
   // Emblema/nome do clã no header (defensivo: o formato do clã varia; tenta os campos comuns)
@@ -3364,7 +3543,7 @@ lw:!!(window.__loginWatch||window.document?.querySelector('input[autocomplete=on
   // mexem nas casas decimais o tempo todo, e cada mexida invalidava o cache (o Ditto do Simples re-varria 0,3 s a cada 30 s)
   const calChave = () => { const q = (v, p) => Math.round((+v || 0) / p) * p; return q(tempoCal.a, 0.1).toFixed(1) + '/' + q(tempoCal.b, 0.1).toFixed(1) + '/' + q(danoFator, 0.05).toFixed(2) + '/' + JSON.stringify(Object.values((typeof huntStats !== 'undefined' && huntStats) || {}).map(M => Object.values(M || {}).map(v => q(v && v.tma, 0.5) + '/' + q(v && v.tpa, 0.5) + '/' + q(v && v.tsh, 20)))); };
   const sugCalc = (A, x) => {
-    const M2 = window.PokeGridIvMath;
+    const M2 = window.EscarlataIvMath;
     const aB = A && basesByName[A.sp], am = A && movesByName[A.sp];
     const dB = basesByName[x.sp], dm = movesByName[x.sp] || {};
     if (!M2 || !aB || !am || !dB) return null;
@@ -4188,7 +4367,7 @@ lw:!!(window.__loginWatch||window.document?.querySelector('input[autocomplete=on
         + '</div>'
         + (catches.length ? catches.map(x => '<div class="cd-row"><span class="cd-dot" style="background:' + x.dot + '"></span><span class="rn">' + (x.fx ? '<span title="' + t('cdFirst') + '">🆕</span> ' : '') + (x.sh ? '✨ ' : '') + esc(x.n) + raroHtml(x.q) + ' <span style="color:#7d8590">· ' + esc(x.acc) + '</span></span><span style="color:#55e6d3">' + (+x.iv || 0) + '/192</span>' + (+x.q ? '<span style="color:#f2c665">×' + (+x.q).toFixed(2) + '</span>' : '') + '<span class="rt">' + fmtDT(x.t) + '</span></div>').join('') : '<div class="cd-empty">' + t('cdNone') + '</div>') + '</div>'; };
     SB.team = () => { // chave 'team', a mesma do CDSECTS e do cardsCfg.order (SB.teams nunca era desenhado)
-      const M = window.PokeGridIvMath;
+      const M = window.EscarlataIvMath;
       const alvo = Math.max(1, Math.min(tlMax(), +(lsGet('cdPjLv') || 500)));
       const cols = ordered.filter(r => r.st === 'on' && (r.team || []).length);
       const poder = (p) => { // mesmo modulo do card de IV; sem base/qualidade/IV nao inventa numero
@@ -4597,28 +4776,28 @@ lw:!!(window.__loginWatch||window.document?.querySelector('input[autocomplete=on
   }
   // Tres regras de injecao de userscript, num lugar so:
   // 1) NUNCA na tela de login: ali o app digita a senha do cofre, e qualquer script ligado leria o campo.
-  // 2) uma execucao por documento (marca em window.__pgUS): ligar/instalar com o painel carregando caia junto com o dom-ready.
+  // 2) uma execucao por documento (marca em window.__ehUS): ligar/instalar com o painel carregando caia junto com o dom-ready.
   // 3) embrulhado como o Tampermonkey (return/await no topo valem, const de um script nao colide com o de outro), com o erro registrado.
   // sem userscript onde se digita senha (login, cadastro, recuperacao, verificacao) e fora do jogo (about:blank do painel desligado, pagina de erro)
   const usNoLoginUrl = (u) => { u = String(u || ''); if (!u.startsWith('https://poke.idleworld.online/')) return true; const p = u.slice('https://poke.idleworld.online'.length); return ['/login', '/register', '/forgot-password', '/verify-email', '/trocar-senha'].some(x => p === x || p.startsWith(x + '?') || p.startsWith(x + '/') || p.startsWith(x + '#')); };
   const usNoLogin = (wv) => { try { return usNoLoginUrl(wv.getURL()); } catch { return true; } };
   const runUS = (wv, s, code) => { try {
-    wv.executeJavaScript('(()=>{const m=window.__pgUS=window.__pgUS||{},k=' + JSON.stringify(String(s.id)) + ';if(m[k])return 1;m[k]=1;return 0})()')
+    wv.executeJavaScript('(()=>{const m=window.__ehUS=window.__ehUS||{},k=' + JSON.stringify(String(s.id)) + ';if(m[k])return 1;m[k]=1;return 0})()')
       .then(ja => { if (!ja) wv.executeJavaScript('(async function(){' + code + '\n})().then(function(){})').catch(e => { }); })
       .catch(() => {});
   } catch {} };
   // ===== JustPokédex integrado =====
   // Se carga desde los archivos de Escarlata Hispana y no aparece en el gestor de Scripts.
   // Cada webview/cuenta ejecuta su propia instancia y conserva su propio localStorage.
-  let justPokedexCode = null;
-  async function injectJustPokedex(wv) {
+  let escarlataCalculatorCode = null;
+  async function injectEscarlataCalculator(wv) {
     if (usNoLogin(wv)) return;
     try {
-      if (justPokedexCode == null) justPokedexCode = (await window.pokeAPI.readPreset('justpokedex.js')) || '';
-      if (!justPokedexCode) return;
-      const ja = await wv.executeJavaScript("(()=>{if(window.__escarlataJustPokedex)return 1;window.__escarlataJustPokedex=1;return 0})()");
+      if (escarlataCalculatorCode == null) escarlataCalculatorCode = (await window.pokeAPI.readPreset('escarlata-calculadora.js')) || '';
+      if (!escarlataCalculatorCode) return;
+      const ja = await wv.executeJavaScript("(()=>{if(window.__escarlataCalculator)return 1;window.__escarlataCalculator=1;return 0})()");
       if (!ja) {
-        await wv.executeJavaScript('(async function(){' + justPokedexCode + '\n})().then(function(){})');
+        await wv.executeJavaScript('(async function(){' + escarlataCalculatorCode + '\n})().then(function(){})');
         // Arranca recogido: se abre desde el botón nativo de Escarlata Hispana.
         await wv.executeJavaScript("(()=>{const p=document.getElementById('pokemon-reader-panel');if(p)p.classList.add('minimized')})()").catch(()=>{});
       }
@@ -4639,14 +4818,14 @@ lw:!!(window.__loginWatch||window.document?.querySelector('input[autocomplete=on
   }
 
   async function injectScripts(wv) {
-    if (usNoLogin(wv)) { wv.__pgSemScripts = true; return; }
-    wv.__pgSemScripts = false;
+    if (usNoLogin(wv)) { wv.__ehSemScripts = true; return; }
+    wv.__ehSemScripts = false;
     for (const s of allScripts()) { if (!scriptsOn[s.id]) continue; const code = await getScriptCode(s); if (code) runUS(wv, s, code); }
   }
   async function applyScriptToAll(sid) {
     const s = allScripts().find(x => x.id === sid); if (!s) return;
     const code = await getScriptCode(s); if (!code) return;
-    webviews.forEach((w, i) => { if (off[i] || !w) return; if (usNoLogin(w)) w.__pgSemScripts = true; else runUS(w, s, code); }); // painel no login: marca pra entrar quando sair de la
+    webviews.forEach((w, i) => { if (off[i] || !w) return; if (usNoLogin(w)) w.__ehSemScripts = true; else runUS(w, s, code); }); // painel no login: marca pra entrar quando sair de la
   }
   function renderScriptsList() {
     const el = document.getElementById('scList');
@@ -4658,11 +4837,11 @@ lw:!!(window.__loginWatch||window.document?.querySelector('input[autocomplete=on
     el.querySelectorAll('.sc-chk input').forEach(chk => chk.onchange = () => { if (!chk.checked && !window.confirm(t('scReloadAviso'))) { chk.checked = true; return; } scriptsOn[chk.dataset.sid] = chk.checked; saveScripts(); if (chk.checked) applyScriptToAll(chk.dataset.sid); else webviews.forEach((w, wi) => { if (!off[wi]) try { w.reload(); } catch {} }); });
     el.querySelectorAll('.sc-del').forEach(b => b.onclick = () => { const ativo = !!scriptsOn[b.dataset.del]; if (!window.confirm(t('scRemover') + (ativo ? ' ' + t('scReloadAviso') : ''))) return; userScripts = userScripts.filter(u => u.id !== b.dataset.del); delete scriptsOn[b.dataset.del]; if (ativo) webviews.forEach((w, wi) => { if (!off[wi]) try { w.reload(); } catch {} }); saveScripts(); renderScriptsList(); });
   }
-  const justPokedexBtn = document.getElementById('justPokedexBtn');
-  justPokedexBtn.onclick = async () => {
+  const escarlataCalculatorBtn = document.getElementById('escarlataCalculatorBtn');
+  escarlataCalculatorBtn.onclick = async () => {
     for (let i = 0; i < webviews.length; i++) {
       const w = webviews[i]; if (off[i] || !w || usNoLogin(w)) continue;
-      await injectJustPokedex(w); await injectEhMarket(w);
+      await injectEscarlataCalculator(w); await injectEhMarket(w);
       try {
         await w.executeJavaScript(`(()=>{const p=document.getElementById('pokemon-reader-panel');if(!p)return 'no';if(p.classList.contains('minimized')){const b=document.getElementById('minimize');if(b)b.click();else{p.classList.remove('minimized');p.style.setProperty('display','flex','important')}}else{p.style.setProperty('display','flex','important')}return 'abierto'})()`);
       } catch {}
@@ -4736,7 +4915,7 @@ lw:!!(window.__loginWatch||window.document?.querySelector('input[autocomplete=on
   // carregado ou faltar dado, cai no valor que o painel mandou.
   function poderFiel(d) {
     try {
-      const M = window.PokeGridIvMath;
+      const M = window.EscarlataIvMath;
       if (!M || !d || !d.bases) return null;
       const b = d.bases, nv = +d.nivel || 0, q = +d.qualidade || 0, tot = +d.ivTotal || 0;
       if (!(nv > 0) || !(q > 0) || !(tot > 0)) return null;
@@ -4853,7 +5032,7 @@ lw:!!(window.__loginWatch||window.document?.querySelector('input[autocomplete=on
     const foco = document.activeElement && document.activeElement.id;
     const pedido = { pokemon: d.pokemon || { nome: d.nome, nivel: d.nivel, ivAtual: d.ivTotal, poder: d.poderJogo, tipos: d.tipos }, nivel: nv, qualidade: q, atuais, bases };
     try {
-      w.executeJavaScript('window.__pgIv && window.__pgIv.calc(' + JSON.stringify(pedido) + ')').then(r => {
+      w.executeJavaScript('window.__ehIv && window.__ehIv.calc(' + JSON.stringify(pedido) + ')').then(r => {
         if (!r) return;
         const d2 = ivSane(r); if (!d2) return; ivDados = d2; ivRender(); // r vem da pagina do jogo: sanea igual ao canal do console
         if (foco) { const el = ivEl.querySelector('#' + foco); if (el) el.focus(); }
@@ -4937,29 +5116,14 @@ lw:!!(window.__loginWatch||window.document?.querySelector('input[autocomplete=on
 
   // ----- Init -----
   (async () => {
-    // Los paneles no deben depender de que el IPC de credenciales responda.
-    // Antes, si loadCreds quedaba esperando, la app mostraba 4/4 en la barra pero el área de cuentas quedaba vacía.
-    accounts = normalize([]);
+    // Carga las cuentas persistentes antes de crear los paneles. No hay timeout:
+    // una lectura lenta nunca se interpreta como "no hay cuentas".
+    try { accounts = normalize(await window.pokeAPI.loadCreds()); }
+    catch { accounts = normalize([]); }
     build();
-    applyLang(); // aplica idioma en la interfaz
+    applyLang();
     applyStats();
     applyCards();
-
-    try {
-      const saved = await Promise.race([
-        window.pokeAPI.loadCreds(),
-        new Promise((_, reject) => setTimeout(() => reject(new Error('credenciales-timeout')), 2500))
-      ]);
-      accounts = normalize(saved);
-      // Actualiza los nombres de los paneles ya creados sin destruir ni recargar los webviews.
-      [...grid.querySelectorAll('.panel')].forEach((panel, i) => {
-        const nameEl = panel.querySelector('.panel-header .name');
-        if (nameEl) nameEl.textContent = accounts[i].name || defName(i);
-      });
-      try { if (typeof refreshAccountNames === 'function') refreshAccountNames(); } catch {}
-    } catch {
-      // La interfaz y las cuatro cuentas siguen visibles aunque falle la lectura de credenciales.
-    }
   })();
 </script>
 
@@ -4972,7 +5136,7 @@ body.eh-side-collapsed{--eh-side:58px}
 #ehBrand img{width:46px;height:46px;border-radius:12px;object-fit:cover;flex:none;box-shadow:0 0 0 1px #ff5265}
 #ehBrandText{font-weight:900;font-size:14px;line-height:1.05;white-space:nowrap}.eh-sub{font-size:9px;color:#e9b5bd;margin-top:4px;letter-spacing:.7px}
 #ehCollapse{margin-left:auto;width:28px;height:28px;padding:0!important;border-radius:9px!important}
-#ehJustPokedex{margin:8px 9px 0!important;width:calc(100% - 18px)!important;min-height:42px!important;background:linear-gradient(135deg,#7d1020,#d91f32)!important;border:1px solid #ff5964!important;color:#fff!important;font-weight:900!important;border-radius:10px!important;box-shadow:0 4px 14px rgba(217,31,50,.22)}#ehJustPokedex:hover{background:linear-gradient(135deg,#a51428,#ef3045)!important}#ehNav{display:grid;grid-template-columns:1fr 1fr;gap:7px;padding:8px 9px 9px;border-bottom:1px solid #321018}
+#ehCalculator{margin:8px 9px 0!important;width:calc(100% - 18px)!important;min-height:42px!important;background:linear-gradient(135deg,#7d1020,#d91f32)!important;border:1px solid #ff5964!important;color:#fff!important;font-weight:900!important;border-radius:10px!important;box-shadow:0 4px 14px rgba(217,31,50,.22)}#ehCalculator:hover{background:linear-gradient(135deg,#a51428,#ef3045)!important}#ehNav{display:grid;grid-template-columns:1fr 1fr;gap:7px;padding:8px 9px 9px;border-bottom:1px solid #321018}
 .eh-nav{min-height:48px!important;padding:5px!important;font-size:11px!important;display:flex!important;flex-direction:column;align-items:center;justify-content:center;gap:3px;border-radius:10px!important}.eh-nav span{font-size:18px}
 #ehAccounts{padding:9px;overflow:auto;flex:1}.eh-title{font-size:9px;font-weight:800;letter-spacing:1.4px;color:#a77d84;margin:2px 3px 8px;text-transform:uppercase}
 .eh-account{width:100%;text-align:left!important;padding:9px!important;margin:0 0 8px!important;min-height:116px!important;border-radius:13px!important;background:linear-gradient(145deg,#17121b,#111521)!important;border:1px solid #35203a!important;display:grid!important;grid-template-columns:58px 1fr!important;grid-template-rows:auto auto auto auto!important;column-gap:9px!important;row-gap:4px!important;align-items:center!important;overflow:hidden}
@@ -4981,18 +5145,20 @@ body.eh-side-collapsed{--eh-side:58px}
 .eh-acctxt{grid-column:2;grid-row:1;min-width:0}.eh-account b{display:block;color:#fff;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.eh-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#29d17d;margin-right:5px;box-shadow:0 0 7px #29d17d}
 .eh-trainer-level{font-size:9px;background:#27345a;border:1px solid #465f9b;border-radius:5px;padding:2px 4px;margin-left:4px;color:#dbe8ff}.eh-vip{color:#ffd94a;margin-left:4px}.eh-huntline,.eh-pokeline{grid-column:2;font-size:9px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.eh-huntline{color:#b7a5b9}.eh-pokeline{color:#80a9ff;font-weight:800}
 .eh-progress{grid-column:1/3;height:4px;border-radius:4px;background:#2a2f3c;overflow:hidden;margin-top:2px}.eh-progress>i{display:block;height:100%;background:linear-gradient(90deg,#287cff,#6ba3ff);border-radius:4px}.eh-progressmeta{grid-column:1/3;display:flex;justify-content:flex-end;gap:8px;font-size:9px;color:#b9c3d8;margin-top:-2px}.eh-money{grid-column:1/3;display:flex;justify-content:space-between;align-items:center;border-radius:7px;background:#10352f;border:1px solid #1a574c;padding:4px 7px;font-size:9px;color:#8ca4aa}.eh-money b{font-size:10px;color:#e7edf3}.eh-money .today{color:#70e3b4}
-#ehOptionsPane{display:none;position:fixed;left:var(--eh-side);top:0;bottom:0;width:280px;z-index:4999;background:#100b0d;border-right:1px solid #5b1824;padding:14px;overflow:auto;box-shadow:10px 0 25px rgba(0,0,0,.32)}
-body.eh-options-open #ehOptionsPane{display:block}#ehOptionsPane h2{margin:4px 0 12px;color:#fff;font-size:16px}#ehOptionList{display:flex;flex-direction:column;gap:7px}#ehOptionList>*{width:100%!important;margin:0!important;min-height:39px!important}#ehOptionList #countRow{display:flex!important;align-items:center;gap:5px;padding:6px!important}
-#ehOptionList button.on,#ehOptionList button[aria-pressed="true"]{background:linear-gradient(135deg,#b81428,#e31d32)!important;border-color:#ff5b69!important;color:#fff!important;box-shadow:inset 0 0 0 1px rgba(255,255,255,.05),0 3px 10px rgba(227,29,50,.18)!important}
-#ehOptionList button.on::after,#ehOptionList button[aria-pressed="true"]::after{content:" ✓";color:#74f0ad;font-weight:900}
+#ehOptionsPane{display:none;position:fixed;inset:0;z-index:999999;background:rgba(2,4,9,.78);backdrop-filter:blur(4px);align-items:center;justify-content:center;padding:28px}
+#ehOptionsPane.show{display:flex}body.eh-options-open #ehOptionsPane{display:flex}
+.eh-options-card{width:min(1180px,94vw);height:min(800px,91vh);display:flex;flex-direction:column;background:#0b1020;border:1px solid #57202a;border-radius:16px;box-shadow:0 25px 80px #000;overflow:hidden;color:#eef2ff}
+.eh-options-head{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;background:linear-gradient(90deg,#1a0d12,#101728);border-bottom:1px solid #4b1822}.eh-options-head b{font-size:18px}.eh-options-head small{display:block;color:#929bb0;margin-top:3px}.eh-options-head button{background:#2a1017;border:1px solid #6a2632;color:#fff;border-radius:8px;padding:7px 11px;cursor:pointer}
+#ehOptionList{padding:16px;overflow:auto;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;align-content:start;flex:1}.eh-opt-section{background:#0f1627;border:1px solid #27334c;border-radius:13px;padding:13px;display:flex;flex-direction:column;gap:8px}.eh-opt-section h3{margin:0 0 3px;font-size:13px;color:#fff}.eh-opt-section>small{color:#8794aa;margin:-1px 0 5px}.eh-opt-section>*:not(h3):not(small){width:100%!important;margin:0!important;min-height:39px!important}.eh-opt-section #countRow{display:flex!important;align-items:center;gap:5px;padding:6px!important}
+#ehOptionList button.on,#ehOptionList button[aria-pressed="true"]{background:linear-gradient(135deg,#b81428,#e31d32)!important;border-color:#ff5b69!important;color:#fff!important;box-shadow:inset 0 0 0 1px rgba(255,255,255,.05),0 3px 10px rgba(227,29,50,.18)!important}#ehOptionList button.on::after,#ehOptionList button[aria-pressed="true"]::after{content:" ✓";color:#74f0ad;font-weight:900}
+#ehUpdateBox{margin:0!important}#ehSidebarFooter{margin-top:auto;padding:10px;border-top:1px solid #35141b;background:#0b080b}#ehSidebarFooter #ehUpdateBox{padding:9px!important;border:1px solid #4b1b24!important;border-radius:9px!important;background:#151014!important}#ehSidebarFooter #ehUpdateStatus{font-size:10px!important;margin-bottom:6px!important}#ehSidebarFooter button{font-size:11px!important;padding:7px!important}
 
-body.eh-side-collapsed #ehBrandText,body.eh-side-collapsed #ehJustPokedex .eh-jp-text,body.eh-side-collapsed .eh-title,body.eh-side-collapsed .eh-account b,body.eh-side-collapsed .eh-account small{display:none}body.eh-side-collapsed #ehBrand{padding:6px}body.eh-side-collapsed #ehBrand img{width:42px;height:42px}body.eh-side-collapsed #ehCollapse{position:absolute;top:58px;left:15px}body.eh-side-collapsed #ehJustPokedex{width:46px!important;margin:28px 6px 0!important;padding:6px!important;min-height:40px!important}body.eh-side-collapsed #ehNav{grid-template-columns:1fr;padding:8px 6px;margin-top:0}.eh-side-collapsed .eh-nav{font-size:0!important;min-height:42px!important}.eh-side-collapsed .eh-nav span{font-size:18px}.eh-side-collapsed #ehAccounts{padding:6px}.eh-side-collapsed .eh-account{height:38px;min-height:38px!important;padding:8px!important;text-align:center!important}
+body.eh-side-collapsed #ehBrandText,body.eh-side-collapsed #ehCalculator .eh-jp-text,body.eh-side-collapsed .eh-title,body.eh-side-collapsed .eh-account b,body.eh-side-collapsed .eh-account small{display:none}body.eh-side-collapsed #ehBrand{padding:6px}body.eh-side-collapsed #ehBrand img{width:42px;height:42px}body.eh-side-collapsed #ehCollapse{position:absolute;top:58px;left:15px}body.eh-side-collapsed #ehCalculator{width:46px!important;margin:28px 6px 0!important;padding:6px!important;min-height:40px!important}body.eh-side-collapsed #ehNav{grid-template-columns:1fr;padding:8px 6px;margin-top:0}.eh-side-collapsed .eh-nav{font-size:0!important;min-height:42px!important}.eh-side-collapsed .eh-nav span{font-size:18px}.eh-side-collapsed #ehAccounts{padding:6px}.eh-side-collapsed .eh-account{height:38px;min-height:38px!important;padding:8px!important;text-align:center!important}
 body.eh-side-collapsed .eh-account{display:flex!important;width:46px!important;height:52px!important;min-height:52px!important;margin:0 auto 7px!important;padding:3px!important;align-items:center!important;justify-content:center!important;overflow:hidden!important;border-radius:12px!important}
 body.eh-side-collapsed .eh-account .eh-pokeicon{display:block!important;width:44px!important;height:44px!important;min-width:44px!important;min-height:44px!important;max-width:44px!important;max-height:44px!important;margin:0!important;padding:0!important;object-fit:contain!important;object-position:center!important;border-radius:50%!important;align-self:center!important;transform:none!important}
 body.eh-side-collapsed .eh-account .eh-acctxt,body.eh-side-collapsed .eh-account .eh-huntline,body.eh-side-collapsed .eh-account .eh-pokeline,body.eh-side-collapsed .eh-account .eh-progress,body.eh-side-collapsed .eh-account .eh-progressmeta,body.eh-side-collapsed .eh-account .eh-money{display:none!important}
 
-#topbar{padding-left:8px!important}#topbar>.logo,#topbar>#loginAll,#topbar>#accounts,#topbar>#dock,#topbar>#statsBtn,#topbar>#cardsBtn,#topbar>#ivsBtn,#topbar>#justPokedexBtn,#topbar>#menuWrap{display:none!important}
-body.eh-options-open #grid,body.eh-options-open #cards{margin-left:280px!important}
+#topbar{padding-left:8px!important}#topbar>.logo,#topbar>#loginAll,#topbar>#accounts,#topbar>#dock,#topbar>#statsBtn,#topbar>#cardsBtn,#topbar>#ivsBtn,#topbar>#escarlataCalculatorBtn,#topbar>#menuWrap{display:none!important}
 
 #ehToolsModal{display:none;position:fixed;inset:0;z-index:999999;background:rgba(2,4,9,.78);backdrop-filter:blur(4px);align-items:center;justify-content:center;padding:28px}
 #ehToolsModal.show{display:flex}
@@ -5005,10 +5171,10 @@ body.eh-options-open #grid,body.eh-options-open #cards{margin-left:280px!importa
 .eh-advisor-info{padding:8px 16px;color:#aab4c8;font-size:12px;border-bottom:1px solid #202a40}
 .eh-advisor-table-wrap{overflow:auto;flex:1;padding:0 14px 14px}.eh-advisor-table{width:100%;border-collapse:collapse;font-size:12px}.eh-advisor-table th{position:sticky;top:0;background:#11192b;color:#9eabc3;text-align:left;padding:10px 8px;border-bottom:1px solid #34415e}.eh-advisor-table td{padding:10px 8px;border-bottom:1px solid #1e2940}.eh-advisor-table tr:hover td{background:#111a2c}.eh-rank{color:#71809c}.eh-huntname{font-weight:800;color:#f2f5fb}.eh-xp{color:#68b9ff;font-weight:800}.eh-loot{color:#f3c54b;font-weight:800}.eh-skill{color:#d6d9e2}.eh-best{color:#53d88a;font-size:10px;font-weight:900;margin-left:6px}.eh-real{margin-left:6px;color:#55e49b;font-size:9px;font-weight:900}.eh-est{margin-left:6px;color:#8794aa;font-size:9px;font-weight:800}
 
-@media(max-width:850px){:root{--eh-side:62px}#ehBrandText,.eh-title,.eh-account b,.eh-account small{display:none}#ehNav{grid-template-columns:1fr;padding:7px}.eh-nav{font-size:0!important}.eh-nav span{font-size:18px}#ehOptionsPane{width:250px}}
+@media(max-width:850px){:root{--eh-side:62px}#ehBrandText,.eh-title,.eh-account b,.eh-account small{display:none}#ehNav{grid-template-columns:1fr;padding:7px}.eh-nav{font-size:0!important}.eh-nav span{font-size:18px}#ehOptionList{grid-template-columns:1fr}#ehOptionsPane{padding:10px}.eh-options-card{width:98vw;height:95vh}}
 </style>
 <div id="ehSidebar"><div id="ehBrand"><img src="assets/escarlata-hispana.png"><div id="ehBrandText">ESCARLATA<br>HISPANA<div class="eh-sub">POKE IDLE WORLD</div></div><button id="ehCollapse" title="Contraer menú">‹</button></div>
-  <button id="ehJustPokedex" title="Abrir Calculadora de IV global"><span>🧮</span> <span class="eh-jp-text">Calculadora de IV</span></button>
+  <button id="ehCalculator" title="Abrir Calculadora de IV global"><span>🧮</span> <span class="eh-jp-text">Calculadora de IV</span></button>
   <div id="ehNav">
     <button class="eh-nav" id="ehStart"><span>▶</span>Iniciar</button>
     <button class="eh-nav" id="ehAccountsBtn"><span>👤</span>Cuentas</button>
@@ -5016,16 +5182,18 @@ body.eh-options-open #grid,body.eh-options-open #cards{margin-left:280px!importa
     <button class="eh-nav" id="ehOptionsBtn"><span>⚙</span>Opciones</button>
   </div>
   <div id="ehAccounts"><div class="eh-title">Entrenadores <span id="ehCount">4/4</span></div><div id="ehAccountList"></div></div>
-</div>
-<div id="ehOptionsPane"><h2>⚙ Opciones</h2><div id="ehOptionList"></div>
-  <div id="ehUpdateBox" style="margin-top:14px;padding:12px;border:1px solid #5b1824;border-radius:10px;background:#171014">
-    <div style="font-weight:800;color:#fff;margin-bottom:5px">Escarlata Hispana <span id="ehCurrentVersion"></span></div>
-    <div id="ehUpdateStatus" style="font-size:12px;color:#c9aeb3;margin-bottom:9px">Comprobando versión…</div>
-    <button id="ehCheckUpdate" style="width:100%;margin-bottom:6px">🔄 Buscar actualizaciones</button>
-    <button id="ehDownloadUpdate" style="width:100%;margin-bottom:6px;display:none">⬇ Descargar actualización</button>
+  <div id="ehSidebarFooter"><div id="ehUpdateBox">
+    <div style="font-weight:800;color:#fff;margin-bottom:4px">Escarlata Hispana <span id="ehCurrentVersion"></span></div>
+    <div id="ehUpdateStatus" style="color:#c9aeb3">Versión actual</div>
+    <button id="ehCheckUpdate" style="width:100%;margin-bottom:5px">🔄 Buscar actualizaciones</button>
+    <button id="ehDownloadUpdate" style="width:100%;margin-bottom:5px;display:none">⬇ Descargar actualización</button>
     <button id="ehInstallUpdate" class="primary" style="width:100%;display:none">✓ Instalar y reiniciar</button>
-  </div>
+  </div></div>
 </div>
+<div id="ehOptionsPane" aria-hidden="true"><div class="eh-options-card">
+  <div class="eh-options-head"><div><b>⚙ Configuración</b><small>Todas las opciones de Escarlata Hispana, organizadas en un solo lugar</small></div><button id="ehOptionsClose" title="Cerrar">✕</button></div>
+  <div id="ehOptionList"></div>
+</div></div>
 
 <div id="ehToolsModal" aria-hidden="true">
   <div class="eh-tools-card">
@@ -5035,8 +5203,11 @@ body.eh-options-open #grid,body.eh-options-open #cards{margin-left:280px!importa
     </div>
     <div class="eh-tools-tabs">
 <button class="active" data-ehtab="advisor">🎯 Hunt Advisor</button>
-<button id="ehMarketBtn">🌐 Mercado Global</button>
+<button id="ehMarketBtn" data-ehtab="market">🌐 Mercado Global</button>
 <button data-ehtab="diag">🧰 Diagnóstico</button>
+<button id="ehToolControl" data-ehtab="control">📊 Centro de estado</button>
+<button id="ehToolActivity" data-ehtab="activity">📜 Actividad</button>
+<button id="ehToolMarketHistory" data-ehtab="marketHistory">📈 Historial mercado</button>
 </div>
     <div id="ehFeaturePanels">
 <div id="ehDiagPanel" class="eh-feature-panel eh-tool-main-panel">
@@ -5044,6 +5215,10 @@ body.eh-options-open #grid,body.eh-options-open #cards{margin-left:280px!importa
   <button id="ehDiagBtn">Generar diagnóstico</button><button id="ehDiagCopyBtn">📋 Copiar diagnóstico</button>
   <pre id="ehDiagPane"></pre>
 </div>
+<div id="ehMarketPanel" class="eh-tool-main-panel"></div>
+<div id="ehControlPanel" class="eh-tool-main-panel"></div>
+<div id="ehActivityPanel" class="eh-tool-main-panel"></div>
+<div id="ehMarketHistoryPanel" class="eh-tool-main-panel"></div>
 </div>
 <div id="ehAdvisorPanel" class="eh-tool-main-panel show">
 <div class="eh-advisor-controls">
@@ -5069,7 +5244,13 @@ body.eh-options-open #grid,body.eh-options-open #cards{margin-left:280px!importa
  const $=id=>document.getElementById(id);
  const body=document.body, menu=$('menu'), list=$('ehOptionList');
 
- let ehGMIndex=-1, ehGMTimer=null, ehGMRows=[];
+ let ehGMIndex=-1, ehGMTimer=null, ehGMCountdownTimer=null, ehGMSafetyTimer=null, ehGMNextRefresh=0, ehGMRows=[], ehGMCanPurchase=false, ehGMLocationState='unknown';
+ const EHGM_REFRESH_MS=20000;
+ const ehGMCountdownText=()=>Math.max(0,Math.ceil((ehGMNextRefresh-Date.now())/1000));
+ const ehGMUpdateCountdown=()=>{const st=$('ehGMStatus');if(!st||!$('ehGeneralMarket')?.classList.contains('show')||!ehGMNextRefresh)return;const base=st.dataset.base||`${ehGMRows.length} anuncios`;st.textContent=`${base} · próxima actualización en ${ehGMCountdownText()} s`;};
+ const ehGMStopAutoRefresh=()=>{clearInterval(ehGMTimer);clearInterval(ehGMCountdownTimer);clearInterval(ehGMSafetyTimer);ehGMTimer=ehGMCountdownTimer=ehGMSafetyTimer=null;ehGMNextRefresh=0;};
+ const ehGMStartAutoRefresh=()=>{ehGMStopAutoRefresh();ehGMNextRefresh=Date.now()+EHGM_REFRESH_MS;ehGMUpdateCountdown();ehGMCountdownTimer=setInterval(ehGMUpdateCountdown,250);ehGMTimer=setInterval(async()=>{await ehGMFetch(false);ehGMNextRefresh=Date.now()+EHGM_REFRESH_MS;ehGMUpdateCountdown();},EHGM_REFRESH_MS);ehGMSafetyTimer=setInterval(()=>ehGMUpdateSafety(true),2000);};
+ const ehGMManualRefresh=async()=>{await ehGMFetch(false);ehGMStartAutoRefresh();};
  const ehGMWebview=()=>ehGMIndex>=0&&webviews[ehGMIndex]&&!off[ehGMIndex]?webviews[ehGMIndex]:null;
  const EHGM_PREF='ehMarketPrefsV1',EHGM_FAV='ehMarketFavsV1';
  const ehGMGetPrefs=()=>{try{return JSON.parse(localStorage.getItem(EHGM_PREF)||'{}')}catch{return{}}};
@@ -5092,9 +5273,8 @@ body.eh-options-open #grid,body.eh-options-open #cards{margin-left:280px!importa
  const ehGMCur=v=>/DIAM|^DD$/i.test(String(v||''))?'DIAMONDS':'GOLD';
  const ehGMEsc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  async function ehGMEnsure(w){await injectEhMarket(w);}
- async function ehGMInHunt(w){try{return await w.executeJavaScript(`(()=>{const city=/\\b(?:cerulean(?: city)?|pewter(?: city)?|lavender(?: town)?|viridian(?: city)?|cassino|casino)\\b/i;const loc=String(document.querySelector('.phud-tloc')?.textContent||'').trim();if(loc&&city.test(loc))return false;const here=[...document.querySelectorAll('.hunt-marker.here,[data-guide^="hunt-"].here')].some(x=>!city.test((x.querySelector('.hunt-name')?.textContent||x.textContent||'').trim()));if(here)return true;const battle=!!document.querySelector('.battle-window:not([style*="display: none"]),.hunt-window:not([style*="display: none"]),.battle-area,.battle-screen');if(battle)return true;if(loc&&!city.test(loc))return true;return true})()`)}catch{return true}}
-
-
+ async function ehGMLocation(w){try{return await w.executeJavaScript(`(()=>{const city=/\b(?:cerulean(?: city)?|pewter(?: city)?|lavender(?: town)?|viridian(?: city)?|saffron(?: city)?|celadon(?: city)?|fuchsia(?: city)?|cinnabar(?: island)?|pallet(?: town)?|vermili(?:o|a)n(?: city)?|cassino|casino|pok[eé]mon\s*center|pokemon\s*center|centro\s*pok[eé]mon|mercado|market)\b/i;const loc=String(document.querySelector('.phud-tloc,[data-guide="player-location"],[data-guide="location"],.phud-location,.location-name')?.textContent||'').trim();const marketOpen=[...document.querySelectorAll('[data-guide*="market" i],[data-guide*="mercado" i],.market-window,.global-market,.marketplace')].some(x=>{const cs=getComputedStyle(x);return cs.display!=='none'&&cs.visibility!=='hidden'&&x.getClientRects().length>0});const centerOpen=[...document.querySelectorAll('[data-guide*="pokemon-center" i],[data-guide*="pokecenter" i],.pokemon-center,.pokecenter')].some(x=>{const cs=getComputedStyle(x);return cs.display!=='none'&&cs.visibility!=='hidden'&&x.getClientRects().length>0});const battle=[...document.querySelectorAll('[data-guide="capture-bar"],.hunt-ui,.battle-window,.hunt-window,.wild-pokemon,.battle-area,.battle-screen')].some(x=>{const cs=getComputedStyle(x);return cs.display!=='none'&&cs.visibility!=='hidden'&&x.getClientRects().length>0});const here=[...document.querySelectorAll('.hunt-marker.here,[data-guide^="hunt-"].here')].some(x=>!city.test((x.querySelector('.hunt-name')?.textContent||x.textContent||'').trim()));if(battle||here)return {state:'hunt',loc};if((loc&&city.test(loc))||marketOpen||centerOpen)return {state:'city',loc:loc||'Centro Pokémon / Mercado'};if(loc)return {state:'hunt',loc};return {state:'unknown',loc:''}})()`)}catch{return {state:'unknown',loc:''}}}
+ async function ehGMInHunt(w){const x=await ehGMLocation(w);return x.state!=='city'}
  const ehGMHistoryAdd=e=>{try{const a=JSON.parse(localStorage.getItem('ehMarketHistoryV1')||'[]'),r=e.item||e.pokemon||e.product||{};a.unshift({at:new Date().toISOString(),trainer:ehGMTrainerName(ehGMIndex),name:e.name||e.title||e.itemName||e.pokemonName||r.name||'—',iv:e.ivTotal??r.ivTotal??e.iv??r.iv??null,quality:e.quality??r.quality??e.q??r.q??null,price:e.price??e.totalPrice??e.value??0,currency:e.currency||e.currencyType||r.currency||r.currencyType||''});localStorage.setItem('ehMarketHistoryV1',JSON.stringify(a.slice(0,100)))}catch{}};
 
 
@@ -5106,61 +5286,47 @@ body.eh-options-open #grid,body.eh-options-open #cards{margin-left:280px!importa
  const ehGMClearFilters=()=>{['ehGMQ','ehGMIVMin','ehGMIVMax','ehGMQMin','ehGMQMax','ehGMLvMin','ehGMLvMax'].forEach(id=>{if($(id))$(id).value=''});$('ehGMCurrency').value='ALL';$('ehGMSort').value='level-desc';$('ehGMFavOnly').classList.remove('on');ehGMSavePrefs();ehGMRender()};
  const ehGMShowHistory=()=>{const h=$('ehGMHistory'),l=$('ehGMList'),st=$('ehGMStats');const open=h.style.display==='none';h.style.display=open?'block':'none';l.style.display=open?'none':'';st.style.display='none';if(!open){ehGMRender();return}let a=[];try{a=JSON.parse(localStorage.getItem('ehMarketHistoryV1')||'[]')}catch{}h.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center"><b>🕘 Historial de compras (${a.length})</b><button id="ehGMClearHistory">Borrar historial</button></div>`+(a.length?a.map(x=>`<div class="ehgm-hrow"><span>${new Date(x.at).toLocaleString('es-CL')}</span><b>${ehGMEsc(x.name)}</b><span>${x.iv!=null?'IV '+x.iv:''}${x.quality!=null?' · C '+x.quality:''}</span><strong>${Number(x.price||0).toLocaleString('es-CL')} ${ehGMCur(x.currency)==='DIAMONDS'?'DD':'$'}</strong></div>`).join(''):'<p>Sin compras registradas.</p>');$('ehGMClearHistory').onclick=()=>{if(confirm('¿Borrar historial?')){localStorage.removeItem('ehMarketHistoryV1');ehGMShowHistory();ehGMShowHistory()}}};
 
- const ehGMUpdateSafety=async()=>{
+ const ehGMUpdateSafety=async(rerender=false)=>{
    const w=ehGMWebview(),el=$('ehGMSafety');if(!el)return false;
-   if(!w){el.textContent='⚪ Sin entrenador';el.classList.remove('safe');return false}
-   try{await ehGMEnsure(w);const hunt=await ehGMInHunt(w);el.textContent=hunt?'🔴 EN HUNT — compras bloqueadas':'🟢 FUERA DE HUNT — compras habilitadas';el.classList.toggle('safe',!hunt);return !hunt}
-   catch{el.textContent='⚠️ Estado desconocido';el.classList.remove('safe');return false}
+   const before=ehGMCanPurchase;
+   if(!w){ehGMCanPurchase=false;ehGMLocationState='unknown';el.textContent='⚪ Sin entrenador';el.classList.remove('safe');if(rerender&&before!==ehGMCanPurchase)ehGMRender();return false}
+   try{await ehGMEnsure(w);const pos=await ehGMLocation(w);ehGMLocationState=pos.state;ehGMCanPurchase=pos.state==='city';if(pos.state==='city')el.textContent='🟢 EN CIUDAD / CENTRO / MERCADO — compras habilitadas';else if(pos.state==='hunt')el.textContent='🔴 EN HUNT — compras bloqueadas';else el.textContent='⚠️ UBICACIÓN NO CONFIRMADA — compras bloqueadas';el.classList.toggle('safe',ehGMCanPurchase);if(rerender&&before!==ehGMCanPurchase)ehGMRender();return ehGMCanPurchase}
+   catch{ehGMCanPurchase=false;ehGMLocationState='unknown';el.textContent='⚠️ UBICACIÓN NO CONFIRMADA — compras bloqueadas';el.classList.remove('safe');if(rerender&&before!==ehGMCanPurchase)ehGMRender();return false}
  };
 
- async function ehGMFetch(){
-   const w=ehGMWebview(), st=$('ehGMStatus'); if(!w){st.textContent='No hay cuenta activa.';return;}
-   st.textContent='Actualizando mercado…';
+ async function ehGMFetch(resetClock=true){
+   const w=ehGMWebview(), st=$('ehGMStatus'); if(!w){st.dataset.base='No hay cuenta activa.';st.textContent=st.dataset.base;return;}
+   st.dataset.base='Actualizando mercado…';st.textContent=st.dataset.base;
    try{
      await ehGMEnsure(w);
      if(!ehGMItemIconsLoaded)await ehGMLoadItemIcons(w);
      const cat=$('ehGMCat').value;
      ehGMRows=await w.executeJavaScript(`(async()=>{const M=window.__EH_MARKET__;if(!M)return [];const p=await M.apiRaw('/api/game/market?category=${encodeURIComponent(cat)}');return M.listingsRaw(p)})()`);
-     try{window.ehRecordMarketPrices?.(ehGMRows);window.ehCheckMarketAlerts?.(ehGMRows)}catch{}
+     ehGMRefreshSearchOptions();
+     await ehGMUpdateSafety(false);
      ehGMRender();
-   }catch(e){st.textContent='No se pudo cargar el mercado: '+(e?.message||e);}
+   }catch(e){st.dataset.base='No se pudo cargar el mercado: '+(e?.message||e);st.textContent=st.dataset.base;}
+   if(resetClock&&$('ehGeneralMarket')?.classList.contains('show'))ehGMStartAutoRefresh();
  }
  async function ehGMBuy(e){
    const w=ehGMWebview(); if(!w)return;
-   if(await ehGMInHunt(w)){alert('🔒 No puedes comprar mientras estás en una hunt. Primero tienes que salir de la hunt.');return;}
+   if(!(await ehGMUpdateSafety(false))){alert('🔒 Solo puedes comprar cuando la cuenta esté en una ciudad, Centro Pokémon o Mercado.');return;}
    const p=Number(e.price??e.totalPrice??e.value??0), r=e.item||e.pokemon||e.product||{}, n=e.name||e.title||e.itemName||e.pokemonName||r.name||'anuncio';
    if(!confirm(`Comprar ${n} por ${p.toLocaleString('es-CL')} ${ehGMCur(e.currency||r.currency)==='DIAMONDS'?'DD':'Dollars'}?`))return;
    try{
-     if(await ehGMInHunt(w)){alert('🔒 La ubicación cambió. Sal de la hunt antes de comprar.');return;}
+     if(!(await ehGMUpdateSafety(false))){alert('🔒 La ubicación cambió. La compra solo está permitida en una ciudad, Centro Pokémon o Mercado.');return;}
      const cat=$('ehGMCat').value;
      await w.executeJavaScript(`window.__EH_MARKET__.buyRaw(${JSON.stringify(e)},${JSON.stringify(cat)})`);ehGMHistoryAdd(e);
      await ehGMFetch();
    }catch(err){alert('No se pudo comprar: '+(err?.message||err));}
  }
    let ehGMItemIcons=new Map(),ehGMItemIconsLoaded=false;
+   const EHGM_ORIGIN='https://poke.idleworld.online';
    const EHGM_STONES={fire_stone:'/assets/items/fire_stone.gif',feather_stone:'/assets/stones/feather_stone.png',leaf_stone:'/assets/items/leaf_stone.gif',rock_stone:'/assets/items/rock_stone.gif',enigma_stone:'/assets/items/enigma_stone.gif',cocoon_stone:'/assets/items/cocoon_stone.gif',thunder_stone:'/assets/items/thunder_stone.gif',earth_stone:'/assets/items/earth_stone.gif',crystal_stone:'/assets/items/crystal_stone.gif',metal_stone:'/assets/stones/metal_stone.png',ancient_stone:'/assets/stones/ancient_stone.gif',water_stone:'/assets/items/water_stone.gif',heart_stone:'/assets/items/heart_stone.gif',skull_stone:'/assets/items/skull_stone.png',ice_stone:'/assets/items/ice_stone.gif',punch_stone:'/assets/items/punch_stone.gif',darkness_stone:'/assets/items/darkness_stone.gif',venom_stone:'/assets/items/venom_stone.gif',deep_stone:'/assets/items/deep_stone.png',flower_stone:'/assets/items/flower_stone.png',aqua_stone:'/assets/items/aqua_stone.png',champion_stone:'/assets/items/champion_stone.png',voltage_stone:'/assets/items/voltage_stone.png',pixie_stone:'/assets/items/pixie_stone.png',tortoise_stone:'/assets/items/tortoise_stone.png',aroma_stone:'/assets/items/aroma_stone.png'};
-   const ehGMNormIcon=x=>{if(!x)return'';x=String(x).trim();if(/^(?:https?:)?\/\//i.test(x)||x.startsWith('/'))return x;if(/^assets\//i.test(x))return '/'+x;if(/^items\//i.test(x))return '/assets/'+x;return '/assets/items/'+x};
-   const ehGMLoadItemIcons=async w=>{if(ehGMItemIconsLoaded)return;try{
-     const data=await w.executeJavaScript(`fetch('https://poke.idleworld.online/game/items.json',{credentials:'include'}).then(r=>{if(!r.ok)throw Error(r.status);return r.json()})`);
-     const arr=Array.isArray(data)?data:(Array.isArray(data?.items)?data.items:Object.values(data?.items||data||{})),m=new Map();
-     for(const x of arr){if(!x||typeof x!=='object')continue;const names=[x.name,x.title,x.slug,x.key].filter(Boolean).map(v=>String(v).trim().toLowerCase()),ids=[x.id,x.itemId,x.refId,x.key].filter(v=>v!==undefined&&v!==null).map(String);const raw=x.icon||x.image||x.sprite||x.img||x.iconUrl||x.imageUrl||'';const rec={...x,_icon:ehGMNormIcon(raw)};for(const n of names)m.set('n:'+n,rec);for(const id of ids)m.set('i:'+id,rec)}
-     ehGMItemIcons=m;ehGMItemIconsLoaded=true;
-   }catch{ehGMItemIconsLoaded=false}};
-   const ehGMImageSources=(e,cat)=>{const r=e.item||e.pokemon||e.product||{},name=String(e.name||e.title||e.itemName||e.pokemonName||r.name||'').trim(),clean=name.toLowerCase();
-     if(clean==='diamonds'||String(cat).toLowerCase()==='diamonds')return['__DIAMOND__'];
-     if(cat==='Pokemon'){const direct=e.image||e.imageUrl||e.icon||e.iconUrl||e.sprite||r.image||r.imageUrl||r.icon||r.iconUrl||r.sprite||e.pokemon?.sprite;if(direct)return[ehGMNormIcon(direct)];const id=Number(e.pokemonId??e.speciesId??r.pokemonId??r.speciesId??0);return id>0&&id<2000?[`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`]:[]}
-     if(clean==='idle ball')return['/assets/markitems/idleball.png'];
-     const ridVals=[e.refId,e.itemId,e.id,r.refId,r.itemId,r.id].filter(v=>v!==undefined&&v!==null).map(String);
-     let item=ehGMItemIcons.get('n:'+clean);if(!item)for(const id of ridVals){item=ehGMItemIcons.get('i:'+id);if(item)break}
-     const direct=e.icon||e.iconUrl||e.image||e.imageUrl||e.sprite||r.icon||r.iconUrl||r.image||r.imageUrl||r.sprite;
-     const key=clean.replace(/\s+/g,'_'),stone=/\bstone\b/.test(clean)||/stones?/i.test(cat);
-     const sources=[];
-     // Prefer exact catalog icon first. This prevents a wrong guessed icon from winning.
-     if(item?._icon)sources.push(item._icon);
-     if(direct)sources.push(ehGMNormIcon(direct));
-     if(stone)sources.push(EHGM_STONES[key],`/assets/stones/${encodeURIComponent(key)}.png`,`/assets/stones/${encodeURIComponent(key)}.gif`,`/assets/items/${encodeURIComponent(key)}.gif`,`/assets/items/${encodeURIComponent(key)}.png`);
-     return [...new Set(sources.filter(Boolean))];
-   };
+   const ehGMNormIcon=x=>{if(!x)return'';x=String(x).trim().replace(/\\/g,'/');if(/^https?:\/\//i.test(x))return x;if(/^\/\//.test(x))return'https:'+x;if(x.startsWith('/'))return EHGM_ORIGIN+x;if(/^assets\//i.test(x))return EHGM_ORIGIN+'/'+x;if(/^items\//i.test(x))return EHGM_ORIGIN+'/assets/'+x;return EHGM_ORIGIN+'/assets/items/'+x};
+   const ehGMLoadItemIcons=async w=>{if(ehGMItemIconsLoaded)return;try{const data=await w.executeJavaScript(`fetch('/game/items.json',{credentials:'include'}).then(r=>{if(!r.ok)throw Error(r.status);return r.json()})`);const arr=Array.isArray(data)?data:(Array.isArray(data?.items)?data.items:Object.values(data?.items||data||{})),m=new Map();for(const x of arr){if(!x||typeof x!=='object')continue;const names=[x.name,x.title,x.slug,x.key].filter(Boolean).map(v=>String(v).trim().toLowerCase()),ids=[x.id,x.itemId,x.refId,x.key].filter(v=>v!==undefined&&v!==null).map(String);const raw=x.icon||x.image||x.sprite||x.img||x.iconUrl||x.imageUrl||'';const rec={...x,_icon:ehGMNormIcon(raw)};for(const n of names)m.set('n:'+n,rec);for(const id of ids)m.set('i:'+id,rec)}ehGMItemIcons=m;ehGMItemIconsLoaded=true}catch(err){console.warn('[Mercado] items.json:',err);ehGMItemIconsLoaded=false}};
+   const ehGMImageSources=(e,cat)=>{const r=e.item||e.pokemon||e.product||{},name=String(e.name||e.title||e.itemName||e.pokemonName||r.name||'').trim(),clean=name.toLowerCase();if(clean==='diamonds'||String(cat).toLowerCase()==='diamonds')return['__DIAMOND__'];if(cat==='Pokemon'){const direct=e.image||e.imageUrl||e.icon||e.iconUrl||e.sprite||r.image||r.imageUrl||r.icon||r.iconUrl||r.sprite||e.pokemon?.sprite;if(direct)return[ehGMNormIcon(direct)];const id=Number(e.pokemonId??e.speciesId??r.pokemonId??r.speciesId??0);return id>0&&id<2000?[`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`]:[]}const ridVals=[e.refId,e.itemId,e.id,r.refId,r.itemId,r.id].filter(v=>v!==undefined&&v!==null).map(String);let item=ehGMItemIcons.get('n:'+clean);if(!item)for(const id of ridVals){item=ehGMItemIcons.get('i:'+id);if(item)break}const direct=e.icon||e.iconUrl||e.image||e.imageUrl||e.sprite||r.icon||r.iconUrl||r.image||r.imageUrl||r.sprite,key=clean.replace(/\s+/g,'_'),stone=/\bstone\b/.test(clean)||/stones?/i.test(cat),sources=[];if(item?._icon)sources.push(item._icon);if(direct)sources.push(ehGMNormIcon(direct));if(clean==='idle ball')sources.push(ehGMNormIcon('/assets/markitems/idleball.png'));if(stone){const guesses=[EHGM_STONES[key],`/assets/stones/${encodeURIComponent(key)}.png`,`/assets/stones/${encodeURIComponent(key)}.gif`,`/assets/items/${encodeURIComponent(key)}.gif`,`/assets/items/${encodeURIComponent(key)}.png`];sources.push(...guesses.map(ehGMNormIcon))}return[...new Set(sources.filter(Boolean))]};
+   const ehGMRefreshSearchOptions=()=>{const dl=$('ehGMQOptions');if(!dl)return;const names=new Set();for(const e of ehGMRows||[]){const r=e.item||e.pokemon||e.product||{},n=String(e.name||e.title||e.itemName||e.pokemonName||r.name||'').trim();if(n)names.add(n)}for(const [k,v] of ehGMItemIcons){if(!k.startsWith('n:'))continue;const n=String(v.name||v.title||v.slug||v.key||k.slice(2)).trim();if(n)names.add(n)}dl.innerHTML=[...names].sort((a,b)=>a.localeCompare(b,'es',{sensitivity:'base'})).slice(0,2500).map(n=>`<option value="${ehGMEsc(n)}"></option>`).join('')};
 
  const ehGMPriceCluster=prices=>{
    const a=prices.map(Number).filter(x=>Number.isFinite(x)&&x>0).sort((x,y)=>x-y);
@@ -5177,7 +5343,6 @@ body.eh-options-open #grid,body.eh-options-open #cards{margin-left:280px!importa
  const ehGMReferencePrice=prices=>ehGMPriceCluster(prices).price;
 
  function ehGMRender(){
-   try{window.ehRecordMarketPrices?.(ehGMRows||[]);window.ehCheckMarketAlerts?.(ehGMRows||[])}catch{}
    const q=$('ehGMQ').value.toLowerCase(), ivMin=$('ehGMIVMin').value===''?null:Number($('ehGMIVMin').value), ivMax=$('ehGMIVMax').value===''?null:Number($('ehGMIVMax').value), qMin=$('ehGMQMin').value===''?null:Number($('ehGMQMin').value), qMax=$('ehGMQMax').value===''?null:Number($('ehGMQMax').value), lvMin=$('ehGMLvMin').value===''?null:Number($('ehGMLvMin').value), lvMax=$('ehGMLvMax').value===''?null:Number($('ehGMLvMax').value), cf=$('ehGMCurrency').value, sort=$('ehGMSort').value, cat=$('ehGMCat').value;
    const lvl=e=>Number(e.level??e.pokemon?.level??e.product?.level??0), price=e=>Number(e.price??e.totalPrice??e.value??0);
    const ivOf=e=>{const r=e.item||e.pokemon||e.product||{};return Number(e.ivTotal??r.ivTotal??e.iv??r.iv??0)};
@@ -5185,8 +5350,8 @@ body.eh-options-open #grid,body.eh-options-open #cards{margin-left:280px!importa
    const favs=ehGMFavs(),favOnly=$('ehGMFavOnly')?.classList.contains('on');let a=ehGMRows.filter(e=>{const r=e.item||e.pokemon||e.product||{},n=String(e.name||e.title||e.itemName||e.pokemonName||r.name||''),c=ehGMCur(e.currency||e.currencyType||r.currency||r.currencyType),iv=ivOf(e),qual=qualityOf(e),fk=n.trim().toLowerCase();return(!q||n.toLowerCase().includes(q))&&(ivMin==null||iv>=ivMin)&&(ivMax==null||iv<=ivMax)&&(qMin==null||(qual!=null&&qual>=qMin))&&(qMax==null||(qual!=null&&qual<=qMax))&&(lvMin==null||lvl(e)>=lvMin)&&(lvMax==null||lvl(e)<=lvMax)&&(cf==='ALL'||c===cf)&&(!favOnly||favs.has(fk))});
    if(sort==='level-desc')a.sort((x,y)=>lvl(y)-lvl(x)||ivOf(y)-ivOf(x));else if(sort==='level-asc')a.sort((x,y)=>lvl(x)-lvl(y));else if(sort==='iv-desc')a.sort((x,y)=>ivOf(y)-ivOf(x));else if(sort==='iv-asc')a.sort((x,y)=>ivOf(x)-ivOf(y));else if(sort==='quality-desc')a.sort((x,y)=>(qualityOf(y)??-1)-(qualityOf(x)??-1));else if(sort==='quality-asc')a.sort((x,y)=>(qualityOf(x)??1e9)-(qualityOf(y)??1e9));else if(sort==='price-asc')a.sort((x,y)=>price(x)-price(y));else a.sort((x,y)=>price(y)-price(x));
    const groups=new Map();a.forEach(e=>{const r=e.item||e.pokemon||e.product||{},n=String(e.name||e.title||e.itemName||e.pokemonName||r.name||'').trim().toLowerCase(),c=ehGMCur(e.currency||e.currencyType||r.currency||r.currencyType),k=n+'|'+c;if(!groups.has(k))groups.set(k,[]);groups.get(k).push(price(e))});const stats=$('ehGMStats'),exact=q.trim()?a.filter(e=>String(e.name||e.title||e.itemName||e.pokemonName||(e.item||e.pokemon||e.product||{}).name||'').toLowerCase().includes(q.trim())):[];if(exact.length){const ps=exact.map(price).filter(Number.isFinite),mn=Math.min(...ps),mx=Math.max(...ps),pc=ehGMPriceCluster(ps),av=pc.price;stats.style.display='block';stats.textContent=`Precios filtrados: mínimo ${Math.round(mn).toLocaleString('es-CL')} · precio típico ${Math.round(av).toLocaleString('es-CL')} (${pc.count}/${pc.total} anuncios en el rango principal) · máximo ${Math.round(mx).toLocaleString('es-CL')}`}else stats.style.display='none';const list=$('ehGMList');list.innerHTML='';
-   a.slice(0,300).forEach(e=>{const r=e.item||e.pokemon||e.product||{},n=e.name||e.title||e.itemName||e.pokemonName||r.name||'—',p=price(e),l=lvl(e),ivt=e.ivTotal??r.ivTotal??e.iv??r.iv,qual=qualityOf(e),qty=Number(e.quantity??e.qty??e.amount??e.ids?.length??1),c=ehGMCur(e.currency||e.currencyType||r.currency||r.currencyType);const row=document.createElement('div');row.className='ehgm-row';const g=groups.get(String(n).trim().toLowerCase()+'|'+c)||[],pc=ehGMPriceCluster(g),avg=pc.price;const reliable=pc.total>=10&&pc.count>=6&&pc.share>=.40;if(reliable&&avg>0){if(p<=avg*.5)row.classList.add('ehgm-deal','ehgm-great');else if(p<=avg*.75)row.classList.add('ehgm-good')}row.innerHTML=`<button class="ehgm-star" title="Favorito">${favs.has(String(n).trim().toLowerCase())?'★':'☆'}</button>${(()=>{const srcs=ehGMImageSources(e,cat);if(srcs[0]==='__DIAMOND__')return '<span class="ehgm-img-fallback">💎</span>';if(!srcs.length)return `<span class="ehgm-img-fallback">${cat==='Pokemon'?'◉':'🎒'}</span>`;return `<img class="ehgm-img" src="${ehGMEsc(srcs[0])}" data-fallbacks="${ehGMEsc(JSON.stringify(srcs.slice(1)))}" alt="">`})()}<div><b>${ehGMEsc(n)}${l?` <span style="color:#aab6c7;font-size:13px;font-weight:700">Nv.${l}</span>`:''}</b><small>${ivt!=null?`IV <b style="display:inline;font-size:12.5px">${ehGMEsc(ivt)}/192</b>`:''}${cat==='Pokemon'&&qual!=null?` &nbsp;•&nbsp; Calidad <b style="display:inline;font-size:12.5px">${Number(qual).toFixed(2)}</b>`:''}${cat!=='Pokemon'?`Cantidad ${qty.toLocaleString('es-CL')}`:''}</small></div><strong>${c==='DIAMONDS'?'💎 '+p.toLocaleString('es-CL')+' DD':'💲 '+p.toLocaleString('es-CL')+' Dollars'}</strong>`;const im=row.querySelector('.ehgm-img');if(im)im.onerror=()=>{let a=[];try{a=JSON.parse(im.dataset.fallbacks||'[]')}catch{}const nx=a.shift();if(nx){im.dataset.fallbacks=JSON.stringify(a);im.src=nx}else im.outerHTML=`<span class="ehgm-img-fallback">${cat==='Pokemon'?'◉':'🎒'}</span>`};row.querySelector('.ehgm-star').onclick=()=>ehGMToggleFav(n);const b=document.createElement('button');b.textContent='Comprar';b.onclick=()=>ehGMBuy(e);row.appendChild(b);list.appendChild(row)});
-   $('ehGMStatus').textContent=`${a.length} anuncios · actualización automática cada 20 segundos`;
+   a.slice(0,300).forEach(e=>{const r=e.item||e.pokemon||e.product||{},n=e.name||e.title||e.itemName||e.pokemonName||r.name||'—',p=price(e),l=lvl(e),ivt=e.ivTotal??r.ivTotal??e.iv??r.iv,qual=qualityOf(e),qty=Number(e.quantity??e.qty??e.amount??e.ids?.length??1),c=ehGMCur(e.currency||e.currencyType||r.currency||r.currencyType);const row=document.createElement('div');row.className='ehgm-row';const g=groups.get(String(n).trim().toLowerCase()+'|'+c)||[],pc=ehGMPriceCluster(g),avg=pc.price;const reliable=pc.total>=10&&pc.count>=6&&pc.share>=.40;if(reliable&&avg>0){if(p<=avg*.5)row.classList.add('ehgm-deal','ehgm-great');else if(p<=avg*.75)row.classList.add('ehgm-good')}row.innerHTML=`<button class="ehgm-star" title="Favorito">${favs.has(String(n).trim().toLowerCase())?'★':'☆'}</button>${(()=>{const srcs=ehGMImageSources(e,cat);if(srcs[0]==='__DIAMOND__')return '<span class="ehgm-img-fallback">💎</span>';if(!srcs.length)return `<span class="ehgm-img-fallback">${cat==='Pokemon'?'◉':'🎒'}</span>`;return `<img class="ehgm-img" src="${ehGMEsc(srcs[0])}" data-fallbacks="${ehGMEsc(JSON.stringify(srcs.slice(1)))}" alt="">`})()}<div><b>${ehGMEsc(n)}${l?` <span style="color:#aab6c7;font-size:13px;font-weight:700">Nv.${l}</span>`:''}</b><small>${ivt!=null?`IV <b style="display:inline;font-size:12.5px">${ehGMEsc(ivt)}/192</b>`:''}${cat==='Pokemon'&&qual!=null?` &nbsp;•&nbsp; Calidad <b style="display:inline;font-size:12.5px">${Number(qual).toFixed(2)}</b>`:''}${cat!=='Pokemon'?`Cantidad ${qty.toLocaleString('es-CL')}`:''}</small></div><strong>${c==='DIAMONDS'?'💎 '+p.toLocaleString('es-CL')+' DD':'💲 '+p.toLocaleString('es-CL')+' Dollars'}</strong>`;const im=row.querySelector('.ehgm-img');if(im)im.onerror=()=>{let a=[];try{a=JSON.parse(im.dataset.fallbacks||'[]')}catch{}const nx=a.shift();if(nx){im.dataset.fallbacks=JSON.stringify(a);im.src=nx}else im.outerHTML=`<span class="ehgm-img-fallback">${cat==='Pokemon'?'◉':'🎒'}</span>`};row.querySelector('.ehgm-star').onclick=()=>ehGMToggleFav(n);if(ehGMCanPurchase){const b=document.createElement('button');b.textContent='Comprar';b.onclick=()=>ehGMBuy(e);row.appendChild(b)}list.appendChild(row)});
+   const gmst=$('ehGMStatus');gmst.dataset.base=`${a.length} anuncios`;if(ehGMNextRefresh)ehGMUpdateCountdown();else gmst.textContent=`${a.length} anuncios · próxima actualización en 20 s`;
  }
  async function ehGMTeleport(){
    const w=ehGMWebview(),btn=$('ehGMTeleport');if(!w||btn?.classList.contains('busy'))return;const original=btn.textContent;btn.classList.add('busy');btn.textContent='🧭 Preparando…';
@@ -5227,17 +5392,19 @@ body.eh-options-open #grid,body.eh-options-open #cards{margin-left:280px!importa
    }catch(e){alert('No se pudo ir al mercado: '+(e?.message||e));}
    finally{btn.classList.remove('busy');btn.textContent=original}
  }
- const openEhMarket=async()=>{
-   const tools=$('ehToolsModal'); if(tools){tools.classList.remove('show','on','open');tools.style.removeProperty('display');}
+ const openEhMarket=async(embedded=false)=>{
    let i=Number($('ehAdvisorAccount')?.value);if(!Number.isInteger(i)||i<0||!webviews[i]||off[i])i=webviews.findIndex((w,j)=>w&&!off[j]);
    if(i<0){alert('No hay ninguna cuenta activa.');return;}
-   ehGMIndex=i; ehGMFillTrainers(); ehGMLoadPrefs(); if($('ehGMTrainer')?.value!=='')ehGMIndex=+$('ehGMTrainer').value; $('ehGeneralMarket').classList.add('show'); clearInterval(ehGMTimer); await ehGMFetch(); ehGMTimer=setInterval(ehGMFetch,20000);setTimeout(ehGMUpdateSafety,250);
+   ehGMIndex=i; ehGMFillTrainers(); ehGMLoadPrefs(); if($('ehGMTrainer')?.value!=='')ehGMIndex=+$('ehGMTrainer').value; $('ehGeneralMarket').classList.add('show'); if(embedded)$('ehGeneralMarket').classList.add('eh-embedded'); ehGMStopAutoRefresh(); await ehGMFetch(false); ehGMStartAutoRefresh();setTimeout(ehGMUpdateSafety,250);
  };
  setTimeout(()=>{
-   const b=$('ehMarketBtn');if(b)b.onclick=openEhMarket;
-   $('ehGMClose').onclick=()=>{clearInterval(ehGMTimer);ehGMTimer=null;$('ehGeneralMarket').classList.remove('show')};
-   $('ehGMRefresh').onclick=ehGMFetch;$('ehGMTeleport').onclick=ehGMTeleport;$('ehGMSaveProfile').onclick=ehGMSaveProfile;$('ehGMProfile').onchange=e=>ehGMApplyProfile(e.target.value);$('ehGMClear').onclick=ehGMClearFilters;$('ehGMHistoryBtn').onclick=ehGMShowHistory;ehGMRefreshProfiles();$('ehGMTrainer').onchange=async e=>{ehGMIndex=+e.target.value;ehGMSavePrefs();await ehGMFetch()};
-   $('ehGMCat').onchange=()=>{ehGMSavePrefs();ehGMFetch()};$('ehGMQ').oninput=()=>{ehGMSavePrefs();ehGMRender()};['ehGMIVMin','ehGMIVMax','ehGMQMin','ehGMQMax','ehGMLvMin','ehGMLvMax'].forEach(id=>$(id).oninput=()=>{ehGMSavePrefs();ehGMRender()});$('ehGMCurrency').onchange=()=>{ehGMSavePrefs();ehGMRender()};$('ehGMSort').onchange=()=>{ehGMSavePrefs();ehGMRender()};$('ehGMFavOnly').onclick=()=>{$('ehGMFavOnly').classList.toggle('on');ehGMSavePrefs();ehGMRender()};
+   const b=$('ehMarketBtn');if(b)b.onclick=()=>showEhTab('market');
+   const cs=$('ehToolControl');if(cs)cs.onclick=()=>showEhTab('control');
+   const ca=$('ehToolActivity');if(ca)ca.onclick=()=>showEhTab('activity');
+   const cm=$('ehToolMarketHistory');if(cm)cm.onclick=()=>showEhTab('marketHistory');
+   $('ehGMClose').onclick=()=>{ehGMStopAutoRefresh();if($('ehGeneralMarket').classList.contains('eh-embedded'))showEhTab('advisor');else $('ehGeneralMarket').classList.remove('show')};
+   $('ehGMRefresh').onclick=ehGMManualRefresh;$('ehGMTeleport').onclick=ehGMTeleport;$('ehGMSaveProfile').onclick=ehGMSaveProfile;$('ehGMProfile').onchange=e=>ehGMApplyProfile(e.target.value);$('ehGMClear').onclick=ehGMClearFilters;$('ehGMHistoryBtn').onclick=ehGMShowHistory;ehGMRefreshProfiles();$('ehGMTrainer').onchange=async e=>{ehGMIndex=+e.target.value;ehGMSavePrefs();await ehGMManualRefresh()};
+   $('ehGMCat').onchange=()=>{ehGMSavePrefs();ehGMManualRefresh()};$('ehGMQ').oninput=()=>{ehGMSavePrefs();ehGMRender()};['ehGMIVMin','ehGMIVMax','ehGMQMin','ehGMQMax','ehGMLvMin','ehGMLvMax'].forEach(id=>$(id).oninput=()=>{ehGMSavePrefs();ehGMRender()});$('ehGMCurrency').onchange=()=>{ehGMSavePrefs();ehGMRender()};$('ehGMSort').onchange=()=>{ehGMSavePrefs();ehGMRender()};$('ehGMFavOnly').onclick=()=>{$('ehGMFavOnly').classList.toggle('on');ehGMSavePrefs();ehGMRender()};
  },0);
 
  const EH_STATE_IDS=['dock','alerts','sellguard','chat','cleanHud','muteAll','awake','minTray','sndShiny','voltaHunt','layout','propNat','scriptsBtn'];
@@ -5255,17 +5422,33 @@ body.eh-options-open #grid,body.eh-options-open #cards{margin-left:280px!importa
    });
  }
 
- // Lleva las opciones existentes al panel lateral sin duplicar su lógica.
+ // Lleva las opciones existentes a la pestaña grande de Configuración sin duplicar su lógica.
  if(menu&&list){
-   [...menu.children].forEach(el=>list.appendChild(el));
-   const dock=$('dock'), panels=$('countRow');
-   if(dock) panels ? panels.insertAdjacentElement('afterend',dock) : list.appendChild(dock);
+   const makeSection=(title,desc)=>{const s=document.createElement('section');s.className='eh-opt-section';s.innerHTML=`<h3>${title}</h3><small>${desc}</small>`;list.appendChild(s);return s};
+   const general=makeSection('🎛 General','Controles principales de la aplicación y de los paneles.');
+   const alertsSec=makeSection('🔔 Alertas y hallazgos','Elige exactamente qué avisos quieres recibir.');
+   const session=makeSection('👤 Cuentas y sesión','Comportamiento de las cuentas, sonido y funcionamiento en segundo plano.');
+   const view=makeSection('🖥 Apariencia y juego','Cómo se muestran Escarlata Hispana y Poke Idle World.');
+   const data=makeSection('💾 Datos y ayuda','Copias de configuración, ayuda y herramientas auxiliares.');
+   const alertBox=$('ehAlertSettings'); if(alertBox)alertsSec.appendChild(alertBox);
+   const adv=document.createElement('button');adv.textContent='⚙ Alertas avanzadas y umbrales';adv.onclick=()=>window.ehOpenControlCenter?.('alerts');alertsSec.appendChild(adv);
+   const centerData=document.createElement('button');centerData.textContent='💾 Historial y datos del Centro';centerData.onclick=()=>window.ehOpenControlCenter?.('activity');data.appendChild(centerData);
+   const map={tierBtn:data,dittoBtn:data,scriptsBtn:data,countRow:general,alerts:alertsSec,sellguard:alertsSec,chat:view,cleanHud:view,muteAll:session,eco:session,awake:session,minTray:session,autoStart:session,sndShiny:alertsSec,voltaHunt:general,faqBtn:data,bkExp:data,bkImp:data,layout:view,propNat:view};
+   [...menu.children].forEach(el=>{if(el===alertBox)return;(map[el.id]||general).appendChild(el)});
+   const dock=$('dock'), panels=$('countRow');if(dock)general.appendChild(dock);
    menu.style.display='none';
+   const sections=[...list.querySelectorAll('.eh-opt-section')];
+   if(sections.length){
+     list.classList.add('eh-tabbed'); sections[0].classList.add('eh-opt-show');
+     const nav=document.createElement('div');nav.className='eh-opt-nav';
+     sections.forEach((sec,i)=>{const b=document.createElement('button');b.textContent=sec.querySelector('h3')?.textContent||('Sección '+(i+1));b.classList.toggle('active',i===0);b.onclick=()=>{sections.forEach(x=>x.classList.remove('eh-opt-show'));sec.classList.add('eh-opt-show');[...nav.children].forEach(x=>x.classList.remove('active'));b.classList.add('active')};nav.appendChild(b)});
+     list.parentElement.insertBefore(nav,list);
+   }
  }
  // Calculadora de IV única y global.
  // El motor de JustPokédex sigue corriendo dentro de cada cuenta, pero la ventana visible
  // pertenece a Escarlata Hispana, por lo que puede moverse por TODA la aplicación.
- $('ehJustPokedex').onclick=async()=>{
+ $('ehCalculator').onclick=async()=>{
    // Nunca mostrar los cuatro paneles internos: sólo usamos sus motores de cálculo.
    for(const w of webviews) if(w) try{
      await w.executeJavaScript(`(()=>{const p=document.getElementById('pokemon-reader-panel');if(p)p.style.setProperty('display','none','important')})()`);
@@ -5276,11 +5459,14 @@ body.eh-options-open #grid,body.eh-options-open #cards{margin-left:280px!importa
  $('ehStart').onclick=()=>{const b=$('loginAll');if(b)b.click()};
  $('ehAccountsBtn').onclick=()=>{const b=$('accounts');if(b)b.click()};
  const ehTabs=[...document.querySelectorAll('.eh-tools-tabs [data-ehtab]')];
- const ehPanels={advisor:$('ehAdvisorPanel'),diag:$('ehDiagPanel')};
+ const ehPanels={advisor:$('ehAdvisorPanel'),diag:$('ehDiagPanel'),market:$('ehMarketPanel'),control:$('ehControlPanel'),activity:$('ehActivityPanel'),marketHistory:$('ehMarketHistoryPanel')};
  const showEhTab=tab=>{
    Object.values(ehPanels).forEach(x=>x&&x.classList.remove('show'));
    ehTabs.forEach(x=>x.classList.toggle('active',x.dataset.ehtab===tab));
    if(ehPanels[tab])ehPanels[tab].classList.add('show');
+   if(tab==='market'){const host=$('ehMarketPanel'),gm=$('ehGeneralMarket');if(host&&gm&&gm.parentElement!==host){host.appendChild(gm);gm.classList.add('eh-embedded');} openEhMarket?.(true);}
+   else { try{ehGMStopAutoRefresh?.()}catch{} }
+   if(['control','activity','marketHistory'].includes(tab)){const host=ehPanels[tab],cc=$('ehCommandCenter');if(host&&cc&&cc.parentElement!==host){host.appendChild(cc);cc.classList.add('eh-embedded');} window.ehOpenControlCenter?.(tab==='activity'?'activity':tab==='marketHistory'?'market':'summary');}
  };
  ehTabs.forEach(b=>b.onclick=()=>showEhTab(b.dataset.ehtab));
 
@@ -5297,7 +5483,7 @@ body.eh-options-open #grid,body.eh-options-open #cards{margin-left:280px!importa
    const arr=[];
    for(let i=0;i<count;i++){
      if(off[i]||!webviews[i])continue;
-     let d=null;try{d=await lePainel(webviews[i],READ_STATE)}catch{}
+     let d=null;try{d=await ehReadAccountState(i)}catch{}
      if(d&&d.ok&&Array.isArray(d.team)&&d.team.length)arr.push({i,d});
    }
    return arr;
@@ -5310,7 +5496,7 @@ body.eh-options-open #grid,body.eh-options-open #cards{margin-left:280px!importa
      let r=ehAdvisorData.find(x=>x&&x.i===panelIndex);
      if(!r){
        const w=webviews[panelIndex]; if(!w||off[panelIndex])return [];
-       const d=await w.executeJavaScript(READ_STATE);
+       const d=await ehReadAccountState(panelIndex);
        if(!d||!d.ok||!Array.isArray(d.team)||!d.team.length)return [];
        r={i:panelIndex,d};
      }
@@ -5398,7 +5584,9 @@ async function renderAdvisor(){
    $('ehAdvisorRows').innerHTML=rows.slice(0,100).map((z,i)=>'<tr><td class="eh-rank">'+(i+1)+'</td><td class="eh-huntname">'+esc(z.x.name)+(i===0?'<span class="eh-best">MEJOR</span>':'')+(z.m?'<span class="eh-real">REAL '+Math.round(z.m.conf*100)+'%</span>':'<span class="eh-est">EST.</span>')+'</td><td>'+nf(z.hl)+'</td><td>'+fmtAdvisor(z.kph)+'</td><td class="eh-xp">'+fmtAdvisor(z.xph)+'</td><td class="eh-loot">$'+fmtAdvisor(z.loot)+'</td><td class="eh-skill">'+(z.sg.fis?'⚔ ':'🔮 ')+esc(z.sg.nome||'—')+(z.sg.tm?' · TM '+esc(z.sg.tm):'')+'</td></tr>').join('')||'<tr><td colspan="7" style="padding:24px;text-align:center;color:#8994aa">No se encontraron hunts viables para este Pokémon.</td></tr>';
  }
 
- $('ehOptionsBtn').onclick=()=>{syncEhOptionStates();body.classList.toggle('eh-options-open');};
+ $('ehOptionsBtn').onclick=()=>{syncEhOptionStates();body.classList.add('eh-options-open');$('ehOptionsPane')?.classList.add('show');};
+ $('ehOptionsClose').onclick=()=>{body.classList.remove('eh-options-open');$('ehOptionsPane')?.classList.remove('show')};
+ $('ehOptionsPane').onclick=e=>{if(e.target===$('ehOptionsPane')){$('ehOptionsClose').click()}};
  $('ehCollapse').onclick=()=>{body.classList.toggle('eh-side-collapsed');$('ehCollapse').textContent=body.classList.contains('eh-side-collapsed')?'›':'‹'};
  let ehTrainerCards=[];
  const ehMoney=n=>{n=+n||0;const a=Math.abs(n);if(a>=1e9)return (n/1e9).toFixed(2).replace('.',',')+'B';if(a>=1e6)return (n/1e6).toFixed(2).replace('.',',')+'M';if(a>=1e3)return (n/1e3).toFixed(1).replace('.',',')+'k';return Math.round(n).toLocaleString('es-CL')};
@@ -5409,13 +5597,21 @@ async function renderAdvisor(){
    const xph=+a.xph||0, need=+p.xpn||0; if(!(xph>0&&need>0))return '—';
    const h=Math.max(0,need/xph); return h>=1?'~'+h.toFixed(1).replace('.',',')+' h':'~'+Math.max(1,Math.round(h*60))+' min';
  }
+ const EH_ACCOUNT_FALLBACK = `(()=>{return (async()=>{try{const P=window.__poke||{},api=P.api||{},ws=P.ws||{};let ch=(api['/api/characters/me']&&api['/api/characters/me'].character)||null;if(!ch){try{const opt={credentials:'include',headers:{}};if(P.auth)opt.headers.Authorization=P.auth;const r=await fetch('/api/characters/me',opt);if(r&&r.ok){const j=await r.json();ch=j&&j.character;if(ch){P.api=P.api||{};P.api['/api/characters/me']=j}}}catch(e){}}if(!ch||!ch.id)return null;const nL=v=>{const n=+v;return Number.isFinite(n)?n:0};let list=(ws.pokes&&Array.isArray(ws.pokes.list)&&ws.pokes.list.length)?ws.pokes.list:[];if(!list.length){let pj=api['/api/pokemon']||null;if(!pj){try{const opt={credentials:'include',headers:{}};if(P.auth)opt.headers.Authorization=P.auth;const pr=await fetch('/api/pokemon',opt);if(pr&&pr.ok){pj=await pr.json();P.api=P.api||{};P.api['/api/pokemon']=pj}}catch(e){}}list=(pj&&(pj.pokemon||pj.pokemons||pj.list))||[]}const team=list.filter(x=>x&&(x.team||x.inTeam||x.isTeam||x.leader||x.slot!=null)).sort((a,b)=>(+a.slot||0)-(+b.slot||0)).map(x=>({id:x.id!=null?String(x.id):'',name:String(x.name||x.pokemonName||x.speciesName||'Pokémon'),level:nL(x.level),shiny:!!x.shiny,ld:!!(x.leader||x.isLeader),sid:nL(x.speciesId||x.pokeId||x.dexId),q:nL(x.quality),ivt:nL(x.ivTotal),hp:nL(x.hp),hm:nL(x.maxHp||x.hpMax||x.totalHp),atk:nL(x.atk||x.attack),def:nL(x.def||x.defense),spa:nL(x.spa||x.spAtk||x.specialAttack),spd:nL(x.spd||x.spDef||x.specialDefense),vel:nL(x.vel||x.speed),power:nL(x.power||x.poder),t1:String(x.type1||''),t2:String(x.type2||''),tms:Array.isArray(x.tms)?x.tms:[],xpp:nL(x.xpp||x.xpPercent||x.levelProgress)}));let hunt=(ws['field-init']&&ws['field-init'].slug)||'';hunt=String(hunt).replace(/[_-]+/g,' ').replace(/\\b\\w/g,m=>m.toUpperCase());return{ok:true,fallback:true,cid:String(ch.id),name:String(ch.name||''),level:nL(ch.level),gold:nL(ch.gold),diamonds:nL(ch.diamonds),vip:!!ch.isVip,hunt,team,a:{balance:0,xph:0,kph:0,captures:0,shinyFound:0,shinyCap:0}}}catch(e){return null}})()})()`;
+ async function ehReadAccountState(i){
+   const w=webviews[i]; if(!w||off[i])return null;
+   let d=null; try{d=await lePainel(w,READ_STATE)}catch{}
+   if(d&&d.ok)return d;
+   try{d=await lePainel(w,EH_ACCOUNT_FALLBACK)}catch{}
+   return d&&d.ok?d:null;
+ }
  async function refreshAccounts(){
    const box=$('ehAccountList'); if(!box)return;
    const panels=[...document.querySelectorAll('#grid .panel')], n=panels.length||4; $('ehCount').textContent=n+'/4';
    const states=[];
    for(let i=0;i<n;i++){
-     let d=null;try{if(webviews[i]&&!off[i])d=await lePainel(webviews[i],READ_STATE)}catch{}
-     states.push(d&&d.ok?d:null);
+     const d=await ehReadAccountState(i);
+     states.push(d);
    }
    box.innerHTML='';
    for(let i=0;i<n;i++){
@@ -5429,7 +5625,7 @@ async function renderAdvisor(){
      const hunt=document.createElement('span');hunt.className='eh-huntline';hunt.textContent=d?'📍 '+(d.hunt||'Sin hunt')+(a.xph?' · '+ehRate(a.xph)+' XP/h':''):'Esperando inicio de sesión…';
      const poke=document.createElement('span');poke.className='eh-pokeline';poke.textContent=lead?(lead.shiny?'✨ ':'')+lead.name+' → Nv '+nf(lead.level||0):'Pokémon principal';
      const prog=document.createElement('span');prog.className='eh-progress';prog.innerHTML='<i style="width:'+Math.max(0,Math.min(100,+((lead&&lead.xpp)||0)))+'%"></i>';
-     const pm=document.createElement('span');pm.className='eh-progressmeta';pm.innerHTML='<b>'+Math.round(+((lead&&lead.xpp)||0))+'%</b><span>'+((lead&&d)?ehEta(lead,a):'—')+'</span>';
+     const pm=document.createElement('span');pm.className='eh-progressmeta';const hasProg=!!(lead&&Number.isFinite(+lead.xpp)&&(+lead.xpp>0||!d?.fallback));pm.innerHTML='<b>'+(hasProg?Math.round(+lead.xpp)+'%':'—')+'</b><span>'+((lead&&d&&!d.fallback)?ehEta(lead,a):'—')+'</span>';
      const money=document.createElement('span');money.className='eh-money';money.innerHTML='<span class="today">💵 '+(d?(a.balance>=0?'+':'')+'$'+ehMoney(a.balance||0):'$0')+' hoy</span><span>saldo <b>$'+ehMoney(d&&d.gold||0)+'</b></span>';
      b.append(img,tx,hunt,poke,prog,pm,money);
      b.onclick=()=>{if(!p)return;document.querySelectorAll('.eh-account').forEach(x=>x.classList.remove('active'));b.classList.add('active');try{p.scrollIntoView({behavior:'smooth',block:'center'});const w=p.querySelector('webview');if(w)w.focus()}catch{}};
@@ -5468,15 +5664,75 @@ async function renderAdvisor(){
 
 
 <script>
-document.addEventListener('keydown',async e=>{if(!(e.ctrlKey&&e.shiftKey&&e.code==='KeyD'))return;try{const w=typeof ehGMWebview==='function'?ehGMWebview():null;const game=w?await w.executeJavaScript(`(()=>({loc:document.querySelector('.phud-tloc')?.textContent||'',markers:[...document.querySelectorAll('.map-window .hunt-marker')].map(m=>({name:m.querySelector('.hunt-name')?.textContent||'',level:m.querySelector('.hunt-lvl')?.textContent||'',guide:m.getAttribute('data-guide')||'',here:m.classList.contains('here')})).slice(0,300)}))()`):null;const d={at:new Date().toISOString(),marketRows:typeof ehGMRows!=='undefined'?ehGMRows.length:null,account:typeof ehGMIndex!=='undefined'?ehGMIndex:null,game};localStorage.setItem('ehDiagnosticLast',JSON.stringify(d));console.info('[Escarlata diagnóstico]',d)}catch(err){console.warn('[Escarlata diagnóstico]',err)}})
-
 (()=>{
  const $=id=>document.getElementById(id);
- function diagnostic(){return {app:'Escarlata Hispana',version:'1.0.5',time:new Date().toISOString(),webviews:[...document.querySelectorAll('webview')].length}}
- $('ehDiagBtn')?.addEventListener('click',()=>{const x=$('ehDiagPane');if(x)x.textContent=JSON.stringify(diagnostic(),null,2)});
- $('ehDiagCopyBtn')?.addEventListener('click',async()=>{const t=JSON.stringify(diagnostic(),null,2);try{await navigator.clipboard.writeText(t);alert('Diagnóstico copiado.')}catch{prompt('Copia este diagnóstico:',t)}});
-})();;
+ async function diagnostic(){
+   const views=[...document.querySelectorAll('webview')];
+   const accounts=await Promise.all(views.map(async(w,i)=>{
+     const base={slot:i+1,ready:!!w && !w.isLoading?.(),url:''};
+     try{base.url=String(w.getURL?.()||'').replace(/[?#].*$/,'');}catch{}
+     try{const x=await w.executeJavaScript(`(()=>({title:document.title||'',location:document.querySelector('.phud-tloc')?.textContent?.trim()||'',hasGame:!!window.__poke,online:navigator.onLine}))()`);Object.assign(base,x||{});}catch(e){base.error=String(e?.message||e).slice(0,180);}
+     return base;
+   }));
+   let update=null;try{update=await window.pokeAPI?.getUpdateStatus?.();}catch{}
+   return {app:'Escarlata Hispana',version:String(window.pokeAPI?.appVersion||'1.0.6'),time:new Date().toISOString(),platform:navigator.platform,online:navigator.onLine,webviews:views.length,accounts,update:update?{state:update.state||'',version:update.version||''}:null};
+ }
+ async function renderDiag(){const d=await diagnostic(),t=JSON.stringify(d,null,2),x=$('ehDiagPane');if(x)x.textContent=t;try{localStorage.setItem('ehDiagnosticLast',t)}catch{}return t;}
+ $('ehDiagBtn')?.addEventListener('click',async()=>{const b=$('ehDiagBtn');try{if(b)b.disabled=true;await renderDiag();}finally{if(b)b.disabled=false;}});
+ $('ehDiagCopyBtn')?.addEventListener('click',async()=>{const b=$('ehDiagCopyBtn');try{if(b)b.disabled=true;const t=await renderDiag();let ok=false;try{if(window.pokeAPI?.copyText){ok=!!(await window.pokeAPI.copyText(t));}else{await navigator.clipboard.writeText(t);ok=true;}}catch{}if(ok){const old=b?.textContent;if(b)b.textContent='✓ Diagnóstico copiado';setTimeout(()=>{if(b)b.textContent=old||'📋 Copiar diagnóstico'},1600);}else{prompt('No se pudo acceder al portapapeles. Copia este diagnóstico:',t);}}finally{if(b)b.disabled=false;}});
+ document.addEventListener('keydown',async e=>{if(!(e.ctrlKey&&e.shiftKey&&e.code==='KeyD'))return;try{const t=await renderDiag();console.info('[Escarlata diagnóstico]',JSON.parse(t));}catch(err){console.warn('[Escarlata diagnóstico]',err)}});
+})();
 </script>
 
+<style>
+#ehCommandCenter{display:none;position:fixed;inset:55px 3vw 3vh;z-index:100000;background:#0d1520;border:1px solid #7d2838;border-radius:14px;box-shadow:0 20px 60px #000b;color:#eaf0f7;overflow:hidden;font-family:Arial,sans-serif}
+#ehCommandCenter.show{display:flex;flex-direction:column}.ehcc-head{display:flex;align-items:center;gap:10px;padding:14px 18px;background:#111c2a;border-bottom:1px solid #29384b}.ehcc-head b{font-size:18px}.ehcc-head button{margin-left:auto}.ehcc-tabs{display:flex;gap:8px;padding:10px 14px;border-bottom:1px solid #263547}.ehcc-tabs button.on{background:#8f2334;color:#fff}.ehcc-body{padding:16px;overflow:auto}.ehcc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px}.ehcc-card{background:#111c29;border:1px solid #29394c;border-radius:11px;padding:13px}.ehcc-card h4{margin:0 0 9px}.ehcc-kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:7px}.ehcc-kpi{background:#0a121c;border-radius:8px;padding:8px}.ehcc-log{width:100%;border-collapse:collapse}.ehcc-log td{padding:7px;border-bottom:1px solid #223145}.ehcc-good{color:#61d67c}.ehcc-warn{color:#ffcf5a}.ehcc-bad{color:#ff6b78}.ehcc-settings label{display:flex;justify-content:space-between;gap:15px;padding:9px;border-bottom:1px solid #223145}.ehcc-settings input[type=number]{width:90px}
+#ehNotifyBadge{min-width:26px}.eh-price-cheap{color:#65d982}.eh-price-high{color:#ff7a85}
+</style>
+<div id="ehCommandCenter">
+ <div class="ehcc-head"><b>📊 Centro de control — Escarlata Hispana</b><span id="ehccClock"></span><button id="ehccClose">✕</button></div>
+ <div class="ehcc-tabs"><button data-cc="summary" class="on">Resumen</button><button data-cc="activity">Actividad</button><button data-cc="market">Mercado</button><button data-cc="health">Autodiagnóstico</button><button data-cc="alerts">Alertas avanzadas</button></div>
+ <div id="ehccBody" class="ehcc-body"></div>
+</div>
+<script>
+(()=>{
+ const $=id=>document.getElementById(id), KEY='ehControlCenterV106', now=()=>Date.now();
+ let db={events:[],sessionStart:now(),price:{},settings:{ballsMin:100,stallMin:5,notifyCenter:true}};
+ try{db=Object.assign(db,JSON.parse(localStorage.getItem(KEY)||'{}'));db.settings=Object.assign({ballsMin:100,stallMin:5,notifyCenter:true},db.settings||{});}catch{}
+ const save=()=>{try{db.events=db.events.slice(-1500);localStorage.setItem(KEY,JSON.stringify(db))}catch{}};
+ const nameOf=i=>{try{return (accounts[i]&&accounts[i].name)||tabNames[i]||('Entrenador '+(i+1))}catch{return 'Entrenador '+(i+1)}};
+ function event(i,type,text,data={}){const e={t:now(),i,type,text,data};db.events.push(e);save();renderBadge();return e} window.ehRegisterEvent=event;
+ function renderBadge(){const b=$('ehNotifyBadge');if(b)b.textContent='🔔 '+Math.min(99,db.events.filter(e=>e.t>(db.lastSeen||0)).length)}
+ // Centro de control integrado dentro de Herramientas/Opciones (sin botones extra en la barra principal).
+ function openCC(tab){$('ehCommandCenter').classList.add('show');db.lastSeen=now();save();renderBadge();show(tab)};
+ window.ehOpenControlCenter=openCC;$('ehccClose').onclick=()=>{if($('ehCommandCenter').classList.contains('eh-embedded')){document.querySelector('[data-ehtab=advisor]')?.click()}else $('ehCommandCenter').classList.remove('show')};
+ document.querySelectorAll('[data-cc]').forEach(b=>b.onclick=()=>show(b.dataset.cc));
+ function fmtDur(ms){let s=Math.max(0,ms/1000|0),h=s/3600|0,m=(s%3600)/60|0;return `${h}h ${String(m).padStart(2,'0')}m`}
+ function counts(i){let ev=db.events.filter(e=>e.i===i&&e.t>=db.sessionStart), ph=0,br=0,sh=0,sa=0,dd=0;ev.forEach(e=>{if(e.type==='pheromone')ph+=e.data.n||1;if(e.type==='bronze')br+=e.data.n||1;if(e.type==='shiny')sh+=e.data.n||1;if(e.type==='sale'){sa++;dd+=e.data.price||0}});return{ph,br,sh,sa,dd}}
+ function show(tab){document.querySelectorAll('[data-cc]').forEach(x=>x.classList.toggle('on',x.dataset.cc===tab));const body=$('ehccBody');if(!body)return;
+  if(tab==='summary'){let html='<div class="ehcc-grid">';for(let i=0;i<4;i++){const c=counts(i), L=(typeof lootFound!=='undefined'&&lootFound[i])||{};let on=false;try{on=!off[i]}catch{}html+=`<div class="ehcc-card"><h4>${on?'🟢':'⚫'} ${nameOf(i)}</h4><div class="ehcc-kpis"><div class="ehcc-kpi">⏱ Sesión<br><b>${fmtDur(now()-db.sessionStart)}</b></div><div class="ehcc-kpi">🍃 Pheromonas<br><b>${Math.max(c.ph,L.pheromone||0)}</b></div><div class="ehcc-kpi">🪙 Bronze<br><b>${Math.max(c.br,L.bronze||0)}</b></div><div class="ehcc-kpi">✨ Shinies<br><b>${c.sh}</b></div><div class="ehcc-kpi">💰 Ventas<br><b>${c.sa}</b></div><div class="ehcc-kpi">💎 DD confirmados<br><b>${c.dd.toLocaleString('es-CL')}</b></div></div></div>`}body.innerHTML=html+'</div><p><button id="ehResetSession">↻ Nueva sesión estadística</button></p>';$('ehResetSession').onclick=()=>{db.sessionStart=now();save();show('summary')}}
+  else if(tab==='activity'){const ev=[...db.events].reverse().slice(0,250);body.innerHTML=`<div style="display:flex;gap:8px;margin-bottom:10px"><button id="ehClearAct">🧹 Limpiar historial</button><span>${ev.length} eventos recientes</span></div><table class="ehcc-log">${ev.map(e=>`<tr><td>${new Date(e.t).toLocaleString('es-CL')}</td><td>${nameOf(e.i)}</td><td>${e.text}</td></tr>`).join('')||'<tr><td>Aún no hay actividad registrada.</td></tr>'}</table>`;$('ehClearAct').onclick=()=>{if(confirm('¿Limpiar el historial de actividad?')){db.events=[];save();show('activity')}}}
+  else if(tab==='market'){const entries=Object.entries(db.price||{}).sort((a,b)=>(b[1].last||0)-(a[1].last||0)).slice(0,100);body.innerHTML='<h3>📈 Historial local de precios</h3><p>Se construye únicamente con anuncios que Escarlata ha visto; no inventa precios.</p><table class="ehcc-log"><tr><td><b>Objeto</b></td><td>Mín.</td><td>Promedio</td><td>Máx.</td><td>Muestras</td></tr>'+entries.map(([n,x])=>`<tr><td>${n}</td><td>${x.min}</td><td>${Math.round(x.sum/x.n)}</td><td>${x.max}</td><td>${x.n}</td></tr>`).join('')+'</table>'}
+  else if(tab==='health'){let rows=[];for(let i=0;i<4;i++){let state='Apagada',cl='ehcc-warn';try{if(!off[i]){const w=webviews[i];state=w&&w.getURL&&w.getURL()?'Webview activa':'Sin URL';cl=state==='Webview activa'?'ehcc-good':'ehcc-bad'}}catch{}rows.push(`<div class="ehcc-card"><h4>${nameOf(i)}</h4><div class="${cl}">${state}</div><small>Loot detector: ${typeof lootLast!=='undefined'?'✓ cargado':'⚠ desconocido'}<br>Mercado: ${typeof ehGMFetch==='function'?'✓ cargado':'⚠ no disponible'}<br>Diagnóstico: ${typeof diagnostic==='function'?'✓ cargado':'⚠ no disponible'}</small></div>`)}body.innerHTML='<h3>🩺 Autodiagnóstico</h3><div class="ehcc-grid">'+rows.join('')+'</div><p><button id="ehRunFullDiag">🧰 Generar diagnóstico completo</button></p>';$('ehRunFullDiag').onclick=()=>{try{$('toolsOverlay')?.classList.add('show');$('ehDiagBtn')?.click()}catch{}}}
+  else {body.innerHTML=`<div class="ehcc-card ehcc-settings"><h3>🔔 Alertas avanzadas</h3><label><span>Avisar con Pokéballs por debajo de</span><input id="ccBalls" type="number" min="0" value="${db.settings.ballsMin}"></label><label><span>Avisar si lleva sin farmear (minutos)</span><input id="ccStall" type="number" min="1" value="${db.settings.stallMin}"></label><label><span>Guardar notificaciones en el Centro</span><input id="ccNC" type="checkbox" ${db.settings.notifyCenter?'checked':''}></label><p>Los interruptores individuales de Shiny, Pheromona, Bronze Token, ventas y demás siguen en ⚙ Configuración → Alertas y hallazgos.</p></div>`;['ccBalls','ccStall','ccNC'].forEach(id=>$(id).onchange=()=>{db.settings.ballsMin=+$('ccBalls').value||0;db.settings.stallMin=+$('ccStall').value||5;db.settings.notifyCenter=$('ccNC').checked;save()})}
+ }
+ // Unifica eventos ya detectados por los sistemas existentes.
+ let prevLoot={};setInterval(()=>{try{for(let i=0;i<4;i++){const L=lootFound?.[i];if(!L)continue;const p=prevLoot[i]||{pheromone:L.pheromone||0,bronze:L.bronze||0};if((L.pheromone||0)>p.pheromone)event(i,'pheromone','🍃 Pheromona encontrada',{n:L.pheromone-p.pheromone});if((L.bronze||0)>p.bronze)event(i,'bronze','🪙 Bronze Boss Token encontrado',{n:L.bronze-p.bronze});prevLoot[i]={pheromone:L.pheromone||0,bronze:L.bronze||0}}}catch{}},2000);
+ // Registra shinies nuevos a partir del log vitalicio ya fiable.
+ let shinySeen=new Set();try{(lifeShiny||[]).forEach(x=>shinySeen.add(`${x.p}|${x.t}|${x.sid||x.n}`))}catch{}setInterval(()=>{try{(lifeShiny||[]).forEach(x=>{const k=`${x.p}|${x.t}|${x.sid||x.n}`;if(!shinySeen.has(k)){shinySeen.add(k);event(+x.p||0,'shiny','✨ Shiny encontrado: '+(x.n||'Pokémon'),{n:1})}})}catch{}},2500);
+ // Historial real de precios observados por el Mercado Global.
+ if(typeof ehGMFetch==='function'){const orig=ehGMFetch;ehGMFetch=async function(...a){const r=await orig.apply(this,a);try{(ehGMRows||[]).forEach(e=>{const o=e.item||e.pokemon||e.product||{},n=String(e.name||e.title||e.itemName||e.pokemonName||o.name||'').trim(),p=+(e.price||e.value||e.cost||o.price||0);if(!n||!p)return;let x=db.price[n]||(db.price[n]={min:p,max:p,sum:0,n:0,last:0});x.min=Math.min(x.min,p);x.max=Math.max(x.max,p);x.sum+=p;x.n++;x.last=now()});save()}catch{}return r}}
+ renderBadge();setInterval(()=>{if($('ehCommandCenter')?.classList.contains('show'))$('ehccClock').textContent=new Date().toLocaleTimeString('es-CL')},1000);
+})();
+</script>
+
+
+<script id="ehNotifyFallbackScript">
+(()=>{
+ const esc=s=>String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ const show=d=>{try{let host=document.getElementById('ehNotifyFallback');if(!host){host=document.createElement('div');host.id='ehNotifyFallback';document.body.appendChild(host)}const e=document.createElement('div');e.className='eh-notify-toast';e.innerHTML='<b>'+esc(d?.title||'Escarlata Hispana')+'</b><span>'+esc(d?.body||'')+'</span>';host.appendChild(e);while(host.children.length>4)host.firstElementChild.remove();setTimeout(()=>{try{e.remove()}catch{}},9000)}catch{}};
+ try{window.pokeAPI?.onLocalNotify?.(show)}catch{}
+})();
+</script>
 </body>
 </html>
